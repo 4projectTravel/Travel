@@ -1,0 +1,55 @@
+<header>
+        <div class="header-inner">
+            <div class="page-header">
+                <h1><a href="/">旅行アプリ</a></h1>
+            </div>
+            <div class="header-right">
+                <form class="header-from" id="buy" action="{% url 'post2_list' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="button2" value="buy">
+                </form>
+
+                <form class="header-from" id="sel" action="{% url 'post_list' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="button3" value="sell">
+                </form>
+
+                {% if user.is_authenticated %}
+                <form class="header-from" id="talk" action="{% url 'post3_list' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="button4" value="talk">
+                </form>
+
+                <form class="header-from" id="chat" action="{% url 'move_to_chat' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="button6" value="chat">
+                </form>
+
+                <form class="header-from" id="notification" action="{% url 'move_to_notice' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="button9" value="notif">
+                </form>
+                <form class="header-from" id="mypage" action="{% url 'move_to_mypage' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="button5" value="">
+                </form>
+               {% endif %}
+
+               {% if request.user.is_authenticated %}
+                <form class="header-from" id="logout" action="{% url 'accounts:logout' %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" name="button10" value="logout">
+                </form>
+              {% else %}
+                <form class="header-from" id="login" action="{% url 'accounts:login' %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" name="button11" value="login">
+                </form>
+                <form class="header-from" id="sign-up" action="{% url 'accounts:signup' %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" name="button11" value="sign-up">
+                </form>
+              {% endif %}
+            </div>
+        </div>
+    </header>
