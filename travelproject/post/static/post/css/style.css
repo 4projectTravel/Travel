@@ -1,3 +1,31 @@
 a {
   text-decoration: none;
 }
+.btn {
+  display: block;
+  width: 300px;
+  margin:auto;
+  border-radius: 5px;
+  background-color: lightblue;
+  padding: 10px;
+  text-decoration: none;
+  text-align: center;
+  color: white;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.wrap{
+  text-align: right;
+  padding: 30px;
+}
+
+ul.class1 {
+  width: 200px;
+  border-width: 1px;
+  border-style: solid;
+  text-align: left;
+}

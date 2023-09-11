@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}旅行中の人向け{% endblock %}
+
+{% block content %}
+<html>
+ <head>
+   <title>旅行中の人向け</title>
+ </head>
+ <body>
+   <style>
+     .wrap{
+       text-align: center;
+     }
+
+   </style>
+   <p>現在旅行中の人向け</p>
+   <p>（位置情報が反映された地図を表示する）</p>
+   <div class="wrap">
+　　　<iframe class="map" src="https://www.google.com/maps/d/u/4/embed?mid=1YH5-NlMR2JBpO_iNO-OiTZXLqtMO9T0&ehbc=2E312F" width="640" height="480"></iframe>
+   </div>
+ </body>
+</html>
+
+{% endblock content %}

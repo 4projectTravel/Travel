@@ -3,7 +3,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index_view, name='index'),
+
+    path('topA', views.topA, name='topA'),
+    path('topB', views.topB, name='topB'),
+    path('selection/', views.selection, name='selection'),
+    path('post/', views.index_view, name='index'),
     path('post/', views.ListPostView.as_view(), name='list-post'),
     path('post/<int:pk>/detail/', views.DetailPostView.as_view(),
 name='detail-post'),
@@ -14,7 +18,10 @@ name='delete-post'),
 name='update-post'),
     path('post/<int:post_id>/review/', views.CreateReviewView.as_view(),
 name='review'),
-    #path('post/create/', views.CreateItineraryView.as_view(),
-#name='create-itinerary'),
-
+    path('mypage/', views.move_to_mypage, name='move_to_mypage'),
+    path('itinerary/', views.move_to_itinerary, name='move_to_itinerary'),
+    path('record/', views.move_to_record, name='move_to_record'),
+    path('traveling/', views.move_to_traveling, name='move_to_traveling'),
+    #path('', views.logout_view, name='logout'),
+    #path('login/', views.logoin_view, name='login'),
 ]

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}トップページA{% endblock %}
+
+{% block content %}
+<html>
+ <head>
+   <title>トップページA</title>
+ </head>
+ <body>
+  <div class="container">
+   <ul class="class1">
+     <p>SNSで流行りの場所トップ5</p>
+     <li>東京都</li>
+     <li>京都府</li>
+     <li>大阪府</li>
+     <li>北海道</li>
+     <li>沖縄県</li>
+   </ul>
+   <div class="wrap">
+      <iframe src="https://www.google.com/maps/d/u/4/embed?mid=19BBjbY7WuOh4sSvQ8LzkW0OTeGazTwk&ehbc=2E312F" width="640" height="480"></iframe>
+   </div>
+  </div>
+ </body>
+</html>
+
+{% endblock content %}

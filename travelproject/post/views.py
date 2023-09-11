@@ -15,10 +15,14 @@ from django.views.generic import (
 )
 from .models import Post, Review
 from .consts import ITEM_PER_PAGE
-
+'''
+def logout_view(request):
+    logout(request)
+    return redirect('accounts/login')
+'''
 def index_view(request):
-    object_list = Post.objects.all()
-
+    object_list = Post.objects.order_by('category')
+    #object_list = Post.objects.order_by('-id')
     ranking_list = Post.objects.annotate(avg_rating=Avg('review__rate')).order_by('-avg_rating')
 
     paginator = Paginator(ranking_list, ITEM_PER_PAGE)
@@ -99,13 +103,24 @@ class CreateReviewView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('detail-post', kwargs={'pk': self.object.post.id})
-'''
-class SelectionView(SelectionMixin, SelectionView):
-    template_name = 'post/post_selection.html'
 
-class CreateItineraryView(LoginRequiredMixin, CreateView):
-    model = Post
-    template_name = 'post/itinerary_create.html'
-    fields = ('day', 'text', 'memo')
-    success_url = reverse_lazy('list-post')
-'''
+def move_to_mypage(request):
+        return render(request, 'mypage.html')
+
+def move_to_itinerary(request):
+        return render(request, 'itinerary.html')
+
+def topA(request):
+    return render(request, 'topA.html')
+
+def topB(request):
+    return render(request, 'topB.html')
+
+def selection(request):
+        return render(request, 'selection.html')
+
+def move_to_record(request):
+        return render(request, 'record.html')
+
+def move_to_traveling(request):
+        return render(request, 'traveling.html')
