@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}旅行日程表{% endblock %}
+
+{% block content %}
+<html>
+ <head>
+   <title>旅行記録</title>
+ </head>
+ <body>
+   <style>
+     th,td {
+       border:solid 1px;
+       padding: 10px;
+     }
+     table {
+       border-collapse: collapse;
+     }
+   </style>
+
+   <table>
+   <tr><th>日付</th><th>時間</th><th>スケジュール</th><th>メモ</th></tr>
+   <tr><td contenteditable="true"><input type="text" id="nameText"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+   <tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+   <tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+   <tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+   <tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+   </table>
+   <input type="button" value="登録する" id="checkButton">
+   <p id="msg"></p>
+
+    <script>
+      function buttonClick(){
+        msg.innerText='入力は'+nameText.value+'ですね';
+      }
+      let nameText = document.getElementById('nameText');
+      let msg = document.getElementById('msg');
+
+      let checkButton = document.getElementById('checkButton');
+      checkButton.addEventListener('click',buttonClick);
+    </script>
+ </body>
+</html>
+
+{% endblock content %}

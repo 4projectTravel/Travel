@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'post.apps.PostConfig',
+    'itinerary.apps.ItineraryConfig',
+    'spot.apps.SpotConfig',
+    'import_export',  #add_spot
 ]
 
 MIDDLEWARE = [
@@ -107,9 +110,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 
@@ -124,5 +129,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'selection'
+LOGIN_REDIRECT_URL = 'topA'
 LOGOUT_REDIRECT_URL = 'topA'

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- 検索フォーム -->
+<form class="mt-2" id="search-form" action="" method="GET">
+  <div class="mt-2 inline">
+    {{ search_form_addressgenre.genre }}
+    {{ search_form_addressgenre.address }}
+     <button class="btn btn-info ml-4" type="submit">検索</button>
+  </div>
+</form>
+
+
+<table class="table mt-3">
+  <tr>
+    <th>スポット名</th>
+    <th>エリア</th>
+    <th>ジャンル</th>
+  </tr>
+  {% for addressgenre in addressgenre_list %}
+    <tr>
+      <td>
+        {% if addressgenre.spot %}
+        {{ addressgenre.spot }}
+        {% endif %}
+      </td>
+      <td>{{ addressgenre.address }}</td>
+      <td>{{ addressgenre.genre }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

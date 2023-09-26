@@ -11,7 +11,6 @@ from django.views.generic import (
     CreateView,
     DeleteView,
     UpdateView,
-    #CreateItineraryView,
 )
 from .models import Post, Review
 from .consts import ITEM_PER_PAGE
@@ -21,8 +20,8 @@ def logout_view(request):
     return redirect('accounts/login')
 '''
 def index_view(request):
-    object_list = Post.objects.order_by('category')
-    #object_list = Post.objects.order_by('-id')
+    #object_list = Post.objects.order_by('category')
+    object_list = Post.objects.order_by('-id')
     ranking_list = Post.objects.annotate(avg_rating=Avg('review__rate')).order_by('-avg_rating')
 
     paginator = Paginator(ranking_list, ITEM_PER_PAGE)
@@ -124,3 +123,21 @@ def move_to_record(request):
 
 def move_to_traveling(request):
         return render(request, 'traveling.html')
+
+def map_restaurant(request):
+        return render(request, 'map_restaurant.html')
+
+def map_museum(request):
+        return render(request, 'map_museum.html')
+
+def map_shrine(request):
+        return render(request, 'map_shrine.html')
+
+def map_leisure(request):
+        return render(request, 'map_leisure.html')
+
+def map_hotspring(request):
+        return render(request, 'map_hotspring.html')
+
+def map_event(request):
+        return render(request, 'map_event.html')

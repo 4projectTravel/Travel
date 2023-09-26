@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}旅行記録削除{% endblock %}
+
+
+{% block content %}
+  <form method='post'>
+    {% csrf_token %}
+    <button type='submit' class="btn btn-light">{{ object.title }}を削除する</button>
+  </form>
+{% endblock content %}

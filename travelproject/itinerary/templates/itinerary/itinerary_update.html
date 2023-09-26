@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}旅行日程修正{% endblock %}
+
+{% block content %}
+<form method='POST'>{% csrf_token %}
+  <p>
+    <label>タイトル</label>
+    <p>{{ form.title }}</p>
+  </p>
+  <table id="table">
+  <tr><th>日付</th><th>時間</th><th>スケジュール</th></tr>
+  <tr>
+    <td rowspan="4">{{ form.date_1 }}</td>
+    <td>{{ form.time_1 }}</td>
+    <td>{{ form.schedule_1 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_2 }}</td>
+    <td>{{ form.schedule_2 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_3 }}</td>
+    <td>{{ form.schedule_3 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_4 }}</td>
+    <td>{{ form.schedule_4 }}</td>
+  </tr>
+  <tr>
+    <td rowspan="4">{{ form.date_2 }}</td>
+    <td>{{ form.time_5 }}</td>
+    <td>{{ form.schedule_5 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_6 }}</td>
+    <td>{{ form.schedule_6 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_7 }}</td>
+    <td>{{ form.schedule_7 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_8 }}</td>
+    <td>{{ form.schedule_8 }}</td>
+  </tr>
+  <tr>
+    <td rowspan="4">{{ form.date_3 }}</td>
+    <td>{{ form.time_9 }}</td>
+    <td>{{ form.schedule_9 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_10 }}</td>
+    <td>{{ form.schedule_10 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_11 }}</td>
+    <td>{{ form.schedule_11 }}</td>
+  </tr>
+  <tr>
+    <td>{{ form.time_12 }}</td>
+    <td>{{ form.schedule_12 }}</td>
+  </tr>
+
+  </table>
+  <button type='submit' class="btn btn-light">>修正する</button>
+</form>
+
+
+{% endblock %}

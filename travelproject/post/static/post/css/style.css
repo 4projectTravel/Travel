@@ -1,15 +1,18 @@
 a {
   text-decoration: none;
 }
+
+
+/* ボタン */
 .btn {
+  font-size: 1.375rem;
   display: block;
   width: 300px;
   margin:auto;
+  padding: 18px 32px;
   border-radius: 5px;
-  background-color: lightblue;
+  background-color: #ffbf1f;
   padding: 10px;
-  text-decoration: none;
-  text-align: center;
   color: white;
 }
 
@@ -29,3 +32,27 @@ ul.class1 {
   border-style: solid;
   text-align: left;
 }
+
+th,td {
+  border:solid 1px;
+}
+table {
+  text-align: center;
+  border-collapse: collapse;
+  width: 500px;
+  height: 100px;
+}
+input.button {
+  background-color: #ffbf1f;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 1rem;
+  text-align: center;
+  padding: 6px 12px;
+}
+
+/*
+input.button:hover{
+  background: #0090aa;
+}
+*/

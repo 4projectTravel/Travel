@@ -4,7 +4,8 @@ from .consts import MAX_RATE
 RATE_CHOICES = [(x, str(x)) for x in range(0, MAX_RATE + 1)]
 
 # Create your models here.
-CATEGORY = (('Hokkaido', '北海道'),('Tohoku','東北'),('Kanto','関東'),('Chubu','中部'),('Kinki','近畿'),('Chugoku','中国'),('Shikoku','四国'),('Kyushu','九州'))
+#CATEGORY = (('北海道', '北海道'),('Tohoku','東北'),('関東','関東'),('Chubu','中部'),('Kinki','近畿'),('Chugoku','中国'),('Shikoku','四国'),('Kyushu','九州'))
+CATEGORY = (('北海道', '北海道'),('東北','東北'),('関東','関東'),('中部','中部'),('近畿','近畿'),('中国','中国'),('四国','四国'),('九州','九州'))
 class Post(models.Model):
     title = models.CharField(max_length=100)
     text = models.TextField()

@@ -15,6 +15,35 @@
 
    </style>
    <p>現在旅行中の人向け</p>
+
+   <!-- 検索フォーム -->
+<form class="mt-2" id="search-form" action="" method="GET">
+  <div class="mt-2 inline">
+    {{ search_form.category }}
+    <button class="btn btn-info ml-4" type="submit">検索</button>
+  </div>
+</form>
+
+<!-- 一覧表示 -->
+<table class="table mt-3">
+  <tr>
+    <th>エリア</th>
+    <th>ジャンル</th>
+    <th>摘要</th>
+  </tr>
+  {% for genre in genre_list %}
+  <tr>
+    <td>{{ genre.category }}</td>
+    <td>
+      {% if payment.description %}
+      {{ genre.description }}
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+
    <p>（位置情報が反映された地図を表示する）</p>
    <div class="wrap">
 　　　<iframe class="map" src="https://www.google.com/maps/d/u/4/embed?mid=1YH5-NlMR2JBpO_iNO-OiTZXLqtMO9T0&ehbc=2E312F" width="640" height="480"></iframe>
