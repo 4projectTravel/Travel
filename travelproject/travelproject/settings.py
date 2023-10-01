@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'itinerary.apps.ItineraryConfig',
     'spot.apps.SpotConfig',
     'import_export',  #add_spot
+    'map.apps.MapConfig',
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
@@ -116,7 +119,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -129,5 +132,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'topA'
+#LOGIN_REDIRECT_URL = 'topA'
+LOGIN_REDIRECT_URL = '/map/api/' #追記
 LOGOUT_REDIRECT_URL = 'topA'
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

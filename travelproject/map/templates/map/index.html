@@ -1,0 +1,189 @@
+<!--現在地とピンの表示-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 50%;
+        weight: 50%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="map"></div>
+    <br/><input type="button" value="現在位置" onclick="getPosition();" />
+    <script>
+      var map;
+      var marker;
+      var circle;
+
+      /**
+       * The CenterControl adds a control to the map that recenters the map on
+       * Chicago.
+       * This constructor takes the control DIV as an argument.
+       * @constructor
+       */
+
+      function CenterControl(controlDiv, map) {
+
+        // Set CSS for the control border.
+
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to recenter the map';
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        var controlText = document.createElement('div');
+        controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontSize = '16px';
+        controlText.style.lineHeight = '38px';
+        controlText.style.paddingLeft = '5px';
+        controlText.style.paddingRight = '5px';
+        controlText.innerHTML = 'Map Search';
+        controlUI.appendChild(controlText);
+
+        controlUI.addEventListener('click', function() {
+
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+               if (this.readyState == 4 && this.status == 200) {
+                 setMarker(JSON.parse(this.responseText));
+               }
+          };
+          xhttp.open("GET", "api/map?format=json", true);
+          xhttp.setRequestHeader("Content-type", "application/json");
+          xhttp.send();
+
+        });
+
+      }
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 35.681236, lng: 139.767125},
+          zoom: 8
+        });
+
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new CenterControl(centerControlDiv, map);
+
+        centerControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+      }
+/*位置情報を表示する*/
+      function success(pos) {
+         var crd = pos.coords;
+         var timeStamp = pos.timestamp;
+
+
+
+         var currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);
+
+         if ( marker != undefined )  marker.setMap(null);
+         if ( circle != undefined )  circle.setMap(null);
+
+         /* 現在位置にマーカーを設定 */
+         marker =  new google.maps.Marker({
+            position: currentPos,
+            map: map,
+            /*マーカーのアニメーションと色変更*/
+            animation: google.maps.Animation.DROP,
+            icon: {
+              fillColor: "#ff6633",//塗り潰し色
+              scale: 10,
+              fillOpacity: 0.8,
+              strokeColor: "#ff6633",              //枠の色
+		          strokeWeight: 1.0,
+          		path: google.maps.SymbolPath.CIRCLE, //円を指定
+		        },
+            label: {
+              text: 'A',                           //ラベル文字
+          		color: '#FFFFFF',                    //文字の色
+          		fontSize: '20px'                     //文字のサイズ
+		        }
+          });
+
+         /* 位置の誤差領域 */
+         circle = new google.maps.Circle({
+            strokeColor: "#3333FF",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#3333FF",
+            fillOpacity: 0.35,
+            map: map,
+            draggable: false,
+            center: currentPos,
+            radius: crd.accuracy   /* 位置の誤差(m)を半径とする */
+         });
+         map.setCenter(currentPos);
+         map.setZoom(14);
+         setInfo(crd);
+      }
+      function error(err) {
+         document.getElementById('tdErrCd').innerHTML = err.code;
+         document.getElementById('tdErrMg').innerHTML = err.message;
+      }
+
+      function getPosition() {
+         var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+         };
+         navigator.geolocation.getCurrentPosition(success, error, options);
+      }
+
+      function setMarker(mapJson) {
+
+
+
+        for(var i = 0; i < mapJson.length; i++){
+
+          var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
+          '<a>'+'口コミを見る'+'</a>'+'<br>'+'<a>'+'このスポットが入ったモデルコースを見る'+'</a>';
+
+          var infowindow = new google.maps.InfoWindow({
+
+            content: contentStr
+          });
+
+          var marker = new google.maps.Marker({
+            position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+            map: map,
+          });
+
+          bindInfoWindow(marker, map, infowindow);
+        }
+      }
+
+      function bindInfoWindow(marker, map, infowindow) {
+        marker.addListener('click', function() {
+          infowindow.open(map, this);
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
+    async defer></script>
+  </body>
+</html>
