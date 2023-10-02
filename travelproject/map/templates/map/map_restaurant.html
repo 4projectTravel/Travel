@@ -161,7 +161,7 @@
         for(var i = 0; i < mapJson.length; i++){
 
           var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
-          '<a href="{% url 'list-post' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a>'+'このスポットが入った旅行記録を見る'+'</a>';
+          '<a href="{% url 'list-post' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
 
           var infowindow = new google.maps.InfoWindow({
 

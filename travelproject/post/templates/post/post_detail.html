@@ -19,8 +19,8 @@
       </div>
       {% endfor %}
     </div>
-    <a href="{% url 'review' object.pk %}" class="btn btn-light">レビューする</a>
-    <a href="{% url 'update-post' object.pk %}" class="btn btn-light">編集する</a>
-    <a href="{% url 'delete-post' object.pk %}" class="btn btn-light">削除する</a>
+    <a href="{% url 'review-post' object.pk %}" class="btn btn-light">このスポットについての口コミを書く</a>
+    <!--<a href="{% url 'update-post' object.pk %}" class="btn btn-light">編集する</a>-->
+    <!--<a href="{% url 'delete-post' object.pk %}" class="btn btn-light">削除する</a>-->
   </div>
 {% endblock %}

@@ -17,6 +17,28 @@ class ListItineraryView(ListView):
     template_name = 'itinerary/itinerary_list.html'
     model = Itinerary
 
+    # 検索フォーム
+    def get_queryset(self): # 検索機能のために追加
+        query = self.request.GET.get('query')
+
+        if query:
+            itinerary_list = Itinerary.objects.filter(schedule_1__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_2__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_3__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_4__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_5__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_6__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_7__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_8__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_9__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_10__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_11__icontains=query)
+            itinerary_list = Itinerary.objects.filter(schedule_12__icontains=query)
+        else:
+            itinerary_list = Itinerary.objects.all()
+        return itinerary_list
+
+
 class DetailItineraryView(DetailView):
     template_name = 'itinerary/itinerary_detail.html'
     model = Itinerary
@@ -65,7 +87,7 @@ class UpdateItineraryView(CreateView):
 
 class CreateReviewView(CreateView):
     model = Review
-    fields = ('itinerary', 'title', 'text', 'rate')
+    fields = ('itinerary', 'title', 'text', 'rate_1', 'rate_2')
     template_name = 'itinerary/review_form.html'
 
     def get_context_data(self, **kwargs):

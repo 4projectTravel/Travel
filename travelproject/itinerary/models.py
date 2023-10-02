@@ -7,6 +7,7 @@ from django import forms
 RATE_CHOICES = [(x, str(x)) for x in range(0, MAX_RATE + 1)]
 
 
+
 class Itinerary(models.Model):
     title = models.TextField()
     date_1 = models.DateField(default=timezone.now, blank=True)
@@ -47,7 +48,9 @@ class Review(models.Model):
     itinerary = models.ForeignKey(Itinerary, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     text = models.TextField()
-    rate = models.IntegerField(choices=RATE_CHOICES)
+    rate_1 = models.IntegerField(choices=RATE_CHOICES,null=True)
+    rate_2 = models.IntegerField(choices=RATE_CHOICES,null=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE,related_name='user_itinerary',null=True)
 
 
     def __str__(self):

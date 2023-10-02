@@ -18,7 +18,7 @@ from .consts import ITEM_PER_PAGE
 def logout_view(request):
     logout(request)
     return redirect('accounts/login')
-'''
+
 def index_view(request):
     #object_list = Post.objects.order_by('category')
     object_list = Post.objects.order_by('-id')
@@ -33,11 +33,27 @@ def index_view(request):
         'post/index.html',
         {'post_list': object_list, 'ranking_list': ranking_list, 'page_obj':page_obj },
     )
+'''
+
+
+
 
 class ListPostView(LoginRequiredMixin, ListView):
     template_name = 'post/post_list.html'
     model = Post
     paginate_by = ITEM_PER_PAGE
+
+    # 検索フォーム
+    def get_queryset(self): # 検索機能のために追加
+        query = self.request.GET.get('query')
+
+        if query:
+            post_list = Post.objects.filter(title__icontains=query)
+        else:
+            post_list = Post.objects.all()
+        return post_list
+
+
 
 class DetailPostView(LoginRequiredMixin, DetailView):
     template_name = 'post/post_detail.html'
@@ -88,7 +104,7 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
 class CreateReviewView(LoginRequiredMixin, CreateView):
     model = Review
     fields = ('post', 'title', 'text', 'rate')
-    template_name = 'post/review_form.html'
+    template_name = 'post/review_form1.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

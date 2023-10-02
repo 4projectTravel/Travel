@@ -5,14 +5,26 @@
 
 
 {% block content %}
+      <!--formを追加-->
+       <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
+         <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/>
+  　　　　<button type="submit">検索</button>
+       </form>
+
+
     {% for item in post_list %}
     <div class="p-4 m-4 bg-light border border-info rounded">
-      <a href="{% url 'detail-post' item.pk %}"><h2 class="text-info">{{ item.title }}</h2></a>
-      <h6>カテゴリ：{{ item.category }}</h6>
-      <!--<div class="mt-3">
-        <a href="{% url 'detail-post' item.pk %}">詳細へ</a>
-      </div>-->
+        <a href="{% url 'detail-post' item.pk %}"><h2 class="text-info">{{ item.title }}</h2></a>
+        <!--<h6>カテゴリ：{{ item.category }}</h6>-->
+        <!--<div class="mt-3">
+           <a href="{% url 'detail-post' item.pk %}">詳細へ</a>
+         </div>-->
     </div>
     {% endfor %}
+
+  
+
+　　<a href="{% url 'create-post' %}" class="btn btn-light">スポットを追加する</a>
+
     {% include 'post/components/pagination.html' %}
 {% endblock content %}
