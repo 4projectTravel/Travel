@@ -18,11 +18,6 @@
         margin: 0;
         padding: 0;
       }
-      table {
-        border-style: solid;
-
-      }
-
     </style>
   </head>
   <body>
@@ -85,10 +80,8 @@
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          /*center: {lat: 35.681236, lng: 139.767125},*/
-           center: {lat: 35.323791, lng: 139.54749},
-          zoom: 12
-
+          center: {lat: 35.681236, lng: 139.767125},
+          zoom: 8
         });
 
         var centerControlDiv = document.createElement('div');
@@ -98,15 +91,14 @@
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
 
       }
-　　　/*位置情報を表示する*/
+      /*位置情報を表示する*/
       function success(pos) {
          var crd = pos.coords;
          var timeStamp = pos.timestamp;
 
 
-　　　　　/*現在地*/
-         var currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);
 
+         var currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);
 
          if ( marker != undefined )  marker.setMap(null);
          if ( circle != undefined )  circle.setMap(null);
@@ -164,62 +156,24 @@
 
       function setMarker(mapJson) {
 
-       /*一覧表示*/
-       var tableEle = document.getElementById('data-table');
+
 
         for(var i = 0; i < mapJson.length; i++){
 
-          var tr = document.createElement('tr');
-          var td = document.createElement('td');
-          td.innerHTML = mapJson[i].name ;
-          tr.appendChild(td);
-
-
-        tableEle.appendChild(tr);
-       /*一覧表示ここまで*/
-
-
           var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
-          '<a href="{% url 'list-post' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
+          '<a>'+'口コミを見る'+'</a>'+'<br>'+'<a>'+'このスポットが入ったモデルコースを見る'+'</a>';
 
           var infowindow = new google.maps.InfoWindow({
 
             content: contentStr
           });
 
-          if(mapJson[i].genre == 'ご飯'){
-            var marker = new google.maps.Marker({
-              position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-              map: map,
-              icon: {
-                fillColor: "#ffdc00",//塗り潰し色
-                scale: 10,
-                fillOpacity: 0.8,
-                strokeColor: "#ff6633",              //枠の色
-  		          strokeWeight: 1.0,
-            		path: google.maps.SymbolPath.CIRCLE, //円を指定
-              }
-            });
-
-          }else if(mapJson[i].genre == '神社・寺院'){
-            var marker = new google.maps.Marker({
-              position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-              map: map,
-              icon: {
-                fillColor: "#3333FF",//塗り潰し色
-                scale: 10,
-                fillOpacity: 0.8,
-                strokeColor: "#ff6633",              //枠の色
-  		          strokeWeight: 1.0,
-            		path: google.maps.SymbolPath.CIRCLE, //円を指定
-
-              }
-            });
-          }
+          var marker = new google.maps.Marker({
+            position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+            map: map,
+          });
 
           bindInfoWindow(marker, map, infowindow);
-
-
         }
       }
 
@@ -228,37 +182,8 @@
           infowindow.open(map, this);
         });
       }
-
-
-
-
-
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
     async defer></script>
-
-
-    <a href="{% url 'topA' %}">ホーム画面へ戻る</a>
-
-    <!--<ul class="class1">
-
-      <li>黄色：ご飯</li>
-      <li>赤色：カフェ・パン・スイーツ・お菓子</li>
-      <li>水色：イベント</li>
-      <li>オレンジ色：風景・景色</li>
-      <li>ピンク色：アート・カルチャー</li>
-      <li>紫色：お土産・お酒・雑貨</li>
-      <li>青色：神社・寺院</li>
-      <li>緑色：アクティビティ・体験・その他施設</li>
-    </ul>-->
-
-    <table id='data-table'>
-      <tr><th>スポット名</th></tr>
-    </table>
-
-
-
-
   </body>
 </html>

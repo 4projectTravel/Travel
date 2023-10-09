@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}旅行記録一覧{% endblock %}
-{% block h1 %}旅行記録一覧{% endblock %}
+{% block title %}旅行記録一覧(全体向け){% endblock %}
+{% block h1 %}旅行記録一覧(全体向け){% endblock %}
 
 
 {% block content %}
@@ -12,14 +12,15 @@
    </form>
 
     {% for item in object_list %}
-    {% if user.username == item.contributer %}
+    {% if item.category|stringformat:"s" == "記入済み" %}
 
     <div class="card">
       <h5 class="card-header">{{ item.title }}</h5>
 
+
       <div class="card-body">
         <p>ユーザー名:  {{ item.contributer }}</p>
-        <p>旅行記録の記入状況: {{ item.category }}</p>
+
         <table>
         <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
         <tr>
@@ -81,9 +82,11 @@
         <tr><td>{{ object.date }}</td><td>{{ object.time }}</td><td>{{ object.schedule }}</td><td>{{ object.note }}</td></tr>-->
 
         </table>
-        <a href="{% url 'detail-itinerary' item.pk %}">詳細へ</a>
+        <a href="{% url 'detail-itinerary-all' item.pk %}">詳細へ</a>
       </div>
-    <div>
+    </div>
     {% endif %}
     {% endfor %}
+
+    <a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>
 {% endblock content %}

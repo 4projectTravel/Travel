@@ -1,0 +1,136 @@
+<!--２地点間の移動距離を表示する-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 50%;
+        weight: 50%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Hello</p>
+
+    <div><p id="route-time"></p></div>
+    <div id="map"></div>
+
+    <script>
+      var directionsService;
+      var directionsRenderer;
+      var distanceMatrixservice;
+      var map;
+      var lat1;
+      var lng1;
+
+      function initMap() {
+        // GoogleMapsAPI実体化
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        distanceMatrixservice = new google.maps.DistanceMatrixService();
+
+        // Map初期表示設定
+        map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 13, // 地図のズームレベル設定
+          center: {lat: 35.323791, lng: 139.54749}, // 地図表示の中心座標
+        });
+        //情報ウィンドウのインスタンスの生成
+        //var infoWindow = new google.maps.InfoWindow;
+
+        // 地図描画
+        directionsRenderer.setMap(map);
+
+        // オプション設定
+        // 地図の座標指定、ズームレベルの設定を適用する
+        directionsRenderer.setOptions({
+          preserveViewport: true,
+        });
+
+        // ルート取得
+        setLocation("35.331222", "139.53822");
+        //ブラウザが対応している場合、position にユーザーの位置情報が入る
+        navigator.geolocation.getCurrentPosition(function(position) {
+          //position から緯度経度（ユーザーの位置）のオブジェクトを作成し変数に代入
+          var pos = {
+             lat1: position.coords.latitude,
+             lng1: position.coords.longitude
+          };
+          //情報ウィンドウに現在位置を指定
+          //infoWindow.setPosition(pos);
+          //情報ウィンドウのコンテンツを設定
+          //infoWindow.setContent('現在位置を取得しました。');
+          //情報ウィンドウを表示
+          //infoWindow.open(map);
+          //マップの中心位置を指定
+          //map.setCenter(pos);
+
+
+        });
+        //setLocation(lat1, lng1);
+        //setLocation(position.coords.latitude, position.coords.longitude);
+
+      }
+
+      function setLocation(lat, lng){
+      //function setLocation(){
+         // 所要時間取得
+         distanceMatrixservice.getDistanceMatrix({
+		 　　　　 origins: [lat +"," + lng], // 出発地
+             //origins: pos, // 出発地
+		  　　　　destinations: ["35.663799" + "," + "139.700886"], // 目的地
+		  　　　　travelMode: google.maps.TravelMode.DRIVING, // 移動手段
+	    　  }, timeRequired)
+
+         // ルート取得
+         directionsService.route({　
+             origin: lat +"," + lng, // 出発地
+             //origin: pos,
+             destination: "35.663799" + "," + "139.700886", // 目的地
+             travelMode: google.maps.TravelMode.DRIVING, // 移動手段
+        })
+        .then((response) => {
+          directionsRenderer.setDirections(response);
+	        map.panTo(new google.maps.LatLng(lat,lng));
+        })
+        .catch((e) => window.alert("Directions request failed due to " + status));
+      }
+
+      function timeRequired(response, status) {
+        if(status == "OK") {
+        var origins = response.originAddresses;
+        var destinations = response.destinationAddresses;
+
+              for (var i = 0; i < origins.length; i++) {
+                var results = response.rows[i].elements;
+                for (var j = 0; j < results.length; j++) {
+                  var element = results[j];
+                  var distance = element.distance.text;
+                  var duration = element.duration.text;
+                  var from = origins[i];
+                  var to = destinations[j];
+                }
+               }
+          var routeTime = document.getElementById("route-time");
+
+          routeTime.innerHTML = "およそ" + duration + "で着きます"
+	      }
+      }
+
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
+    async defer></script>
+  </body>
+</html>

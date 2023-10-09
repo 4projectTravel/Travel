@@ -3,6 +3,9 @@ from django.contrib.admin.widgets import AdminDateWidget    #インポート
 from .models import Itinerary
 from django.forms import ModelForm
 
+
+
+
 class DateInput(forms.DateInput):
     input_type = 'date'
 
@@ -10,7 +13,7 @@ class AddItineraryForm(forms.ModelForm):
     class Meta:
         model = Itinerary
         fields = ('title','date_1','date_2','date_3','time_1','time_2','time_3','time_4','time_5','time_6','time_7','time_8','time_9','time_10','time_11','time_12',
-    'schedule_1','schedule_2','schedule_3','schedule_4','schedule_5','schedule_6','schedule_7','schedule_8','schedule_9','schedule_10','schedule_11','schedule_12')
+    'schedule_1','schedule_2','schedule_3','schedule_4','schedule_5','schedule_6','schedule_7','schedule_8','schedule_9','schedule_10','schedule_11','schedule_12','category','contributer')
         widgets = {
             'title':forms.Textarea(attrs={'cols': '50', 'rows': '1'}),
             'date_1':DateInput(),
@@ -42,4 +45,9 @@ class AddItineraryForm(forms.ModelForm):
             'schedule_10':forms.Textarea(attrs={'cols': '50', 'rows': '2'}),
             'schedule_11':forms.Textarea(attrs={'cols': '50', 'rows': '2'}),
             'schedule_12':forms.Textarea(attrs={'cols': '50', 'rows': '2'}),
+
+            #'category':forms.Chararea(max_length=100),
+            #'contributer':forms.Chararea(max_length=50),
+
+
         }

@@ -10,7 +10,7 @@
  <body>
 
   <div class="container">
-   <ul class="class1">
+   <!--<ul class="class1">
      <a>カテゴリー</a>
      <li><a href="{% url 'map_restaurant' %}">飲食店</a></li>
      <li><a href="{% url 'map_leisure' %}">レジャー施設</a></li>
@@ -18,11 +18,13 @@
      <li><a href="{% url 'map_museum' %}">博物館・美術館</a></li>
      <li><a href="{% url 'map_hotspring' %}">温泉</a></li>
      <li><a href="{% url 'map_event' %}">イベント</a></li>
-   </ul>
+   </ul>-->
    <div class="wrap">
       <iframe src="https://www.google.com/maps/d/u/4/embed?mid=19BBjbY7WuOh4sSvQ8LzkW0OTeGazTwk&ehbc=2E312F" width="640" height="480"></iframe>
    </div>
+
   </div>
+  <a href="{% url 'map_restaurant' %}">スポットを見る</a>
  </body>
 </html>
 

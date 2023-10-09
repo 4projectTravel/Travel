@@ -6,7 +6,7 @@ from django import forms
 
 RATE_CHOICES = [(x, str(x)) for x in range(0, MAX_RATE + 1)]
 
-
+CATEGORY = (('未記入','未記入'),('記入済み','記入済み'))
 
 class Itinerary(models.Model):
     title = models.TextField()
@@ -39,6 +39,9 @@ class Itinerary(models.Model):
     schedule_10 = models.TextField(blank=True)
     schedule_11 = models.TextField(blank=True)
     schedule_12 = models.TextField(blank=True)
+
+    category = models.CharField(max_length=100, choices = CATEGORY, blank=True)
+    contributer = models.CharField(max_length=50, blank=True) 
 
 
     def __str__(self):

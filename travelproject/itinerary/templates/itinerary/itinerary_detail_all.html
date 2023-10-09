@@ -86,10 +86,10 @@
     </div>
 
     <div class="border p-4 mb-2">
-      <a href="{% url 'review-itinerary' object.pk %}" class="btn btn-light">旅行記録を書く</a>
-      <a href="{% url 'list-itinerary' %}" class="btn btn-light">一覧へ</a>
+      <!--<a href="{% url 'review-itinerary' object.pk %}" class="btn btn-light">旅行記録を書く</a>-->
+      <a href="{% url 'list-itinerary-all' %}" class="btn btn-light">一覧へ</a>
       <a href="{% url 'update-itinerary' object.pk %}" class="btn btn-light">修正する</a>
-      <a href="{% url 'delete-itinerary' object.pk %}" class="btn btn-light">削除する</a>
+      <!--<a href="{% url 'delete-itinerary' object.pk %}" class="btn btn-light">削除する</a>-->
     </div>
    </div>
   </div>
@@ -113,6 +113,6 @@
        document.getElementById('output4').textContent = `${inputForm4}`;
    }
 </script>-->
-
+<a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>
 
 {% endblock %}

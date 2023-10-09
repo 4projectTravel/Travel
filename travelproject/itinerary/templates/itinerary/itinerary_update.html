@@ -3,7 +3,11 @@
 {% block title %}旅行日程修正{% endblock %}
 
 {% block content %}
-<form method='POST'>{% csrf_token %}
+<form method='post'>{% csrf_token %}
+  <p>
+    <label>旅行記録の記入状況</label>
+    <p>{{ form.category }}</p>
+  </p>
   <p>
     <label>タイトル</label>
     <p>{{ form.title }}</p>
@@ -63,7 +67,9 @@
   </tr>
 
   </table>
-  <button type='submit' class="btn btn-light">>修正する</button>
+
+
+  <button type='submit' class="btn btn-light">修正する</button>
 </form>
 
 
