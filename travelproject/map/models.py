@@ -7,6 +7,7 @@ class Map(models.Model):
     lat = models.DecimalField('緯度', max_digits=8, decimal_places=6)
     lng = models.DecimalField('経度', max_digits=9, decimal_places=6)
     genre = models.CharField('ジャンル', max_length=20, null=True)
+    ranking = models.CharField('ランキング', max_length=5, null=True)
 
     def __str__(self):
         return str(self.name)

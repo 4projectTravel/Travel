@@ -9,7 +9,7 @@ from .models import Map
     #model = Map
 
 def index(request):
-    template = loader.get_template('map/index.html')
+    template = loader.get_template('map/index7.html')
     context = {}
     return HttpResponse(template.render(context, request))
 
@@ -22,9 +22,3 @@ def map_shrine(request):
     template = loader.get_template('map/map_shrine.html')
     context = {}
     return HttpResponse(template.render(context, request))
-
-#def spot_delete(request: WSGIRequest, spot_id: int) -> JsonResponse:
-    #""" 投稿を削除する """
-    #spot = Map.objects.get(id=spot_id)
-    #spot.delete()
-    #return JsonResponse({})

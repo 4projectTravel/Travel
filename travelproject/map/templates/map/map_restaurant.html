@@ -10,7 +10,7 @@
        * element that contains the map. */
       #map {
         height: 50%;
-        weight: 50%;
+        weight: 30%;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -20,15 +20,52 @@
       }
       table {
         border-style: solid;
+        margin-left: 30px;
+      }
+      .container {
+        display:flex;
+        gap: 650px;
 
+      }
+      .container2{
+        margin-right: 0px;
+        border-style: solid;
       }
 
     </style>
   </head>
   <body>
+   <div id="map"></div>
+    <div class="container">
+      <div>
+        <table id='data-table'>
+          <tr><th>スポット名</th></tr>
+        </table>
+      </div>
+      <div class="container2">
+        <div>
+          <ul class="class1">
+            <li><span style="color: #ffdc00; font-size: 18px;">●</span>：ご飯</li>
+            <li><span style="color: #ff0000; font-size: 18px;">●</span>：カフェ・パン・スイーツ・お菓子</li>
+            <li><span style="color: #00bfff; font-size: 18px;">●</span>：イベント</li>
+            <li><span style="color: #ee7800; font-size: 18px;">●</span>：風景・景色</li>
+            <li><span style="color: #ffa0ed; font-size: 18px;">●</span>：アート・カルチャー</li>
+            <li><span style="color: #a260bf; font-size: 18px;">●</span>：お土産・お酒・雑貨</li>
+            <li><span style="color: #3333FF; font-size: 18px;">●</span>：神社・寺院</li>
+            <li><span style="color: #008000; font-size: 18px;">●</span>：アクティビティ・体験・その他施設</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li>緑：徒歩5分圏内</li>
+            <li>赤：徒歩15分圏内</li>
+            <li>青：徒歩30分圏内</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-    <div id="map"></div>
-    <br/><input type="button" value="現在位置" onclick="getPosition();" />
+
     <script>
       var map;
       var marker;
@@ -83,11 +120,12 @@
 
       }
 
+
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           /*center: {lat: 35.681236, lng: 139.767125},*/
            center: {lat: 35.323791, lng: 139.54749},
-          zoom: 12
+          zoom: 7
 
         });
 
@@ -97,70 +135,87 @@
         centerControlDiv.index = 1;
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
 
+        /*位置情報を表示する*/
+
+              function success(pos) {
+                 var crd = pos.coords;
+
+
+
+        　　　　　/*現在地*/
+                 var currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);
+
+
+                 if ( marker != undefined )  marker.setMap(null);
+                 if ( circle != undefined )  circle.setMap(null);
+
+                 /* 現在位置にマーカーを設定 */
+                 marker = new google.maps.Marker({
+                    position: currentPos, //マーカーの位置（必須）
+        			      map: map //マーカーを表示する地図
+                  });
+
+                 /* 位置の誤差領域 */
+                 /*
+                 circle = new google.maps.Circle({
+                    strokeColor: "#3333FF",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: "#3333FF",
+                    fillOpacity: 0.35,
+                    map: map,
+                    draggable: false,
+                    center: currentPos,
+                    radius: crd.accuracy   /* 位置の誤差(m)を半径とする */
+                 //});
+
+                 //map.setCenter(currentPos);
+                 //map.setZoom(10);
+                 //setInfo(crd);
+
+                 /*鎌倉市を中心に円を表示する*/
+                 var myCircle_330 = new google.maps.Circle({
+                   strokeColor: '#028760',
+                   strokeOpacity: 0.8,
+                   strokeWeight: 2,
+                   fillColor: '#0287600',
+                   fillOpacity: 0.35,
+                   map: map,
+                   center: currentPos,
+                   //center: {lat: 35.323791, lng: 139.54749},
+                   radius: 330  //半径1000メートル
+                 });
+
+                 var myCircle_1000 = new google.maps.Circle({
+                   strokeColor: '#FF0000',
+                   strokeOpacity: 0.8,
+                   strokeWeight: 2,
+                   fillColor: '#FF0000',
+                   fillOpacity: 0.35,
+                   map: map,
+                   //center: {lat: 35.323791, lng: 139.54749},
+                   center: currentPos,
+                   radius: 1000  //半径1000メートル
+                 });
+
+                 var myCircle_2000 = new google.maps.Circle({
+                   strokeColor: '#0095d9',
+                   strokeOpacity: 0.8,
+                   strokeWeight: 2,
+                   fillColor: '#0095d9',
+                   fillOpacity: 0.35,
+                   map: map,
+                   //center: {lat: 35.323791, lng: 139.54749},
+                   center: currentPos,
+                   radius: 2000  //半径1000メートル
+                 });
+
+              }
+
+              navigator.geolocation.getCurrentPosition(success);
+
       }
-　　　/*位置情報を表示する*/
-      function success(pos) {
-         var crd = pos.coords;
-         var timeStamp = pos.timestamp;
-
-
-　　　　　/*現在地*/
-         var currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);
-
-
-         if ( marker != undefined )  marker.setMap(null);
-         if ( circle != undefined )  circle.setMap(null);
-
-         /* 現在位置にマーカーを設定 */
-         marker =  new google.maps.Marker({
-            position: currentPos,
-            map: map,
-            /*マーカーのアニメーションと色変更*/
-            animation: google.maps.Animation.DROP,
-            icon: {
-              fillColor: "#ff6633",//塗り潰し色
-              scale: 10,
-              fillOpacity: 0.8,
-              strokeColor: "#ff6633",              //枠の色
-		          strokeWeight: 1.0,
-          		path: google.maps.SymbolPath.CIRCLE, //円を指定
-		        },
-            label: {
-              text: 'A',                           //ラベル文字
-          		color: '#FFFFFF',                    //文字の色
-          		fontSize: '20px'                     //文字のサイズ
-		        }
-          });
-
-         /* 位置の誤差領域 */
-         circle = new google.maps.Circle({
-            strokeColor: "#3333FF",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: "#3333FF",
-            fillOpacity: 0.35,
-            map: map,
-            draggable: false,
-            center: currentPos,
-            radius: crd.accuracy   /* 位置の誤差(m)を半径とする */
-         });
-         map.setCenter(currentPos);
-         map.setZoom(14);
-         setInfo(crd);
-      }
-      function error(err) {
-         document.getElementById('tdErrCd').innerHTML = err.code;
-         document.getElementById('tdErrMg').innerHTML = err.message;
-      }
-
-      function getPosition() {
-         var options = {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
-         };
-         navigator.geolocation.getCurrentPosition(success, error, options);
-      }
+　　　
 
       function setMarker(mapJson) {
 
@@ -171,7 +226,7 @@
 
           var tr = document.createElement('tr');
           var td = document.createElement('td');
-          td.innerHTML = mapJson[i].name ;
+          td.innerHTML = mapJson[i].name +'(' + mapJson[i].ranking +')' ;
           tr.appendChild(td);
 
 
@@ -195,7 +250,7 @@
                 fillColor: "#ffdc00",//塗り潰し色
                 scale: 10,
                 fillOpacity: 0.8,
-                strokeColor: "#ff6633",              //枠の色
+                //strokeColor: "#ff6633",              //枠の色
   		          strokeWeight: 1.0,
             		path: google.maps.SymbolPath.CIRCLE, //円を指定
               }
@@ -209,7 +264,7 @@
                 fillColor: "#3333FF",//塗り潰し色
                 scale: 10,
                 fillOpacity: 0.8,
-                strokeColor: "#ff6633",              //枠の色
+                //strokeColor: "#ff6633",              //枠の色
   		          strokeWeight: 1.0,
             		path: google.maps.SymbolPath.CIRCLE, //円を指定
 
@@ -241,21 +296,9 @@
 
     <a href="{% url 'topA' %}">ホーム画面へ戻る</a>
 
-    <!--<ul class="class1">
 
-      <li>黄色：ご飯</li>
-      <li>赤色：カフェ・パン・スイーツ・お菓子</li>
-      <li>水色：イベント</li>
-      <li>オレンジ色：風景・景色</li>
-      <li>ピンク色：アート・カルチャー</li>
-      <li>紫色：お土産・お酒・雑貨</li>
-      <li>青色：神社・寺院</li>
-      <li>緑色：アクティビティ・体験・その他施設</li>
-    </ul>-->
 
-    <table id='data-table'>
-      <tr><th>スポット名</th></tr>
-    </table>
+
 
 
 
