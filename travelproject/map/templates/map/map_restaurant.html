@@ -24,7 +24,7 @@
       }
       .container {
         display:flex;
-        gap: 650px;
+        gap: 400px;
 
       }
       .container2{
@@ -32,20 +32,47 @@
         border-style: solid;
       }
 
+      ul li{
+        list-style:none;
+  　　}
+     .c2 {
+       padding-left: 3em;
+     }
+
+
     </style>
   </head>
   <body>
-   <div id="map"></div>
+    <div id="map"></div>
+    <!--検索-->
+    <!--<div class="checkAllBox">
+      <label><input type="checkbox" class="partsCheck" id="checkAll" checked><span>すべて</span></label>
+    </div>-->
+
+
+    <!--ここまで-->
+
+
     <div class="container">
-      <div>
-        <table id='data-table'>
-          <tr><th>スポット名</th></tr>
-        </table>
+      <div class="BoxList">
+        <p>選択した値 <span id="span1"></span></p>
+        <ul>
+          <li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall" checked>全て選択</label>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="ごはん" checked>ごはん</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="カフェ・パン・スイーツ" checked>カフェ・パン・スイーツ・お菓子</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="イベント" checked>イベント</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="風景・景色" checked>風景・景色</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アート・カルチャー" checked>アート・カルチャー</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="お土産・お酒・雑貨" checked>お土産・お酒・雑貨</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="神社・寺院" checked>神社・寺院</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アクティビティ・体験・その他施設" checked>アクティビティ・体験・その他施設</label></li>
+        </ul>
+        <input type="button" value="検索する" onclick="clickBtn1()">
       </div>
       <div class="container2">
         <div>
           <ul class="class1">
-            <li><span style="color: #ffdc00; font-size: 18px;">●</span>：ご飯</li>
+            <li><span style="color: #ffdc00; font-size: 18px;">●</span>：ごはん</li>
             <li><span style="color: #ff0000; font-size: 18px;">●</span>：カフェ・パン・スイーツ・お菓子</li>
             <li><span style="color: #00bfff; font-size: 18px;">●</span>：イベント</li>
             <li><span style="color: #ee7800; font-size: 18px;">●</span>：風景・景色</li>
@@ -65,8 +92,73 @@
       </div>
     </div>
 
+    <div>
+      <table id='data-table'>
+        <tr><th>スポット名</th></tr>
+      </table>
+    </div>
+
+
 
     <script>
+      /*検索フォーム*/
+      //「全て選択」のチェックボックス
+      let checkAll = document.getElementById("checkAll");
+      //「全て選択」以外のチェックボックス
+      let el = document.getElementsByClassName("checks");
+
+      //全てのチェックボックスをON/OFFする
+      const funcCheckAll = (bool) => {
+        for (let i = 0; i < el.length; i++) {
+            el[i].checked = bool;
+        }
+      }
+
+      //「checks」のclassを持つ要素のチェック状態で「全て選択」のチェック状態をON/OFFする
+      const funcCheck = () => {
+        let count = 0;
+        for (let i = 0; i < el.length; i++) {
+             if (el[i].checked) {
+                  count += 1;
+             }
+         }
+
+         if (el.length === count) {
+             checkAll.checked = true;
+        } else {
+           checkAll.checked = false;
+        }
+      };
+
+      //「全て選択」のチェックボックスをクリックした時
+      checkAll.addEventListener("click",() => {
+           funcCheckAll(checkAll.checked);
+      },false);
+
+      //「全て選択」以外のチェックボックスをクリックした時
+      for (let i = 0; i < el.length; i++) {
+           el[i].addEventListener("click", funcCheck, false);
+      }
+
+
+
+      var arr;
+      var chk1;
+
+      function clickBtn1() {
+        arr = [];
+        chk1 = document.getElementsByName("chk1");
+
+        for (let i = 0; i < chk1.length; i++) {
+            if (chk1[i].checked) {//(chk1[i].checked === true)と同じ
+               arr.push(chk1[i].value);
+            }
+         }
+         document.getElementById("span1").textContent = arr;
+       }
+      /*ここまで*/
+
+
       var map;
       var marker;
       var circle;
@@ -101,7 +193,7 @@
         controlText.style.lineHeight = '38px';
         controlText.style.paddingLeft = '5px';
         controlText.style.paddingRight = '5px';
-        controlText.innerHTML = 'Map Search';
+        controlText.innerHTML = '検索する';
         controlUI.appendChild(controlText);
 
         controlUI.addEventListener('click', function() {
@@ -109,8 +201,13 @@
           var xhttp = new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
                if (this.readyState == 4 && this.status == 200) {
-                 setMarker(JSON.parse(this.responseText));
+                  setMarker(JSON.parse(this.responseText));
                }
+               //for (let i = 0; i < chk1.length; i++) {
+                // if ( this.readyState == 4 && this.status == 200 && chk1[i].checked) {//(chk1[i].checked === true)と同じ
+                //   setMarker(JSON.parse(this.responseText));
+                // }
+               //}
           };
           xhttp.open("GET", "api/map?format=json", true);
           xhttp.setRequestHeader("Content-type", "application/json");
@@ -125,7 +222,7 @@
         map = new google.maps.Map(document.getElementById('map'), {
           /*center: {lat: 35.681236, lng: 139.767125},*/
            center: {lat: 35.323791, lng: 139.54749},
-          zoom: 7
+          zoom: 9
 
         });
 
@@ -218,69 +315,74 @@
 　　　
 
       function setMarker(mapJson) {
+        /*一覧表示*/
+        var tableEle = document.getElementById('data-table');
 
-       /*一覧表示*/
-       var tableEle = document.getElementById('data-table');
+         for(var i = 0; i < mapJson.length; i++){
+           var tr = document.createElement('tr');
+           var td = document.createElement('td');
+           for(var j=0; j < chk1.length; j++){
+             if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
+               td.innerHTML = mapJson[i].name +'(' + mapJson[i].ranking +')' ;
+               tr.appendChild(td);
+             }
+             tableEle.appendChild(tr);
+           }
+         }
+        /*一覧表示ここまで*/
 
-        for(var i = 0; i < mapJson.length; i++){
+       for(var i = 0; i < mapJson.length; i++){
+         for(var j=0; j < chk1.length; j++){
+           if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
 
-          var tr = document.createElement('tr');
-          var td = document.createElement('td');
-          td.innerHTML = mapJson[i].name +'(' + mapJson[i].ranking +')' ;
-          tr.appendChild(td);
+             var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
+             '<a href="{% url 'list-post' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
 
+             var infowindow = new google.maps.InfoWindow({
 
-        tableEle.appendChild(tr);
-       /*一覧表示ここまで*/
+               content: contentStr
+             });
 
+             if(mapJson[i].genre == 'ごはん'){
+               var marker = new google.maps.Marker({
+                 position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                 map: map,
+                 icon: {
+                   fillColor: "#ffdc00",//塗り潰し色
+                   scale: 10,
+                   fillOpacity: 0.8,
+                   //strokeColor: "#ff6633",              //枠の色
+     		          strokeWeight: 1.0,
+               		path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 }
+               });
 
-          var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
-          '<a href="{% url 'list-post' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
+             }else if(mapJson[i].genre == '神社・寺院'){
+               var marker = new google.maps.Marker({
+                 position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                 map: map,
+                 icon: {
+                   fillColor: "#3333FF",//塗り潰し色
+                   scale: 10,
+                   fillOpacity: 0.8,
+                   //strokeColor: "#ff6633",              //枠の色
+     		          strokeWeight: 1.0,
+               		path: google.maps.SymbolPath.CIRCLE, //円を指定
 
-          var infowindow = new google.maps.InfoWindow({
+                 }
+               });
+             }
 
-            content: contentStr
-          });
-
-          if(mapJson[i].genre == 'ご飯'){
-            var marker = new google.maps.Marker({
-              position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-              map: map,
-              icon: {
-                fillColor: "#ffdc00",//塗り潰し色
-                scale: 10,
-                fillOpacity: 0.8,
-                //strokeColor: "#ff6633",              //枠の色
-  		          strokeWeight: 1.0,
-            		path: google.maps.SymbolPath.CIRCLE, //円を指定
-              }
-            });
-
-          }else if(mapJson[i].genre == '神社・寺院'){
-            var marker = new google.maps.Marker({
-              position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-              map: map,
-              icon: {
-                fillColor: "#3333FF",//塗り潰し色
-                scale: 10,
-                fillOpacity: 0.8,
-                //strokeColor: "#ff6633",              //枠の色
-  		          strokeWeight: 1.0,
-            		path: google.maps.SymbolPath.CIRCLE, //円を指定
-
-              }
-            });
+             bindInfoWindow(marker, map, infowindow);
           }
-
-          bindInfoWindow(marker, map, infowindow);
-
-
+         }
         }
       }
 
       function bindInfoWindow(marker, map, infowindow) {
         marker.addListener('click', function() {
           infowindow.open(map, this);
+
         });
       }
 
