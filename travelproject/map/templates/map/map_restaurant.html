@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
@@ -329,6 +330,7 @@
              if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
                td1.innerHTML = mapJson[i].name +'(' + mapJson[i].ranking +')' ;
                tr.appendChild(td1);
+               //一言追加
                td2.innerHTML = mapJson[i].comment;
                tr.appendChild(td2);
              }
