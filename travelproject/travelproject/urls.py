@@ -11,7 +11,7 @@ from rest_framework import routers, serializers, viewsets
 class MapSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Map
-        fields = ('name', 'address', 'lat', 'lng', 'genre', 'ranking')
+        fields = ('name', 'address', 'lat', 'lng', 'genre', 'ranking', 'comment')
 
 class MapViewSet(viewsets.ModelViewSet):
     #queryset = Map.objects.all()
