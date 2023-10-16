@@ -97,6 +97,7 @@
       <table id='data-table'>
         <tr>
           <th>スポット名</th>
+          <th>移動時間</th>
           <th>一言</th>
         </tr>
       </table>
@@ -221,6 +222,9 @@
 
       }
 
+      var currentPos;// 緯度・経度
+      var directionsService;
+      var directionsRenderer;
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -244,8 +248,9 @@
 
 
         　　　　　/*現在地*/
-                 var currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);
-
+                 currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);// 緯度・経度
+                 directionsService = new google.maps.DirectionsService();
+                 directionsRenderer = new google.maps.DirectionsRenderer();
 
                  if ( marker != undefined )  marker.setMap(null);
                  if ( circle != undefined )  circle.setMap(null);
@@ -321,22 +326,64 @@
       function setMarker(mapJson) {
         /*一覧表示*/
         var tableEle = document.getElementById('data-table');
+        var durationTextWalking;
+        var durationTextDriving;
+        var durationTextTransit;
 
-         for(var i = 0; i < mapJson.length; i++){
-           var tr = document.createElement('tr');
-           var td1 = document.createElement('td');
-           var td2 = document.createElement('td');
-           for(var j=0; j < chk1.length; j++){
-             if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
-               td1.innerHTML = mapJson[i].name +'(' + mapJson[i].ranking +')' ;
-               tr.appendChild(td1);
-               //一言を追加
-               td2.innerHTML = mapJson[i].comment;
-               tr.appendChild(td2);
-             }
-             tableEle.appendChild(tr);
-           }
-         }
+        for (var i = 0; i<mapJson.length; i++){
+          for (var j = 0; j<chk1.length; j++){
+            if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre) {
+              calculateRoute(currentPos, {
+                lat: Number(mapJson[i].lat),
+                lng: Number(mapJson[i].lng)
+              }, mapJson[i]);
+            }
+          }
+        }
+
+        function calculateRoute(origin, destination, spot) {
+          var travelModes = [google.maps.DirectionsTravelMode.WALKING, google.maps.DirectionsTravelMode.DRIVING, google.maps.DirectionsTravelMode.TRANSIT];
+          var tableBody = tableEle.querySelector('tbody');
+
+          travelModes.forEach(function (mode, index){
+            var request = {
+              origin: origin,
+              destination: destination,
+              travelMode: mode
+            };
+
+            directionsService.route(request, function (response, status) {
+              if (status == 'OK') {
+                var route = response.routes[0];
+                var routeLeg = route.legs[0];
+                var durationText = routeLeg.duration.text;
+
+                if (mode == google.maps.DirectionsTravelMode.WALKING){
+                  durationTextWalking = durationText;
+                } else if (mode == google.maps.DirectionsTravelMode.DRIVING) {
+                  durationTextDriving = durationText;
+                } else if (mode == google.maps.DirectionsTravelMode.TRANSIT) {
+                  durationTextTransit = durationText;
+                }
+
+                var tr = document.createElement('tr');
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                var td3 = document.createElement('td');
+                
+                td1.innerHTML = spot.name + ' (' + spot.ranking + ')';
+                td2.innerHTML =  '🏃‍♀️' + durationTextWalking + '🚘' + durationTextDriving + ' 🚆' + durationTextTransit;
+                td3.innerHTML = spot.comment;
+                
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tableEle.appendChild(tr);
+              }
+            });
+          });
+        }
+        
         /*一覧表示ここまで*/
 
        for(var i = 0; i < mapJson.length; i++){
