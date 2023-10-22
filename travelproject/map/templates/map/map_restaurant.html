@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
@@ -141,8 +142,12 @@
     </div>
 
     <div>
-      <table id='data-table' class="d_table">
-        <tr><th>スポット名</th></tr>
+      <table id='data-table'>
+        <tr>
+          <th>スポット名</th>
+          <th>移動時間</th>
+          <th>一言</th>
+        </tr>
       </table>
     </div>
 
@@ -299,6 +304,9 @@
 
       }
 
+      var currentPos;// 緯度・経度
+      var directionsService;
+      var directionsRenderer;
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -322,8 +330,9 @@
 
 
         　　　　　/*現在地*/
-                 var currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);
-
+                 currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);// 緯度・経度
+                 directionsService = new google.maps.DirectionsService();
+                 directionsRenderer = new google.maps.DirectionsRenderer();
 
                  if ( marker != undefined )  marker.setMap(null);
                  if ( circle != undefined )  circle.setMap(null);
@@ -398,40 +407,68 @@
 
       function setMarker(mapJson) {
         /*一覧表示*/
-        tableEle = document.getElementById('data-table');
+        
+        var tableEle = document.getElementById('data-table');
+        var durationTextWalking;
+        var durationTextDriving;
+        var durationTextTransit;
 
+        for (var i = 0; i<mapJson.length; i++){
+          for (var j = 0; j<chk1.length; j++){
+            if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre) {
+              calculateRoute(currentPos, {
+                lat: Number(mapJson[i].lat),
+                lng: Number(mapJson[i].lng)
+              }, mapJson[i]);
+            }
+          }
+        }
 
-         for(var i = 0; i < mapJson.length; i++){
+        function calculateRoute(origin, destination, spot) {
+          var travelModes = [google.maps.DirectionsTravelMode.WALKING, google.maps.DirectionsTravelMode.DRIVING, google.maps.DirectionsTravelMode.TRANSIT];
+          var tableBody = tableEle.querySelector('tbody');
 
-           var tr = document.createElement('tr');
-           var td = document.createElement('td');
+          travelModes.forEach(function (mode, index){
+            var request = {
+              origin: origin,
+              destination: destination,
+              travelMode: mode
+            };
 
+            directionsService.route(request, function (response, status) {
+              if (status == 'OK') {
+                var route = response.routes[0];
+                var routeLeg = route.legs[0];
+                var durationText = routeLeg.duration.text;
 
-           /*カテゴリー検索*/
+                if (mode == google.maps.DirectionsTravelMode.WALKING){
+                  durationTextWalking = durationText;
+                } else if (mode == google.maps.DirectionsTravelMode.DRIVING) {
+                  durationTextDriving = durationText;
+                } else if (mode == google.maps.DirectionsTravelMode.TRANSIT) {
+                  durationTextTransit = durationText;
+                }
 
-           for(var j=0; j < chk1.length; j++){
-             if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
-               //for(var k=0; k < mapJson.length; k++){
-                 //if(i!=k && mapJson[k].name == mapJson[i].name){
-                if(mapJson[i].name == mapJson[i+1].name){
-                   //td.innerHTML = mapJson[i].ranking + ' : ' +mapJson[i].name +mapJson[k].genre + ',' + mapJson[i].genre;
-                   td.innerHTML = mapJson[i].number + ' : ' +mapJson[i].name +mapJson[i].genre + ',' + mapJson[i+1].genre;
-                   i=i+1;
-                   //td.innerHTML = mapJson[i].ranking + ' : ' +"<button type="button">"+ mapJson[i].name +"</button>"+mapJson[k].genre + ',' + mapJson[i].genre;
-                   //i=k+1;
-                 }else{
-                   td.innerHTML = mapJson[i].number + ' : ' + mapJson[i].name +mapJson[i].genre;
+                var tr = document.createElement('tr');
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                var td3 = document.createElement('td');
 
-                 }
-             }
+                td1.innerHTML = spot.name + ' (' + spot.ranking + ')';
+                td2.innerHTML =  '🏃‍♀️' + durationTextWalking + '🚘' + durationTextDriving + ' 🚆' + durationTextTransit;
+                td3.innerHTML = spot.comment;
 
-             tr.appendChild(td);
-             tableEle.appendChild(tr);
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tableEle.appendChild(tr);
+              }
+            });
+          });
+        }
 
-         }
-       }
+        /*一覧表示ここまで*/
 
-          /*一覧表示ここまで*/
 
        /*一情報ウィンドウ*/
        for(var i = 0; i < mapJson.length; i++){

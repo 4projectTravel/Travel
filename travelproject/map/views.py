@@ -9,7 +9,7 @@ from .models import Map
     #model = Map
 
 def index(request):
-    template = loader.get_template('map/index7.html')
+    template = loader.get_template('map/index.html')
     context = {}
     return HttpResponse(template.render(context, request))
 
