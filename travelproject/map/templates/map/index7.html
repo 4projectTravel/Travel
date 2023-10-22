@@ -21,71 +21,46 @@
     </style>
   </head>
   <body>
-    <div><p id="route-time"></p></div>
+
     <div id="map"></div>
+    <p><button id="method">メソッドを実行</button><button id="reset">リセット</button></p>
+    <p><textarea id="response"></textarea></p>
 
     <script>
-      function initMap() {
-        function success(pos) {
-          var lat = pos.coords.latitude;
-          var lng = pos.coords.longitude;
-          var latlng = new google.maps.LatLng(lat, lng); //中心の緯度, 経度
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 10,
-			      center: latlng
-          });
-          var marker = new google.maps.Marker({
-            position: latlng, //マーカーの位置（必須）
-			      map: map //マーカーを表示する地図
-          });
+    function initialize() {
+var mapDiv = document.getElementById( "map" ) ;
 
-          /*鎌倉市を中心に円を表示する*/
-          var myCircle_330 = new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            //fillColor: '#FF0000',
-            //fillOpacity: 0.35,
-            map: map,
-            center: latlng,
-            //center: {lat: 35.323791, lng: 139.54749},
-            //draggable: true,  //円をドラッグできるように
-            radius: 330  //半径1000メートル
-          });
+var responseTextarea = document.getElementById( "response" ) ;
+responseTextarea.value = "" ;
 
-          var myCircle_1000 = new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            //fillColor: '#FF0000',
-            //fillOpacity: 0.35,
-            map: map,
-            //center: {lat: 35.323791, lng: 139.54749},
-            center: latlng,
-            //draggable: true,  //円をドラッグできるように
-            radius: 1000  //半径1000メートル
-          });
+// Map
+var map = new google.maps.Map( mapDiv, {
+  center: new google.maps.LatLng( 35, 139 ) ,
+  zoom: 15 ,
+} ) ;
 
-          var myCircle_2000 = new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            //fillColor: '#FF0000',
-            //fillOpacity: 0.35,
-            map: map,
-            //center: {lat: 35.323791, lng: 139.54749},
-            center: latlng,
-            //draggable: true,  //円をドラッグできるように
-            radius: 2000  //半径1000メートル
-          });
+// InfoWindow
+var infoWindow = new google.maps.InfoWindow( {
+  position: new google.maps.LatLng( 35, 139 ) ,
+  content: "SYNCER" ,
+} ) ;
 
-        }
-        navigator.geolocation.getCurrentPosition(success);
+// set center
+map.setCenter( infoWindow.getPosition() ) ;
 
+// Method
+document.getElementById( "method" ).onclick = function () {
+  var response = infoWindow.open( map ) ;
+  try{ response = typeof response == "object" ? JSON.stringify( response ) : response ; }catch(e){}
+  responseTextarea.value = response ;
 
+}
+}
 
+// Reset
+document.getElementById( "reset" ).onclick = initialize ;
 
-      }
+initialize() ;
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"

@@ -5,12 +5,17 @@
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css" integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+
+
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
         height: 50%;
-        weight: 30%;
+        weight: 50%;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -22,27 +27,64 @@
         border-style: solid;
         margin-left: 30px;
       }
+
+      table.d_table{
+        border-style: solid;
+        margin-left: auto;
+        margin-right: auto
+      }
+
       .container {
         display:flex;
-        gap: 400px;
+        gap: 350px;
 
       }
       .container2{
-        margin-right: 0px;
         border-style: solid;
+        padding: 10px;
       }
 
       ul li{
         list-style:none;
   　　}
      .c2 {
-       padding-left: 3em;
+       padding-left: 2em;
+     }
+
+     a:hover{
+       cursor: pointer;
      }
 
 
-    </style>
+
+
+   </style>
   </head>
   <body>
+    <nav class="navbar navbar-dark bg-info sticky-top">
+      <div class="navbar-nav d-flex flex-row">
+        <a class="navbar-brand text-light" href="{% url 'topA' %}">ほっとりっぷ</a>
+        <!--<a class="nav-link mx-3" href="{% url 'create-itinerary' %}"> 旅行日程表を作成する </a>-->
+        <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> 旅行記録を閲覧する </a>
+        <!--<a class="nav-link mx-3" href="{% url 'move_to_record' %}"> 旅行記録を作成する </a>-->
+        <a class="nav-link mx-3" href="{% url 'list-post' %}"> 口コミを閲覧・投稿する </a>
+        <!--<a class="nav-link mx-3" href="{% url 'create-post' %}"> 口コミ登録 </a>-->
+        <a class="nav-link mx-3" href="{% url 'move_to_mypage' %}"> マイページ(旅程表作成・閲覧) </a>
+        <!--<a class="nav-link mx-3" href="{% url 'move_to_traveling' %}"> 現在旅行中の方はこちら </a>-->
+      </div>
+      <div class="narbar-nav d-flex flex-row">
+        {% if request.user.is_authenticated %}
+          <a class="nav-link mx-3" href="{% url 'accounts:logout' %}">Logout</a>
+
+        {% else %}
+          <a class="nav-link mx-3" href="{% url 'accounts:login' %}">Login</a>
+          <a class="nab-link mx-3" href="{% url 'accounts:signup' %}">Sign up</a>
+
+        {% endif %}
+
+      </div>
+    </nav>
+
     <div id="map"></div>
     <!--検索-->
     <!--<div class="checkAllBox">
@@ -55,11 +97,11 @@
 
     <div class="container">
       <div class="BoxList">
-        <p>選択した値 <span id="span1"></span></p>
+        <!--<p>選択した値 <span id="span1"></span></p>-->
         <ul>
           <li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall" checked>全て選択</label>
           <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="ごはん" checked>ごはん</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="カフェ・パン・スイーツ" checked>カフェ・パン・スイーツ・お菓子</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="カフェ・パン・スイーツ・お菓子" checked>カフェ・パン・スイーツ・お菓子</label></li>
           <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="イベント" checked>イベント</label></li>
           <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="風景・景色" checked>風景・景色</label></li>
           <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アート・カルチャー" checked>アート・カルチャー</label></li>
@@ -67,11 +109,16 @@
           <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="神社・寺院" checked>神社・寺院</label></li>
           <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アクティビティ・体験・その他施設" checked>アクティビティ・体験・その他施設</label></li>
         </ul>
-        <input type="button" value="検索する" onclick="clickBtn1()">
+        <input type="button" value="検索" onclick="clickBtn1()"></input>
+
+        <font color="#6495ed"><a onclick="window.location.reload()"　href="#" id="reset">表示をリセットする</a></font>
+        <!--<font color="#6495ed"><button id="reset">表示をリセットする</button></font>-->
+
       </div>
       <div class="container2">
         <div>
-          <ul class="class1">
+          <ul>
+            <li><<b>スポットのカテゴリー</b>></li>
             <li><span style="color: #ffdc00; font-size: 18px;">●</span>：ごはん</li>
             <li><span style="color: #ff0000; font-size: 18px;">●</span>：カフェ・パン・スイーツ・お菓子</li>
             <li><span style="color: #00bfff; font-size: 18px;">●</span>：イベント</li>
@@ -84,23 +131,23 @@
         </div>
         <div>
           <ul>
-            <li>緑：徒歩5分圏内</li>
-            <li>赤：徒歩15分圏内</li>
-            <li>青：徒歩30分圏内</li>
+            <li><<b>現在地からの距離</b>></li>
+            <li><font color="#028760">緑</font>：徒歩5分圏内</li>
+            <li><font color="#ff0000">赤</font>：徒歩15分圏内</li>
+            <li><font color="#0095d9">青</font>：徒歩30分圏内</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div>
-      <table id='data-table'>
+      <table id='data-table' class="d_table">
         <tr><th>スポット名</th></tr>
       </table>
     </div>
 
-
-
     <script>
+      //document.getElementById( "reset" ).onclick = initMap;
       /*検索フォーム*/
       //「全て選択」のチェックボックス
       let checkAll = document.getElementById("checkAll");
@@ -145,6 +192,8 @@
       var arr;
       var chk1;
 
+      var tableEle;
+/*
       function clickBtn1() {
         arr = [];
         chk1 = document.getElementsByName("chk1");
@@ -156,12 +205,42 @@
          }
          document.getElementById("span1").textContent = arr;
        }
+
       /*ここまで*/
+
+      function clickBtn1() {
+        //arr = "決定ボタンが押されました。マップ上に表示するには「表示する」ボタンを押してください。"
+        chk1 = document.getElementsByName("chk1");
+        //document.getElementById("span1").textContent = arr;
+
+        var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+               if (this.readyState == 4 && this.status == 200) {
+                  setMarker(JSON.parse(this.responseText));
+               }
+               //for (let i = 0; i < chk1.length; i++) {
+                // if ( this.readyState == 4 && this.status == 200 && chk1[i].checked) {//(chk1[i].checked === true)と同じ
+                //   setMarker(JSON.parse(this.responseText));
+                // }
+               //}
+          };
+          xhttp.open("GET", "api/map?format=json", true);
+          xhttp.setRequestHeader("Content-type", "application/json");
+          xhttp.send();
+/*
+          if(tableEle.length!=0){
+            window.location.reload();
+            clickBtn1()
+          }
+         */
+
+       }
 
 
       var map;
       var marker;
       var circle;
+
 
       /**
        * The CenterControl adds a control to the map that recenters the map on
@@ -169,6 +248,7 @@
        * This constructor takes the control DIV as an argument.
        * @constructor
        */
+
 
       function CenterControl(controlDiv, map) {
 
@@ -186,6 +266,7 @@
         controlDiv.appendChild(controlUI);
 
         // Set CSS for the control interior.
+        /*
         var controlText = document.createElement('div');
         controlText.style.color = 'rgb(25,25,25)';
         controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
@@ -193,7 +274,7 @@
         controlText.style.lineHeight = '38px';
         controlText.style.paddingLeft = '5px';
         controlText.style.paddingRight = '5px';
-        controlText.innerHTML = '検索する';
+        controlText.innerHTML = 'マップ上に表示する';
         controlUI.appendChild(controlText);
 
         controlUI.addEventListener('click', function() {
@@ -214,6 +295,7 @@
           xhttp.send();
 
         });
+        */
 
       }
 
@@ -253,7 +335,7 @@
                   });
 
                  /* 位置の誤差領域 */
-                 /*
+　　　　　　　　　　 /*
                  circle = new google.maps.Circle({
                     strokeColor: "#3333FF",
                     strokeOpacity: 0.8,
@@ -265,9 +347,10 @@
                     center: currentPos,
                     radius: crd.accuracy   /* 位置の誤差(m)を半径とする */
                  //});
+                 var center_now = {lat: 35.323791, lng: 139.54749};
 
-                 //map.setCenter(currentPos);
-                 //map.setZoom(10);
+                 map.setCenter(center_now);
+                 map.setZoom(10);
                  //setInfo(crd);
 
                  /*鎌倉市を中心に円を表示する*/
@@ -275,7 +358,7 @@
                    strokeColor: '#028760',
                    strokeOpacity: 0.8,
                    strokeWeight: 2,
-                   fillColor: '#0287600',
+                   fillColor: '#028760',
                    fillOpacity: 0.35,
                    map: map,
                    center: currentPos,
@@ -304,33 +387,53 @@
                    map: map,
                    //center: {lat: 35.323791, lng: 139.54749},
                    center: currentPos,
-                   radius: 2000  //半径1000メートル
+                   radius: 2000  //半径2000メートル
                  });
 
               }
 
               navigator.geolocation.getCurrentPosition(success);
-
       }
 　　　
 
       function setMarker(mapJson) {
         /*一覧表示*/
-        var tableEle = document.getElementById('data-table');
+        tableEle = document.getElementById('data-table');
+
 
          for(var i = 0; i < mapJson.length; i++){
+
            var tr = document.createElement('tr');
            var td = document.createElement('td');
+
+
+           /*カテゴリー検索*/
+
            for(var j=0; j < chk1.length; j++){
              if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
-               td.innerHTML = mapJson[i].name +'(' + mapJson[i].ranking +')' ;
-               tr.appendChild(td);
-             }
-             tableEle.appendChild(tr);
-           }
-         }
-        /*一覧表示ここまで*/
+               //for(var k=0; k < mapJson.length; k++){
+                 //if(i!=k && mapJson[k].name == mapJson[i].name){
+                if(mapJson[i].name == mapJson[i+1].name){
+                   //td.innerHTML = mapJson[i].ranking + ' : ' +mapJson[i].name +mapJson[k].genre + ',' + mapJson[i].genre;
+                   td.innerHTML = mapJson[i].number + ' : ' +mapJson[i].name +mapJson[i].genre + ',' + mapJson[i+1].genre;
+                   i=i+1;
+                   //td.innerHTML = mapJson[i].ranking + ' : ' +"<button type="button">"+ mapJson[i].name +"</button>"+mapJson[k].genre + ',' + mapJson[i].genre;
+                   //i=k+1;
+                 }else{
+                   td.innerHTML = mapJson[i].number + ' : ' + mapJson[i].name +mapJson[i].genre;
 
+                 }
+             }
+
+             tr.appendChild(td);
+             tableEle.appendChild(tr);
+
+         }
+       }
+
+          /*一覧表示ここまで*/
+
+       /*一情報ウィンドウ*/
        for(var i = 0; i < mapJson.length; i++){
          for(var j=0; j < chk1.length; j++){
            if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
@@ -343,6 +446,7 @@
                content: contentStr
              });
 
+
              if(mapJson[i].genre == 'ごはん'){
                var marker = new google.maps.Marker({
                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
@@ -354,7 +458,12 @@
                    //strokeColor: "#ff6633",              //枠の色
      		          strokeWeight: 1.0,
                		path: google.maps.SymbolPath.CIRCLE, //円を指定
-                 }
+                },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+               		color: '#000000',                    //文字の色
+               		fontSize: '20px'                     //文字のサイズ
+     		         }
                });
 
              }else if(mapJson[i].genre == '神社・寺院'){
@@ -366,44 +475,56 @@
                    scale: 10,
                    fillOpacity: 0.8,
                    //strokeColor: "#ff6633",              //枠の色
-     		          strokeWeight: 1.0,
-               		path: google.maps.SymbolPath.CIRCLE, //円を指定
+     		           strokeWeight: 1.0,
+               		 path: google.maps.SymbolPath.CIRCLE, //円を指定
+                  //radius: crd.accuracy /* 位置の誤差(m)を半径とする */
 
-                 }
+                },
+                label: {
+                 text: mapJson[i].number,                           //ラベル文字
+                 color: '#000000',                    //文字の色
+                 fontSize: '20px'                     //文字のサイズ
+                }
+               });
+             }else if(mapJson[i].genre == 'カフェ・パン・スイーツ・お菓子'){
+               var marker = new google.maps.Marker({
+                 position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                 map: map,
+                 icon: {
+                   fillColor: "#ff0000",//塗り潰し色
+                   scale: 10,
+                   fillOpacity: 0.8,
+                   //strokeColor: "#ff6633",              //枠の色
+     		           strokeWeight: 1.0,
+               		 path: google.maps.SymbolPath.CIRCLE, //円を指定
+                  //radius: crd.accuracy /* 位置の誤差(m)を半径とする */
+
+                },
+                label: {
+                 text: mapJson[i].number,                           //ラベル文字
+                 color: '#000000',                    //文字の色
+                 fontSize: '20px'                     //文字のサイズ
+                }
                });
              }
 
              bindInfoWindow(marker, map, infowindow);
+
           }
          }
-        }
+       }
+
       }
 
       function bindInfoWindow(marker, map, infowindow) {
         marker.addListener('click', function() {
           infowindow.open(map, this);
-
         });
       }
-
-
-
-
-
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
     async defer></script>
-
-
-    <a href="{% url 'topA' %}">ホーム画面へ戻る</a>
-
-
-
-
-
-
-
 
   </body>
 </html>
