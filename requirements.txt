@@ -1,2 +1,4 @@
 django~=4.0.4
 django-import-export
+rest_framework
+djangorestframework
