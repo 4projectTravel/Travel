@@ -24,15 +24,11 @@
         margin: 0;
         padding: 0;
       }
-      table {
+
+      table, th, td {
+        border-collapse: collapse;
         border-style: solid;
         margin-left: 30px;
-      }
-
-      table.d_table{
-        border-style: solid;
-        margin-left: auto;
-        margin-right: auto
       }
 
       .container {
@@ -144,10 +140,9 @@
     <div>
       <table id='data-table'>
         <tr>
-          <th>スポット番号</th>
-          <th>スポット名</th>
           <th>カテゴリー</th>
-          <th>移動時間</th>
+          <th>スポット名</th>
+          <th colspan="2">移動時間</th>
           <th>一言</th>
         </tr>
       </table>
@@ -332,7 +327,9 @@
 
 
         　　　　　/*現在地*/
-                 currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);// 緯度・経度
+                 //currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);// 緯度・経度
+                 currentPos = new google.maps.LatLng( 35.3188764, 139.551976);
+
                  directionsService = new google.maps.DirectionsService();
                  directionsRenderer = new google.maps.DirectionsRenderer();
 
@@ -408,48 +405,29 @@
 　　　
 
       function setMarker(mapJson) {
-        /*一覧表示*/
+       /*一覧表示*/
+       var tableEle = document.getElementById('data-table');
 
-        var tableEle = document.getElementById('data-table');
-        var durationTextWalking;
-        var durationTextDriving;
-        var durationTextTransit;
+        for(var i = 0; i<mapJson.length; i++){
+          for (var j = 0; j < chk1.length; j++){
+            if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre){
+              (function (i) {
+                var origin = currentPos; // 出発地の緯度と経度
+                //出発地を鎌倉に変更
+                //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
+                var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
 
-        for (var i = 0; i<mapJson.length; i++){
-          for (var j = 0; j<chk1.length; j++){
-            if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre) {
-              calculateRoute(currentPos, {
-                lat: Number(mapJson[i].lat),
-                lng: Number(mapJson[i].lng)
-              }, mapJson[i]);
-            }
-          }
-        }
+                var requestwalking = {
+                  origin: origin,
+                  destination: destination,
+                  travelMode: google.maps.TravelMode.WALKING
+                };
 
-        function calculateRoute(origin, destination, spot) {
-          var travelModes = [google.maps.DirectionsTravelMode.WALKING, google.maps.DirectionsTravelMode.DRIVING, google.maps.DirectionsTravelMode.TRANSIT];
-          var tableBody = tableEle.querySelector('tbody');
-
-          travelModes.forEach(function (mode, index){
-            var request = {
-              origin: origin,
-              destination: destination,
-              travelMode: mode
-            };
-
-            directionsService.route(request, function (response, status) {
-              if (status == 'OK') {
-                var route = response.routes[0];
-                var routeLeg = route.legs[0];
-                var durationText = routeLeg.duration.text;
-
-                if (mode == google.maps.DirectionsTravelMode.WALKING){
-                  durationTextWalking = durationText;
-                } else if (mode == google.maps.DirectionsTravelMode.DRIVING) {
-                  durationTextDriving = durationText;
-                } else if (mode == google.maps.DirectionsTravelMode.TRANSIT) {
-                  durationTextTransit = durationText;
-                }
+                var requestdriving = {
+                  origin: origin,
+                  destination: destination,
+                  travelMode: google.maps.TravelMode.DRIVING
+                };
 
                 var tr = document.createElement('tr');
                 var td1 = document.createElement('td');
@@ -458,11 +436,44 @@
                 var td4 = document.createElement('td');
                 var td5 = document.createElement('td');
 
-                td1.innderHTML = spot.number;
-                td2.innerHTML = spot.name;
-                td3.innerHTML = spot.genre;
-                td4.innerHTML =  '🏃‍♀️' + durationTextWalking + '🚘' + durationTextDriving + ' 🚆' + durationTextTransit;
-                td5.innerHTML = spot.comment;
+                td1.innerHTML = mapJson[i].genre;
+                td2.innerHTML = mapJson[i].name + ' (' + mapJson[i].ranking + ')';
+
+                directionsService.route(requestwalking, function (response, status){
+                  if(status == 'OK'){
+                    var route = response.routes[0];
+                    var routeLeg = route.legs[0];
+                    var durationText = routeLeg.duration.text;
+
+                    if(route.legs[0].duration.value <= 300){
+                      td3.innerHTML = '🏃‍♀️' + durationText;
+                      td3.style.color = 'green';
+                      td3.style.border = '1px solid black';
+                    }else if(route.legs[0].duration.value <= 900){
+                      td3.innerHTML = '🏃‍♀️' + durationText;
+                      td3.style.color = 'red';
+                      td3.style.border = '1px solid black';
+                    }else if(route.legs[0].duration.value <= 1800){
+                      td3.innerHTML = '🏃‍♀️' + durationText;
+                      td3.style.color = 'blue';
+                      td3.style.border = '1px solid black';
+                    }else{
+                      td3.innerHTML = '🏃‍♀️' + durationText;
+                    }
+                  }
+                });
+
+                directionsService.route(requestdriving, function (response, status){
+                  if(status == 'OK'){
+                    var route = response.routes[0];
+                    var routeLeg = route.legs[0];
+                    var durationText = routeLeg.duration.text;
+
+                    td4.innerHTML = '🚘' + durationText;
+                  }
+                });
+
+                td5.innerHTML = mapJson[i].comment;
 
                 tr.appendChild(td1);
                 tr.appendChild(td2);
@@ -470,9 +481,9 @@
                 tr.appendChild(td4);
                 tr.appendChild(td5);
                 tableEle.appendChild(tr);
-              }
-            });
-          });
+              })(i);
+            }
+          }
         }
 
         /*一覧表示ここまで*/
