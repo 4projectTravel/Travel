@@ -144,7 +144,9 @@
     <div>
       <table id='data-table'>
         <tr>
+          <th>スポット番号</th>
           <th>スポット名</th>
+          <th>カテゴリー</th>
           <th>移動時間</th>
           <th>一言</th>
         </tr>
@@ -407,7 +409,7 @@
 
       function setMarker(mapJson) {
         /*一覧表示*/
-        
+
         var tableEle = document.getElementById('data-table');
         var durationTextWalking;
         var durationTextDriving;
@@ -453,14 +455,20 @@
                 var td1 = document.createElement('td');
                 var td2 = document.createElement('td');
                 var td3 = document.createElement('td');
+                var td4 = document.createElement('td');
+                var td5 = document.createElement('td');
 
-                td1.innerHTML = spot.name + ' (' + spot.ranking + ')';
-                td2.innerHTML =  '🏃‍♀️' + durationTextWalking + '🚘' + durationTextDriving + ' 🚆' + durationTextTransit;
-                td3.innerHTML = spot.comment;
+                td1.innderHTML = spot.number;
+                td2.innerHTML = spot.name;
+                td3.innerHTML = spot.genre;
+                td4.innerHTML =  '🏃‍♀️' + durationTextWalking + '🚘' + durationTextDriving + ' 🚆' + durationTextTransit;
+                td5.innerHTML = spot.comment;
 
                 tr.appendChild(td1);
                 tr.appendChild(td2);
                 tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
                 tableEle.appendChild(tr);
               }
             });
@@ -499,7 +507,7 @@
                  label: {
                   text: mapJson[i].number,                           //ラベル文字
                		color: '#000000',                    //文字の色
-               		fontSize: '20px'                     //文字のサイズ
+               		fontSize: '15px'                     //文字のサイズ
      		         }
                });
 
@@ -520,7 +528,7 @@
                 label: {
                  text: mapJson[i].number,                           //ラベル文字
                  color: '#000000',                    //文字の色
-                 fontSize: '20px'                     //文字のサイズ
+                 fontSize: '15px'                     //文字のサイズ
                 }
                });
              }else if(mapJson[i].genre == 'カフェ・パン・スイーツ・お菓子'){
@@ -540,7 +548,7 @@
                 label: {
                  text: mapJson[i].number,                           //ラベル文字
                  color: '#000000',                    //文字の色
-                 fontSize: '20px'                     //文字のサイズ
+                 fontSize: '15px'                     //文字のサイズ
                 }
                });
              }
