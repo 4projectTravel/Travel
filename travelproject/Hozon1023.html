@@ -207,7 +207,6 @@
           xhttp.onreadystatechange = function() {
                if (this.readyState == 4 && this.status == 200) {
                   setMarker(JSON.parse(this.responseText));
-                  setTable(JSON.parse(this.responseText));
                }
                //for (let i = 0; i < chk1.length; i++) {
                 // if ( this.readyState == 4 && this.status == 200 && chk1[i].checked) {//(chk1[i].checked === true)と同じ
@@ -250,7 +249,37 @@
         controlUI.title = 'Click to recenter the map';
         controlDiv.appendChild(controlUI);
 
+        // Set CSS for the control interior.
+        /*
+        var controlText = document.createElement('div');
+        controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontSize = '16px';
+        controlText.style.lineHeight = '38px';
+        controlText.style.paddingLeft = '5px';
+        controlText.style.paddingRight = '5px';
+        controlText.innerHTML = 'マップ上に表示する';
+        controlUI.appendChild(controlText);
 
+        controlUI.addEventListener('click', function() {
+
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+               if (this.readyState == 4 && this.status == 200) {
+                  setMarker(JSON.parse(this.responseText));
+               }
+               //for (let i = 0; i < chk1.length; i++) {
+                // if ( this.readyState == 4 && this.status == 200 && chk1[i].checked) {//(chk1[i].checked === true)と同じ
+                //   setMarker(JSON.parse(this.responseText));
+                // }
+               //}
+          };
+          xhttp.open("GET", "api/map?format=json", true);
+          xhttp.setRequestHeader("Content-type", "application/json");
+          xhttp.send();
+
+        });
+        */
 
 
       }
@@ -296,7 +325,19 @@
         			      map: map //マーカーを表示する地図
                   });
 
-
+                  /* 位置の誤差領域 */
+ 　　　　　　　　　　 /*
+                  circle = new google.maps.Circle({
+                     strokeColor: "#3333FF",
+                     strokeOpacity: 0.8,
+                     strokeWeight: 2,
+                     fillColor: "#3333FF",
+                     fillOpacity: 0.35,
+                     map: map,
+                     draggable: false,
+                     center: currentPos,
+                     radius: crd.accuracy   /* 位置の誤差(m)を半径とする */
+                  //});
                  var center_now = {lat: 35.323791, lng: 139.54749};
 
                  map.setCenter(center_now);
@@ -347,6 +388,172 @@
 　　　
 
       function setMarker(mapJson) {
+       /*一覧表示*/
+       var tableEle = document.getElementById('data-table');
+
+        for(var i = 0; i<mapJson.length; i++){
+          for (var j = 0; j < chk1.length; j++){
+            if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre){
+  /*
+              if(mapJson[i].name == mapJson[i+1].name){
+                (function (i) {
+                  var origin = currentPos; // 出発地の緯度と経度
+                  //出発地を鎌倉に変更
+                  //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
+                  var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
+
+                  var requestwalking = {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: google.maps.TravelMode.WALKING
+                  };
+
+                  var requestdriving = {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: google.maps.TravelMode.DRIVING
+                  };
+
+                  var tr = document.createElement('tr');
+                  var td1 = document.createElement('td');
+                  var td2 = document.createElement('td');
+                  var td3 = document.createElement('td');
+                  var td4 = document.createElement('td');
+                  var td5 = document.createElement('td');
+
+
+                  td1.innerHTML = mapJson[i].number;
+                  td2.innerHTML = mapJson[i].genre+' '+mapJson[i+1].genre;
+                  td3.innerHTML = mapJson[i].name;
+
+                  directionsService.route(requestwalking, function (response, status){
+                    if(status == 'OK'){
+                      var route = response.routes[0];
+                      var routeLeg = route.legs[0];
+                      var durationText = routeLeg.duration.text;
+
+                      if(route.legs[0].duration.value <= 300){
+                        td4.innerHTML = '🏃‍♀️' + durationText;
+                        td4.style.color = '#028760';
+                        td4.style.border = '1px solid black';
+                      }else if(route.legs[0].duration.value <= 900){
+                        td4.innerHTML = '🏃‍♀️' + durationText;
+                        td4.style.color = '#FF0000';
+                        td4.style.border = '1px solid black';
+                      }else if(route.legs[0].duration.value <= 1800){
+                        td4.innerHTML = '🏃‍♀️' + durationText;
+                        td4.style.color = '#0095d9';
+                        td4.style.border = '1px solid black';
+                      }else{
+                        td4.innerHTML = '🏃‍♀️' + durationText;
+                      }
+                    }
+                  });
+
+                  directionsService.route(requestdriving, function (response, status){
+                    if(status == 'OK'){
+                      var route = response.routes[0];
+                      var routeLeg = route.legs[0];
+                      var durationText = routeLeg.duration.text;
+
+                      td4.innerHTML = '🚘' + durationText;
+                    }
+                  });
+
+                  td5.innerHTML = mapJson[i].comment;
+
+                  tr.appendChild(td1);
+                  tr.appendChild(td2);
+                  tr.appendChild(td3);
+                  tr.appendChild(td4);
+                  tr.appendChild(td5);
+                  tableEle.appendChild(tr);
+                })(i);
+                i++;
+              }else{
+  */
+                (function (i) {
+                  var origin = currentPos; // 出発地の緯度と経度
+                  //出発地を鎌倉に変更
+                  //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
+                  var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
+
+                  var requestwalking = {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: google.maps.TravelMode.WALKING
+                  };
+
+                  var requestdriving = {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: google.maps.TravelMode.DRIVING
+                  };
+
+                  var tr = document.createElement('tr');
+                  var td1 = document.createElement('td');
+                  var td2 = document.createElement('td');
+                  var td3 = document.createElement('td');
+                  var td4 = document.createElement('td');
+                  var td5 = document.createElement('td');
+
+
+                  td1.innerHTML = mapJson[i].number;
+                  td2.innerHTML = mapJson[i].genre;
+                  td3.innerHTML = mapJson[i].name;
+
+                  directionsService.route(requestwalking, function (response, status){
+                    if(status == 'OK'){
+                      var route = response.routes[0];
+                      var routeLeg = route.legs[0];
+                      var durationText = routeLeg.duration.text;
+
+                      if(route.legs[0].duration.value <= 300){
+                        td4.innerHTML = '🏃‍♀️' + durationText;
+                        td4.style.color = '#028760';
+                        td4.style.border = '1px solid black';
+                      }else if(route.legs[0].duration.value <= 900){
+                        td4.innerHTML = '🏃‍♀️' + durationText;
+                        td4.style.color = '#FF0000';
+                        td4.style.border = '1px solid black';
+                      }else if(route.legs[0].duration.value <= 1800){
+                        td4.innerHTML = '🏃‍♀️' + durationText;
+                        td4.style.color = '#0095d9';
+                        td4.style.border = '1px solid black';
+                      }else{
+                        td4.innerHTML = '🏃‍♀️' + durationText;
+                      }
+                    }
+                  });
+
+                  directionsService.route(requestdriving, function (response, status){
+                    if(status == 'OK'){
+                      var route = response.routes[0];
+                      var routeLeg = route.legs[0];
+                      var durationText = routeLeg.duration.text;
+
+                      td4.innerHTML = '🚘' + durationText;
+                    }
+                  });
+
+                  td5.innerHTML = mapJson[i].comment;
+
+                  tr.appendChild(td1);
+                  tr.appendChild(td2);
+                  tr.appendChild(td3);
+                  tr.appendChild(td4);
+                  tr.appendChild(td5);
+                  tableEle.appendChild(tr);
+                })(i);
+
+              //}
+
+            }
+          }
+        }
+
+        /*一覧表示ここまで*/
+
 
        /*一情報ウィンドウ*/
        for(var i = 0; i < mapJson.length; i++){
@@ -426,172 +633,6 @@
              bindInfoWindow(marker, map, infowindow);
 
           }
-         }
-       }
-
-      }
-
-      function setTable(mapJson){
-        /*一覧表示*/
-        var tableEle = document.getElementById('data-table');
-
-         for(var i = 0; i<mapJson.length; i++){
-           for (var j = 0; j < chk1.length; j++){
-             if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre){
-
-               if(mapJson[i].name == mapJson[i+1].name){
-
-                 (function (i) {
-                   var origin = currentPos; // 出発地の緯度と経度
-                   //出発地を鎌倉に変更
-                   //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
-                   var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
-
-                   var requestwalking = {
-                     origin: origin,
-                     destination: destination,
-                     travelMode: google.maps.TravelMode.WALKING
-                   };
-
-                   var requestdriving = {
-                     origin: origin,
-                     destination: destination,
-                     travelMode: google.maps.TravelMode.DRIVING
-                   };
-
-                   var tr = document.createElement('tr');
-                   var td1 = document.createElement('td');
-                   var td2 = document.createElement('td');
-                   var td3 = document.createElement('td');
-                   var td4 = document.createElement('td');
-                   var td5 = document.createElement('td');
-
-
-                   td1.innerHTML = mapJson[i].number;
-                   td2.innerHTML = mapJson[i].genre+' '+mapJson[i+1].genre;
-                   td3.innerHTML = mapJson[i].name;
-
-                   directionsService.route(requestwalking, function (response, status){
-                     if(status == 'OK'){
-                       var route = response.routes[0];
-                       var routeLeg = route.legs[0];
-                       var durationText = routeLeg.duration.text;
-
-                       if(route.legs[0].duration.value <= 300){
-                         td4.innerHTML = '🏃‍♀️' + durationText;
-                         td4.style.color = '#028760';
-                         td4.style.border = '1px solid black';
-                       }else if(route.legs[0].duration.value <= 900){
-                         td4.innerHTML = '🏃‍♀️' + durationText;
-                         td4.style.color = '#FF0000';
-                         td4.style.border = '1px solid black';
-                       }else if(route.legs[0].duration.value <= 1800){
-                         td4.innerHTML = '🏃‍♀️' + durationText;
-                         td4.style.color = '#0095d9';
-                         td4.style.border = '1px solid black';
-                       }else{
-                         td4.innerHTML = '🏃‍♀️' + durationText;
-                       }
-                     }
-                   });
-
-                   directionsService.route(requestdriving, function (response, status){
-                     if(status == 'OK'){
-                       var route = response.routes[0];
-                       var routeLeg = route.legs[0];
-                       var durationText = routeLeg.duration.text;
-
-                       td4.innerHTML = '🚘' + durationText;
-                     }
-                   });
-
-                   td5.innerHTML = mapJson[i].comment;
-
-                   tr.appendChild(td1);
-                   tr.appendChild(td2);
-                   tr.appendChild(td3);
-                   tr.appendChild(td4);
-                   tr.appendChild(td5);
-                   tableEle.appendChild(tr);
-                 })(i);
-                 i++;
-             }else{
-               (function (i) {
-                 var origin = currentPos; // 出発地の緯度と経度
-                 //出発地を鎌倉に変更
-                 //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
-                 var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
-
-                 var requestwalking = {
-                   origin: origin,
-                   destination: destination,
-                   travelMode: google.maps.TravelMode.WALKING
-                 };
-
-                 var requestdriving = {
-                   origin: origin,
-                   destination: destination,
-                   travelMode: google.maps.TravelMode.DRIVING
-                 };
-
-                 var tr = document.createElement('tr');
-                 var td1 = document.createElement('td');
-                 var td2 = document.createElement('td');
-                 var td3 = document.createElement('td');
-                 var td4 = document.createElement('td');
-                 var td5 = document.createElement('td');
-
-
-                 td1.innerHTML = mapJson[i].number;
-                 td2.innerHTML = mapJson[i].genre;
-                 td3.innerHTML = mapJson[i].name;
-
-                 directionsService.route(requestwalking, function (response, status){
-                   if(status == 'OK'){
-                     var route = response.routes[0];
-                     var routeLeg = route.legs[0];
-                     var durationText = routeLeg.duration.text;
-
-                     if(route.legs[0].duration.value <= 300){
-                       td4.innerHTML = '🏃‍♀️' + durationText;
-                       td4.style.color = '#028760';
-                       td4.style.border = '1px solid black';
-                     }else if(route.legs[0].duration.value <= 900){
-                       td4.innerHTML = '🏃‍♀️' + durationText;
-                       td4.style.color = '#FF0000';
-                       td4.style.border = '1px solid black';
-                     }else if(route.legs[0].duration.value <= 1800){
-                       td4.innerHTML = '🏃‍♀️' + durationText;
-                       td4.style.color = '#0095d9';
-                       td4.style.border = '1px solid black';
-                     }else{
-                       td4.innerHTML = '🏃‍♀️' + durationText;
-                     }
-                   }
-                 });
-
-                 directionsService.route(requestdriving, function (response, status){
-                   if(status == 'OK'){
-                     var route = response.routes[0];
-                     var routeLeg = route.legs[0];
-                     var durationText = routeLeg.duration.text;
-
-                     td4.innerHTML = '🚘' + durationText;
-                   }
-                 });
-
-                 td5.innerHTML = mapJson[i].comment;
-
-                 tr.appendChild(td1);
-                 tr.appendChild(td2);
-                 tr.appendChild(td3);
-                 tr.appendChild(td4);
-                 tr.appendChild(td5);
-                 tableEle.appendChild(tr);
-               })(i);
-
-             }
-           }
          }
        }
 
