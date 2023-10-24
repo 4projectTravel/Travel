@@ -141,11 +141,10 @@
       <table id='data-table'>
         <tr>
           <th></th>
-          <th>カテゴリー</th>
           <th>スポット名</th>
-          <th>移動時間</th>
-          <!--<th colspan="2">移動時間</th>-->
+          <th>カテゴリー</th>
           <th>一言</th>
+          <th colspan="2">移動時間</th>
         </tr>
       </table>
     </div>
@@ -465,11 +464,12 @@
                    var td3 = document.createElement('td');
                    var td4 = document.createElement('td');
                    var td5 = document.createElement('td');
-
+                   var td6 = document.createElement('td');
 
                    td1.innerHTML = mapJson[i].number;
-                   td2.innerHTML = mapJson[i].genre+' '+mapJson[i+1].genre;
-                   td3.innerHTML = mapJson[i].name;
+                   td2.innerHTML = mapJson[i].name;
+                   td3.innerHTML = mapJson[i].genre+' '+mapJson[i+1].genre;
+                   td4.innerHTML = mapJson[i].comment;
 
                    directionsService.route(requestwalking, function (response, status){
                      if(status == 'OK'){
@@ -478,19 +478,16 @@
                        var durationText = routeLeg.duration.text;
 
                        if(route.legs[0].duration.value <= 300){
-                         td4.innerHTML = '🏃‍♀️' + durationText;
-                         td4.style.color = '#028760';
-                         td4.style.border = '1px solid black';
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#028760';
                        }else if(route.legs[0].duration.value <= 900){
-                         td4.innerHTML = '🏃‍♀️' + durationText;
-                         td4.style.color = '#FF0000';
-                         td4.style.border = '1px solid black';
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#FF0000';
                        }else if(route.legs[0].duration.value <= 1800){
-                         td4.innerHTML = '🏃‍♀️' + durationText;
-                         td4.style.color = '#0095d9';
-                         td4.style.border = '1px solid black';
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#0095d9';
                        }else{
-                         td4.innerHTML = '🏃‍♀️' + durationText;
+                         td5.innerHTML = '🏃‍♀️' + durationText;
                        }
                      }
                    });
@@ -501,17 +498,16 @@
                        var routeLeg = route.legs[0];
                        var durationText = routeLeg.duration.text;
 
-                       td4.innerHTML = '🚘' + durationText;
+                       td6.innerHTML = '🚘' + durationText;
                      }
                    });
-
-                   td5.innerHTML = mapJson[i].comment;
 
                    tr.appendChild(td1);
                    tr.appendChild(td2);
                    tr.appendChild(td3);
                    tr.appendChild(td4);
                    tr.appendChild(td5);
+                   tr.appendChild(td6);
                    tableEle.appendChild(tr);
                  })(i);
                  i++;
@@ -540,11 +536,12 @@
                  var td3 = document.createElement('td');
                  var td4 = document.createElement('td');
                  var td5 = document.createElement('td');
-
+                 var td6 = document.createElement('td');
 
                  td1.innerHTML = mapJson[i].number;
-                 td2.innerHTML = mapJson[i].genre;
-                 td3.innerHTML = mapJson[i].name;
+                 td2.innerHTML = mapJson[i].name;
+                 td3.innerHTML = mapJson[i].genre;
+                 td4.innerHTML = mapJson[i].comment;
 
                  directionsService.route(requestwalking, function (response, status){
                    if(status == 'OK'){
@@ -553,19 +550,16 @@
                      var durationText = routeLeg.duration.text;
 
                      if(route.legs[0].duration.value <= 300){
-                       td4.innerHTML = '🏃‍♀️' + durationText;
-                       td4.style.color = '#028760';
-                       td4.style.border = '1px solid black';
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#028760';
                      }else if(route.legs[0].duration.value <= 900){
-                       td4.innerHTML = '🏃‍♀️' + durationText;
-                       td4.style.color = '#FF0000';
-                       td4.style.border = '1px solid black';
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#FF0000';
                      }else if(route.legs[0].duration.value <= 1800){
-                       td4.innerHTML = '🏃‍♀️' + durationText;
-                       td4.style.color = '#0095d9';
-                       td4.style.border = '1px solid black';
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#0095d9';
                      }else{
-                       td4.innerHTML = '🏃‍♀️' + durationText;
+                       td5.innerHTML = '🏃‍♀️' + durationText;
                      }
                    }
                  });
@@ -576,17 +570,16 @@
                      var routeLeg = route.legs[0];
                      var durationText = routeLeg.duration.text;
 
-                     td4.innerHTML = '🚘' + durationText;
+                     td6.innerHTML = '🚘' + durationText;
                    }
                  });
-
-                 td5.innerHTML = mapJson[i].comment;
 
                  tr.appendChild(td1);
                  tr.appendChild(td2);
                  tr.appendChild(td3);
                  tr.appendChild(td4);
                  tr.appendChild(td5);
+                 tr.appendChild(td6);
                  tableEle.appendChild(tr);
                })(i);
 
