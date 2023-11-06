@@ -52,7 +52,13 @@
        cursor: pointer;
      }
 
-
+     .box{
+       background: white;
+       cursor: pointer;
+     }
+     a{
+       text-decoration: none;
+     }
 
 
    </style>
@@ -83,28 +89,21 @@
     </nav>
 
     <div id="map"></div>
-    <!--検索-->
-    <!--<div class="checkAllBox">
-      <label><input type="checkbox" class="partsCheck" id="checkAll" checked><span>すべて</span></label>
-    </div>-->
-
-
-    <!--ここまで-->
-
 
     <div class="container">
       <div class="BoxList">
-        <!--<p>選択した値 <span id="span1"></span></p>-->
+
         <ul>
-          <li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall" checked>全て選択</label>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="ごはん" checked>ごはん</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="カフェ・パン・スイーツ・お菓子" checked>カフェ・パン・スイーツ・お菓子</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="イベント" checked>イベント</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="風景・景色" checked>風景・景色</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アート・カルチャー" checked>アート・カルチャー</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="お土産・お酒・雑貨" checked>お土産・お酒・雑貨</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="神社・寺院" checked>神社・寺院</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アクティビティ・体験・その他施設" checked>アクティビティ・体験・その他施設</label></li>
+          <li class="c1"><label><input type="checkbox" id="top20" name="top20" value="top20" checked>この地域の人気スポットトップ20</label></li>
+          <li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall">全て選択</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="ごはん">ごはん</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="カフェ・パン・スイーツ・お菓子">カフェ・パン・スイーツ・お菓子</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="イベント">イベント</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="風景・景色">風景・景色</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アート・カルチャー">アート・カルチャー</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="お土産・お酒・雑貨">お土産・お酒・雑貨</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="神社・寺院">神社・寺院</label></li>
+          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アクティビティ・体験・その他施設">アクティビティ・体験・その他施設</label></li>
         </ul>
         <input type="button" value="検索" onclick="clickBtn1()"></input>
 
@@ -137,21 +136,23 @@
       </div>
     </div>
 
+    <a href="{% url 'list-post' %}">この地域のスポット一覧</a>
+
     <div>
       <table id='data-table'>
         <tr>
           <th></th>
-          <th>カテゴリー</th>
-          <th>スポット名</th>
-          <th>移動時間</th>
-          <!--<th colspan="2">移動時間</th>-->
-          <th>一言</th>
+          <th>　　　カテゴリー　　　</th>
+          <th>　　　スポット名　　　</th>
+          <th colspan="2">　　　移動時間　　　</th>
+          <th>　　　一言　　　</th>
         </tr>
       </table>
     </div>
 
+
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js">-->
     <script>
-      //document.getElementById( "reset" ).onclick = initMap;
       /*検索フォーム*/
       //「全て選択」のチェックボックス
       let checkAll = document.getElementById("checkAll");
@@ -193,14 +194,16 @@
 
 
 
+
       var arr;
       var chk1;
+      var chk20;
       var tableEle;
 
 
       function clickBtn1() {
-        //arr = "決定ボタンが押されました。マップ上に表示するには「表示する」ボタンを押してください。"
         chk1 = document.getElementsByName("chk1");
+        chk20 = document.getElementsByName("chk20");
         //document.getElementById("span1").textContent = arr;
 
         var xhttp = new XMLHttpRequest();
@@ -209,16 +212,10 @@
                   setMarker(JSON.parse(this.responseText));
                   setTable(JSON.parse(this.responseText));
                }
-               //for (let i = 0; i < chk1.length; i++) {
-                // if ( this.readyState == 4 && this.status == 200 && chk1[i].checked) {//(chk1[i].checked === true)と同じ
-                //   setMarker(JSON.parse(this.responseText));
-                // }
-               //}
           };
           xhttp.open("GET", "api/map?format=json", true);
           xhttp.setRequestHeader("Content-type", "application/json");
           xhttp.send();
-
        }
 
 
@@ -249,10 +246,6 @@
         controlUI.style.textAlign = 'center';
         controlUI.title = 'Click to recenter the map';
         controlDiv.appendChild(controlUI);
-
-
-
-
       }
 
       var currentPos;// 緯度・経度
@@ -344,103 +337,106 @@
 
               navigator.geolocation.getCurrentPosition(success);
       }
-　　　
+
 
       function setMarker(mapJson) {
+        /*一情報ウィンドウ*/
+        if(top20.checked==true){
+          var m = 20;
+        }else{
+          var m = mapJson.length;
+        }
 
-       /*一情報ウィンドウ*/
-       for(var i = 0; i < mapJson.length; i++){
-         for(var j=0; j < chk1.length; j++){
-           if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
+        for(var i = 0; i < m; i++){
+          for(var j=0; j < chk1.length; j++){
+            if((chk1[j].checked==true && chk1[j].value==mapJson[i].genre) || top20.checked==true){
+              var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
+              '<a href="{% url 'list-post' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
 
-             var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
-             '<a href="{% url 'list-post' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
+              var infowindow = new google.maps.InfoWindow({
 
-             var infowindow = new google.maps.InfoWindow({
-
-               content: contentStr
-             });
+                content: contentStr
+              });
 
 
-             if(mapJson[i].genre == 'ごはん'){
-               var marker = new google.maps.Marker({
-                 position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-                 map: map,
-                 icon: {
-                   fillColor: "#ffdc00",//塗り潰し色
-                   scale: 10,
-                   fillOpacity: 0.8,
-                   //strokeColor: "#ff6633",              //枠の色
-     		          strokeWeight: 1.0,
-               		path: google.maps.SymbolPath.CIRCLE, //円を指定
-                },
+              if(mapJson[i].genre == 'ごはん'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ffdc00",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                    //strokeColor: "#ff6633",              //枠の色
+                    strokeWeight: 1.0,
+                    path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                  label: {
+                   text: mapJson[i].number,                           //ラベル文字
+                    color: '#000000',                    //文字の色
+                    fontSize: '15px'                     //文字のサイズ
+                   }
+                });
+
+              }else if(mapJson[i].genre == '神社・寺院'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#3333FF",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                    //strokeColor: "#ff6633",              //枠の色
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                   //radius: crd.accuracy /* 位置の誤差(m)を半径とする */
+
+                 },
                  label: {
                   text: mapJson[i].number,                           //ラベル文字
-               		color: '#000000',                    //文字の色
-               		fontSize: '15px'                     //文字のサイズ
-     		         }
-               });
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'カフェ・パン・スイーツ・お菓子'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ff0000",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                    //strokeColor: "#ff6633",              //枠の色
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                   //radius: crd.accuracy /* 位置の誤差(m)を半径とする */
 
-             }else if(mapJson[i].genre == '神社・寺院'){
-               var marker = new google.maps.Marker({
-                 position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-                 map: map,
-                 icon: {
-                   fillColor: "#3333FF",//塗り潰し色
-                   scale: 10,
-                   fillOpacity: 0.8,
-                   //strokeColor: "#ff6633",              //枠の色
-     		           strokeWeight: 1.0,
-               		 path: google.maps.SymbolPath.CIRCLE, //円を指定
-                  //radius: crd.accuracy /* 位置の誤差(m)を半径とする */
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }
 
-                },
-                label: {
-                 text: mapJson[i].number,                           //ラベル文字
-                 color: '#000000',                    //文字の色
-                 fontSize: '15px'                     //文字のサイズ
-                }
-               });
-             }else if(mapJson[i].genre == 'カフェ・パン・スイーツ・お菓子'){
-               var marker = new google.maps.Marker({
-                 position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-                 map: map,
-                 icon: {
-                   fillColor: "#ff0000",//塗り潰し色
-                   scale: 10,
-                   fillOpacity: 0.8,
-                   //strokeColor: "#ff6633",              //枠の色
-     		           strokeWeight: 1.0,
-               		 path: google.maps.SymbolPath.CIRCLE, //円を指定
-                  //radius: crd.accuracy /* 位置の誤差(m)を半径とする */
-
-                },
-                label: {
-                 text: mapJson[i].number,                           //ラベル文字
-                 color: '#000000',                    //文字の色
-                 fontSize: '15px'                     //文字のサイズ
-                }
-               });
-             }
-
-             bindInfoWindow(marker, map, infowindow);
-
+              bindInfoWindow(marker, map, infowindow);
+            }
           }
-         }
-       }
-
+        }
       }
-
       function setTable(mapJson){
+        if(top20.checked==true){
+          var m = 20;
+        }else{
+          var m = mapJson.length;
+        }
         /*一覧表示*/
         var tableEle = document.getElementById('data-table');
-
-         for(var i = 0; i<mapJson.length; i++){
+         for(var i = 0; i< m; i++){
            for (var j = 0; j < chk1.length; j++){
-             if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre){
-
+             if((chk1[j].checked == true && chk1[j].value == mapJson[i].genre) || top20.checked == true){
                if(mapJson[i].name == mapJson[i+1].name){
-
                  (function (i) {
                    var origin = currentPos; // 出発地の緯度と経度
                    //出発地を鎌倉に変更
@@ -468,7 +464,7 @@
 
 
                    td1.innerHTML = mapJson[i].number;
-                   td2.innerHTML = mapJson[i].genre+' '+mapJson[i+1].genre;
+                   td2.innerHTML = mapJson[i].genre+' , '+mapJson[i+1].genre;
                    td3.innerHTML = mapJson[i].name;
 
                    directionsService.route(requestwalking, function (response, status){
@@ -480,15 +476,15 @@
                        if(route.legs[0].duration.value <= 300){
                          td4.innerHTML = '🏃‍♀️' + durationText;
                          td4.style.color = '#028760';
-                         td4.style.border = '1px solid black';
+                         //td4.style.border = '1px solid black';
                        }else if(route.legs[0].duration.value <= 900){
                          td4.innerHTML = '🏃‍♀️' + durationText;
                          td4.style.color = '#FF0000';
-                         td4.style.border = '1px solid black';
+                         //td4.style.border = '1px solid black';
                        }else if(route.legs[0].duration.value <= 1800){
                          td4.innerHTML = '🏃‍♀️' + durationText;
                          td4.style.color = '#0095d9';
-                         td4.style.border = '1px solid black';
+                         //td4.style.border = '1px solid black';
                        }else{
                          td4.innerHTML = '🏃‍♀️' + durationText;
                        }
@@ -516,6 +512,7 @@
                  })(i);
                  i++;
              }else{
+
                (function (i) {
                  var origin = currentPos; // 出発地の緯度と経度
                  //出発地を鎌倉に変更
@@ -546,6 +543,7 @@
                  td2.innerHTML = mapJson[i].genre;
                  td3.innerHTML = mapJson[i].name;
 
+
                  directionsService.route(requestwalking, function (response, status){
                    if(status == 'OK'){
                      var route = response.routes[0];
@@ -555,15 +553,15 @@
                      if(route.legs[0].duration.value <= 300){
                        td4.innerHTML = '🏃‍♀️' + durationText;
                        td4.style.color = '#028760';
-                       td4.style.border = '1px solid black';
+                       //td4.style.border = '1px solid black';
                      }else if(route.legs[0].duration.value <= 900){
                        td4.innerHTML = '🏃‍♀️' + durationText;
                        td4.style.color = '#FF0000';
-                       td4.style.border = '1px solid black';
+                       //td4.style.border = '1px solid black';
                      }else if(route.legs[0].duration.value <= 1800){
                        td4.innerHTML = '🏃‍♀️' + durationText;
                        td4.style.color = '#0095d9';
-                       td4.style.border = '1px solid black';
+                       //td4.style.border = '1px solid black';
                      }else{
                        td4.innerHTML = '🏃‍♀️' + durationText;
                      }
@@ -594,7 +592,6 @@
            }
          }
        }
-
       }
 
       function bindInfoWindow(marker, map, infowindow) {
@@ -603,8 +600,10 @@
         });
       }
 
+
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
     async defer></script>
 
   </body>

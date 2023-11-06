@@ -1,12 +1,61 @@
 {% extends 'base.html' %}
 
 {% block title %}{{ object.title }}{% endblock %}
-{% block h1 %}口コミ詳細{% endblock %}
+{% block h1 %}スポット詳細{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+  // いいねボタンが押された時
+  document.getElementById('ajax-like').addEventListener('click', e => {
+    e.preventDefault();
+    const url = '{% url "postlike" %}';
+    fetch(url, {
+      method: 'POST',
+      body: `post_pk={{ post.pk }}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+    }).then(response => {
+      return response.json();
+    }).then(response => {
+      const icon = document.getElementById('like-icon')
+      // いいねした時はハートを塗る
+      if (response.method == 'create') {
+        icon.classList.remove('far')
+        icon.classList.add('fas')
+        icon.id = 'like-icon'
+      } else {
+        icon.classList.remove('fas')
+        icon.classList.add('far')
+        icon.id = 'like-icon'
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  });
+</script>
+{% endblock %}
+
 
 {% block content %}
   <div class="p-4 m-4 bg-light border border-info rounded">
-    <h2 class="text-info">{{ object.title }}</h2>
-    <p>{{ object.text }}</p>
+    {% if is_user_liked %}
+    <button type="button" id="ajax-like" style="border:none;background:none">
+      <!-- すでにいいねしている時はfasクラス -->
+      <i class="fas fa-heart text-danger" id="like-icon"></i>
+    </button>
+    {% else %}
+    <button type="button" id="ajax-like" style="border:none;background:none">
+      <!-- いいねしていないときはfarクラス -->
+      <i class="far fa-heart text-danger" id="like-icon"></i>
+    </button>
+    {% endif %}
+    <h2 class="text-info">{{ object.name }}</h2>
+    <p>住所: {{ object.address }}</p>
+    <p>カテゴリー: {{ object.category }}</p>
+    <p>おすすめポイント: {{ object.comment }}</p>
+
     <div class="border p-4 mb-2">
       {% for review in object.review_set.all %}
       <div>
@@ -18,9 +67,10 @@
         </div>
       </div>
       {% endfor %}
+      <a href="{% url 'review-post' object.pk %}" class="btn btn-light">口コミを書く</a>
     </div>
-    <a href="{% url 'review-post' object.pk %}" class="btn btn-light">このスポットについての口コミを書く</a>
-    <a href="{% url 'update-post' object.pk %}" class="btn btn-light">編集する</a>
+
+    <!--<a href="{% url 'update-post' object.pk %}" class="btn btn-light">編集する</a>-->
     <!--<a href="{% url 'delete-post' object.pk %}" class="btn btn-light">削除する</a>-->
   </div>
 {% endblock %}

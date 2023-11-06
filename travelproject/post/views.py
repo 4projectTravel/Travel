@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404 # 追加
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db.models import Avg
 from django.core.paginator import Paginator
+from django.http import JsonResponse # 追加
+
 
 from django.views.generic import (
     ListView,
@@ -12,7 +14,7 @@ from django.views.generic import (
     DeleteView,
     UpdateView,
 )
-from .models import Post, Review
+from .models import Post, Review, PostLike
 from .consts import ITEM_PER_PAGE
 '''
 def logout_view(request):
@@ -36,8 +38,6 @@ def index_view(request):
 '''
 
 
-
-
 class ListPostView(LoginRequiredMixin, ListView):
     template_name = 'post/post_list.html'
     model = Post
@@ -46,6 +46,7 @@ class ListPostView(LoginRequiredMixin, ListView):
     # 検索フォーム
     def get_queryset(self): # 検索機能のために追加
         query = self.request.GET.get('query')
+        #query="鎌倉"
 
         if query:
             post_list = Post.objects.filter(title__icontains=query)
@@ -53,17 +54,56 @@ class ListPostView(LoginRequiredMixin, ListView):
             post_list = Post.objects.all()
         return post_list
 
+    #いいね機能
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        for item in self.object_list:
+            if item.postlike_set.filter(user_id=self.request.user).exists():
+                context['is_user_liked'] = True
+            else:
+                context['is_user_liked'] = False
+
+        return context
+
+
+def postlike(request):
+    post_pk = request.POST.get('post_pk')
+    context = {
+        'user_id': f'{ request.user }',
+    }
+    post = get_object_or_404(Post, pk=post_pk)
+    like = PostLike.objects.filter(target=post, user_id=request.user)
+
+    if like.exists():
+        like.delete()
+        context['method'] = 'delete'
+    else:
+        like.create(target=post, user_id=request.user)
+        context['method'] = 'create'
+
+    return JsonResponse(context)
 
 
 class DetailPostView(LoginRequiredMixin, DetailView):
     template_name = 'post/post_detail.html'
     model = Post
 
+    #いいね機能
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.object.postlike_set.filter(user_id=self.request.user).exists():
+            context['is_user_liked'] = True
+        else:
+            context['is_user_liked'] = False
+
+        return context
 
 class CreatePostView(LoginRequiredMixin, CreateView):
     template_name = 'post/post_create.html'
     model = Post
-    fields = ('title', 'text', 'category')
+    fields = ('name', 'address', 'category')
     success_url = reverse_lazy('list-post')
 
     def form_valid(self, form):
@@ -87,7 +127,7 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
 
 class UpdatePostView(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ('title', 'text', 'category')
+    fields = ('name', 'address', 'category')
     template_name = 'post/post_update.html'
 
     def get_object(self, queryset=None):
@@ -119,6 +159,9 @@ class CreateReviewView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('detail-post', kwargs={'pk': self.object.post.id})
 
+def like(request):
+        return render(request, 'post/postlike.html')
+
 def move_to_mypage(request):
         return render(request, 'mypage.html')
 
@@ -142,18 +185,3 @@ def move_to_traveling(request):
 
 def map_restaurant(request):
         return render(request, 'map_restaurant.html')
-
-def map_museum(request):
-        return render(request, 'map_museum.html')
-
-def map_shrine(request):
-        return render(request, 'map_shrine.html')
-
-def map_leisure(request):
-        return render(request, 'map_leisure.html')
-
-def map_hotspring(request):
-        return render(request, 'map_hotspring.html')
-
-def map_event(request):
-        return render(request, 'map_event.html')
