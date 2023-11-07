@@ -1,6 +1,7 @@
 from django.db import models
 from .consts import MAX_RATE
 
+
 RATE_CHOICES = [(x, str(x)) for x in range(0, MAX_RATE + 1)]
 
 # Create your models here.
@@ -17,11 +18,11 @@ class Post(models.Model):
               null=True
               )
     comment = models.TextField(null=True)
-    #user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+
 
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 #追加
     def get_absolute_url(self):
         return reverse('post:list-post', kwargs={'pk': self.pk})

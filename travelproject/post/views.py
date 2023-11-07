@@ -15,6 +15,7 @@ from django.views.generic import (
     UpdateView,
 )
 from .models import Post, Review, PostLike
+from map.models import Map
 from .consts import ITEM_PER_PAGE
 '''
 def logout_view(request):
@@ -46,13 +47,15 @@ class ListPostView(LoginRequiredMixin, ListView):
     # 検索フォーム
     def get_queryset(self): # 検索機能のために追加
         query = self.request.GET.get('query')
-        #query="鎌倉"
-
+        #query = Map.number
+        
         if query:
-            post_list = Post.objects.filter(title__icontains=query)
+            post_list = Post.objects.filter(number__icontains=query)
         else:
             post_list = Post.objects.all()
         return post_list
+
+
 
     #いいね機能
     def get_context_data(self, **kwargs):
