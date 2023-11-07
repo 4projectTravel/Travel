@@ -142,10 +142,17 @@
       <table id='data-table'>
         <tr>
           <th></th>
+<<<<<<< HEAD
           <th>　　　スポット名　　　</th>
           <th>　　　カテゴリー　　　</th>
           <!--<th>　　　一言　　　</th>-->
           <th colspan="2">　　　移動時間　　　</th>
+=======
+          <th>スポット名</th>
+          <th>カテゴリー</th>
+          <th>一言</th>
+          <th colspan="2">移動時間</th>
+>>>>>>> 786e390f1817cb8f3829a983b6ebc2c5b304be0e
         </tr>
       </table>
     </div>
@@ -462,6 +469,7 @@
                    //var td4 = document.createElement('td');
                    var td5 = document.createElement('td');
                    var td6 = document.createElement('td');
+<<<<<<< HEAD
 
                    var text1 = ':  <a href="{% url 'list-post' %}">'
                    var text2 = '</a>'
@@ -470,6 +478,13 @@
                    td2.innerHTML = text1 + mapJson[i].name + text2;
                    td3.innerHTML = mapJson[i].genre+' , '+mapJson[i+1].genre;
                    //td4.innerHTML = mapJson[i].comment;
+=======
+
+                   td1.innerHTML = mapJson[i].number;
+                   td2.innerHTML = mapJson[i].name;
+                   td3.innerHTML = mapJson[i].genre+' '+mapJson[i+1].genre;
+                   td4.innerHTML = mapJson[i].comment;
+>>>>>>> 786e390f1817cb8f3829a983b6ebc2c5b304be0e
 
                    directionsService.route(requestwalking, function (response, status){
                      if(status == 'OK'){
@@ -480,6 +495,7 @@
                        if(route.legs[0].duration.value <= 300){
                          td5.innerHTML = '🏃‍♀️' + durationText;
                          td5.style.color = '#028760';
+<<<<<<< HEAD
                          //td4.style.border = '1px solid black';
                        }else if(route.legs[0].duration.value <= 900){
                          td5.innerHTML = '🏃‍♀️' + durationText;
@@ -489,6 +505,14 @@
                          td5.innerHTML = '🏃‍♀️' + durationText;
                          td5.style.color = '#0095d9';
                          //td4.style.border = '1px solid black';
+=======
+                       }else if(route.legs[0].duration.value <= 900){
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#FF0000';
+                       }else if(route.legs[0].duration.value <= 1800){
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#0095d9';
+>>>>>>> 786e390f1817cb8f3829a983b6ebc2c5b304be0e
                        }else{
                          td5.innerHTML = '🏃‍♀️' + durationText;
                        }
@@ -505,7 +529,10 @@
                      }
                    });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 786e390f1817cb8f3829a983b6ebc2c5b304be0e
                    tr.appendChild(td1);
                    tr.appendChild(td2);
                    tr.appendChild(td3);
@@ -542,6 +569,7 @@
                  //var td4 = document.createElement('td');
                  var td5 = document.createElement('td');
                  var td6 = document.createElement('td');
+<<<<<<< HEAD
 
                  var text1 = ':  <a href="{% url 'list-post' %}">'
                  var text2 = '</a>'
@@ -551,6 +579,13 @@
                  td3.innerHTML = mapJson[i].genre;
                  //td4.innerHTML = mapJson[i].comment;
 
+=======
+
+                 td1.innerHTML = mapJson[i].number;
+                 td2.innerHTML = mapJson[i].name;
+                 td3.innerHTML = mapJson[i].genre;
+                 td4.innerHTML = mapJson[i].comment;
+>>>>>>> 786e390f1817cb8f3829a983b6ebc2c5b304be0e
 
                  directionsService.route(requestwalking, function (response, status){
                    if(status == 'OK'){
@@ -561,6 +596,7 @@
                      if(route.legs[0].duration.value <= 300){
                        td5.innerHTML = '🏃‍♀️' + durationText;
                        td5.style.color = '#028760';
+<<<<<<< HEAD
                        //td4.style.border = '1px solid black';
                      }else if(route.legs[0].duration.value <= 900){
                        td5.innerHTML = '🏃‍♀️' + durationText;
@@ -570,6 +606,14 @@
                        td5.innerHTML = '🏃‍♀️' + durationText;
                        td5style.color = '#0095d9';
                        //td4.style.border = '1px solid black';
+=======
+                     }else if(route.legs[0].duration.value <= 900){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#FF0000';
+                     }else if(route.legs[0].duration.value <= 1800){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#0095d9';
+>>>>>>> 786e390f1817cb8f3829a983b6ebc2c5b304be0e
                      }else{
                        td5.innerHTML = '🏃‍♀️' + durationText;
                      }
