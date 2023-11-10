@@ -73,6 +73,7 @@
         <a class="nav-link mx-3" href="{% url 'list-post' %}"> 口コミを閲覧・投稿する </a>
         <!--<a class="nav-link mx-3" href="{% url 'create-post' %}"> 口コミ登録 </a>-->
         <a class="nav-link mx-3" href="{% url 'move_to_mypage' %}"> マイページ(旅程表作成・閲覧) </a>
+        <a class="nav-link mx-3" href="{% url 'list-likepost' %}"> お気に入り登録済みスポット </a>
         <!--<a class="nav-link mx-3" href="{% url 'move_to_traveling' %}"> 現在旅行中の方はこちら </a>-->
       </div>
       <div class="narbar-nav d-flex flex-row">
@@ -195,15 +196,17 @@
 
 
 
+
+
       var arr;
       var chk1;
-      var chk20;
+      var top20;
       var tableEle;
 
 
       function clickBtn1() {
         chk1 = document.getElementsByName("chk1");
-        chk20 = document.getElementsByName("chk20");
+        top20 = document.getElementsByName("top20");
         //document.getElementById("span1").textContent = arr;
 
         var xhttp = new XMLHttpRequest();
@@ -342,17 +345,18 @@
       function setMarker(mapJson) {
         /*一情報ウィンドウ*/
         if(top20.checked==true){
-          var m = 20;
+          var l = 20;
         }else{
-          var m = mapJson.length;
+          var l = mapJson.length;
         }
 
-        for(var i = 0; i < m; i++){
+        for(var i = 0; i < l; i++){
           for(var j=0; j < chk1.length; j++){
-            if((chk1[j].checked==true && chk1[j].value==mapJson[i].genre) || top20.checked==true){
-              var num = 5;
+            for(var m=0; m < top20.length; m++){
+            if((chk1[j].checked==true && chk1[j].value==mapJson[i].genre) || top20[m].checked==true){
+
               var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
-              '<a href="{% url 'detail-post' '5' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
+              '<a href="{% url 'list-post' %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
 
               var infowindow = new google.maps.InfoWindow({
 
@@ -424,20 +428,18 @@
               bindInfoWindow(marker, map, infowindow);
             }
           }
+          }
         }
       }
       function setTable(mapJson){
-        if(top20.checked==true){
-          var m = 20;
-        }else{
-          var m = mapJson.length;
-        }
-        /*一覧表示*/
+
+        /*top20一覧表示*/
         var tableEle = document.getElementById('data-table');
-         for(var i = 0; i< m; i++){
-           for (var j = 0; j < chk1.length; j++){
-             if((chk1[j].checked == true && chk1[j].value == mapJson[i].genre) || top20.checked == true){
+         for(var i = 0; i< 20; i++){
+             for(var m=0; m < top20.length; m++){
+             if(top20[m].checked==true){
                if(mapJson[i].name == mapJson[i+1].name){
+
                  (function (i) {
                    var origin = currentPos; // 出発地の緯度と経度
                    //出発地を鎌倉に変更
@@ -465,10 +467,10 @@
                    var td6 = document.createElement('td');
 
 
-                   var text1 = ':  <a href="{% url 'list-post' %}">'
+                   var text1 = '<a href="{% url 'list-post' %}">'
                    var text2 = '</a>'
 
-                   td1.innerHTML = mapJson[i].number;
+                   td1.innerHTML = mapJson[i].number+'. ';
                    td2.innerHTML = text1 + mapJson[i].name + text2;
                    td3.innerHTML = mapJson[i].genre+' , '+mapJson[i+1].genre;
                    //td4.innerHTML = mapJson[i].comment;
@@ -545,10 +547,183 @@
                  var td6 = document.createElement('td');
 
 
-                 var text1 = ':  <a href="{% url 'list-post' %}">'
+                 var text1 = '<a href="{% url 'list-post' %}">'
                  var text2 = '</a>'
 
-                 td1.innerHTML = mapJson[i].number;
+
+                 td1.innerHTML = mapJson[i].number+'. ';
+                 td2.innerHTML = text1 + mapJson[i].name + text2;
+                 td3.innerHTML = mapJson[i].genre;
+                 //td4.innerHTML = mapJson[i].comment;
+
+                 directionsService.route(requestwalking, function (response, status){
+                   if(status == 'OK'){
+                     var route = response.routes[0];
+                     var routeLeg = route.legs[0];
+                     var durationText = routeLeg.duration.text;
+
+                     if(route.legs[0].duration.value <= 300){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#028760';
+                       //td4.style.border = '1px solid black';
+                     }else if(route.legs[0].duration.value <= 900){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#FF0000';
+                       //td4.style.border = '1px solid black';
+                     }else if(route.legs[0].duration.value <= 1800){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5style.color = '#0095d9';
+                       //td4.style.border = '1px solid black';
+
+                     }else{
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                     }
+                   }
+                 });
+
+                 directionsService.route(requestdriving, function (response, status){
+                   if(status == 'OK'){
+                     var route = response.routes[0];
+                     var routeLeg = route.legs[0];
+                     var durationText = routeLeg.duration.text;
+
+                     td6.innerHTML = '🚘' + durationText;
+                   }
+                 });
+
+                 tr.appendChild(td1);
+                 tr.appendChild(td2);
+                 tr.appendChild(td3);
+                 //tr.appendChild(td4);
+                 tr.appendChild(td5);
+                 tr.appendChild(td6);
+                 tableEle.appendChild(tr);
+               })(i);
+
+             }
+           }
+         }
+       }
+        /*ジャンル別一覧表示*/
+        var tableEle = document.getElementById('data-table');
+         for(var i = 0; i< mapJson.length; i++){
+           for (var j = 0; j < chk1.length; j++){
+             if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre){
+               console.log("Hello2");
+               if(mapJson[i].name == mapJson[i+1].name){
+                 console.log("Hello4");
+                 (function (i) {
+                   var origin = currentPos; // 出発地の緯度と経度
+                   //出発地を鎌倉に変更
+                   //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
+                   var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
+
+                   var requestwalking = {
+                     origin: origin,
+                     destination: destination,
+                     travelMode: google.maps.TravelMode.WALKING
+                   };
+
+                   var requestdriving = {
+                     origin: origin,
+                     destination: destination,
+                     travelMode: google.maps.TravelMode.DRIVING
+                   };
+
+                   var tr = document.createElement('tr');
+                   var td1 = document.createElement('td');
+                   var td2 = document.createElement('td');
+                   var td3 = document.createElement('td');
+                   //var td4 = document.createElement('td');
+                   var td5 = document.createElement('td');
+                   var td6 = document.createElement('td');
+
+
+                   var text1 = '<a href="{% url 'list-post' %}">'
+                   var text2 = '</a>'
+
+                   td1.innerHTML = mapJson[i].number+'. ';
+                   td2.innerHTML = text1 + mapJson[i].name + text2;
+                   td3.innerHTML = mapJson[i].genre+' , '+mapJson[i+1].genre;
+                   //td4.innerHTML = mapJson[i].comment;
+
+                   directionsService.route(requestwalking, function (response, status){
+                     if(status == 'OK'){
+                       var route = response.routes[0];
+                       var routeLeg = route.legs[0];
+                       var durationText = routeLeg.duration.text;
+
+                       if(route.legs[0].duration.value <= 300){
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#028760';
+                         //td4.style.border = '1px solid black';
+                       }else if(route.legs[0].duration.value <= 900){
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#FF0000';
+                         //td4.style.border = '1px solid black';
+                       }else if(route.legs[0].duration.value <= 1800){
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#0095d9';
+                         //td4.style.border = '1px solid black';
+                       }else{
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                       }
+                     }
+                   });
+
+                   directionsService.route(requestdriving, function (response, status){
+                     if(status == 'OK'){
+                       var route = response.routes[0];
+                       var routeLeg = route.legs[0];
+                       var durationText = routeLeg.duration.text;
+
+                       td6.innerHTML = '🚘' + durationText;
+                     }
+                   });
+
+                   tr.appendChild(td1);
+                   tr.appendChild(td2);
+                   tr.appendChild(td3);
+                   //tr.appendChild(td4);
+                   tr.appendChild(td5);
+                   tr.appendChild(td6);
+                   tableEle.appendChild(tr);
+                 })(i);
+                 i++;
+             }else{
+               console.log("Hello5");
+
+               (function (i) {
+                 var origin = currentPos; // 出発地の緯度と経度
+                 //出発地を鎌倉に変更
+                 //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
+                 var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
+
+                 var requestwalking = {
+                   origin: origin,
+                   destination: destination,
+                   travelMode: google.maps.TravelMode.WALKING
+                 };
+
+                 var requestdriving = {
+                   origin: origin,
+                   destination: destination,
+                   travelMode: google.maps.TravelMode.DRIVING
+                 };
+
+                 var tr = document.createElement('tr');
+                 var td1 = document.createElement('td');
+                 var td2 = document.createElement('td');
+                 var td3 = document.createElement('td');
+                 //var td4 = document.createElement('td');
+                 var td5 = document.createElement('td');
+                 var td6 = document.createElement('td');
+
+
+                 var text1 = '<a href="{% url 'list-post' %}">'
+                 var text2 = '</a>'
+
+                 td1.innerHTML = mapJson[i].number+'. ';
                  td2.innerHTML = text1 + mapJson[i].name + text2;
                  td3.innerHTML = mapJson[i].genre;
                  //td4.innerHTML = mapJson[i].comment;

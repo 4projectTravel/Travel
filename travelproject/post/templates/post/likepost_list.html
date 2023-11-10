@@ -4,9 +4,22 @@
 {% block h1 %}お気に入りスポット一覧{% endblock %}
 
 {% block content %}
-{% for item in postlike_list %}
-<div class="p-4 m-4 bg-light border border-info rounded">
-  <a href="{% url 'detail-post' item.target.pk %}"><h2 class="text-info">{{ item.target.name }}</h2></a>
+
+<div class="container text-center">
+  <div class="row row-cols-2">
+  {% for item in postlike_list %}
+  <div class="col">
+    <div class="p-4 m-4 bg-light border border-info rounded">
+      <a href="{% url 'detail-post' item.target.pk %}"><h2 class="text-info">{{ item.target.number }}.{{ item.target.name }}</h2></a>
+      {% if item.target.thumbnail %}
+         <div class="thumbnail"><img src="{{ item.target.thumbnail.url }}" class="img-thumbnail" style="width:450px;height:280px"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+  </div>
 </div>
-{% endfor %}
+
+
+
 {% endblock content %}

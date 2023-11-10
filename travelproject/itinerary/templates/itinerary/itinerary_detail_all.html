@@ -73,24 +73,24 @@
     </table>
     <div class="border p-4 mb-2">
       {% for review in object.review_set.all %}
-      <div>
+
         <h3 class="h4">{{ review.title }}</h3>
-        <div class="px-2">
+        <!--<div class="px-2">-->
           <!--<span>(投稿ユーザー: {{ review.user.username }})</span>-->
           <h6>計画に対する評価：{{ review.rate_1 }}点</h6>
           <h6>旅行に対する総評：{{ review.rate_2 }}点</h6>
           <p>コメント：{{ review.text }}</p>
-        </div>
-       </div>
+        <!--</div>-->
+
        {% endfor %}
     </div>
 
-    <div class="border p-4 mb-2">
+    <!--<div class="border p-4 mb-2">
       <!--<a href="{% url 'review-itinerary' object.pk %}" class="btn btn-light">旅行記録を書く</a>-->
       <a href="{% url 'list-itinerary-all' %}" class="btn btn-light">一覧へ</a>
-      <a href="{% url 'update-itinerary' object.pk %}" class="btn btn-light">修正する</a>
+      <!--<a href="{% url 'update-itinerary' object.pk %}" class="btn btn-light">修正する</a>-->
       <!--<a href="{% url 'delete-itinerary' object.pk %}" class="btn btn-light">削除する</a>-->
-    </div>
+    <!--</div>
    </div>
   </div>
 </div>
@@ -113,6 +113,6 @@
        document.getElementById('output4').textContent = `${inputForm4}`;
    }
 </script>-->
-<a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>
+
 
 {% endblock %}

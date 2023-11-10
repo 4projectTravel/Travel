@@ -50,18 +50,13 @@ class ListPostView(LoginRequiredMixin, ListView):
         #query = Map.number
 
         if query:
-            post_list = Post.objects.filter(number__icontains=query)
+            post_list = Post.objects.filter(name__icontains=query)
         else:
             post_list = Post.objects.all()
         return post_list
 
-
-
-    #いいね機能
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-
         # 投稿に対するいいねの数
         for item in self.object_list:
             like_count = item.postlike_set.count()
@@ -72,8 +67,26 @@ class ListPostView(LoginRequiredMixin, ListView):
                 context['is_user_liked'] = True
             else:
                 context['is_user_liked'] = False
-
         return context
+
+"""
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # 投稿に対するいいねの数
+        like_count = self.post.postlike_set.count()
+        context['like_count'] = like_count
+
+        if self.post.postlike_set.filter(user_id=self.request.user).exists():
+            context['is_user_liked'] = True
+        else:
+            context['is_user_liked'] = False
+        return context
+"""
+
+
+    #いいね機能
+
+
 
 
 def postlike(request):

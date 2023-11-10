@@ -31,16 +31,7 @@ class Post(models.Model):
 class PostLike(models.Model):
     user_id = models.ForeignKey('auth.User',on_delete=models.CASCADE)
     target = models.ForeignKey(Post,on_delete=models.CASCADE)
-    #post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    """
-    number = models.ForeignKey(Post,on_delete=models.CASCADE)
-    name = models.ForeignKey(Post,on_delete=models.CASCADE)
-    address = models.ForeignKey(Post,on_delete=models.CASCADE)
-    thumbnail = models.ForeignKey(Post,on_delete=models.CASCADE)
-    category = models.ForeignKey(Post,on_delete=models.CASCADE)
-    comment = models.ForeignKey(Post,on_delete=models.CASCADE)
-    """
-
+    
 
 class Review(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

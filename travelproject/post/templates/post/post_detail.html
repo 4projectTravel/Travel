@@ -59,7 +59,7 @@
       <span id="like-count">{{ like_count }}</span>
       <span>いいね</span>
     </div>
-    
+
     <h2 class="text-info">{{ object.name }}</h2>
     <p>住所: {{ object.address }}</p>
     <p>カテゴリー: {{ object.category }}</p>
@@ -79,7 +79,9 @@
       <a href="{% url 'review-post' object.pk %}" class="btn btn-light">口コミを書く</a>
     </div>
 
-    <!--<a href="{% url 'update-post' object.pk %}" class="btn btn-light">編集する</a>-->
-    <!--<a href="{% url 'delete-post' object.pk %}" class="btn btn-light">削除する</a>-->
+    <!--<div class="border p-4 mb-2">-->
+      <a href="{% url 'list-likepost' %}" class="btn btn-light">一覧へ</a>
+    <!--</div>-->
+
   </div>
 {% endblock %}

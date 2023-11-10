@@ -13,6 +13,7 @@
 
     {% for item in object_list %}
     {% if user.username == item.contributer %}
+    <div class="p-4 m-4 bg-light border border-info rounded">
 
     <div class="card">
       <h5 class="card-header">{{ item.title }}</h5>
@@ -83,7 +84,9 @@
         </table>
         <a href="{% url 'detail-itinerary' item.pk %}">詳細へ</a>
       </div>
-    <div>
+    </div>
+    </div>
+
     {% endif %}
     {% endfor %}
 {% endblock content %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}スポット一覧{% endblock %}
-{% block h1 %}スポット一覧{% endblock %}
+{% block title %}鎌倉スポット一覧{% endblock %}
+{% block h1 %}鎌倉スポット一覧{% endblock %}
 
 {% block extrajs %}
 <script type="text/javascript">
@@ -46,6 +46,9 @@
   　　　　<button type="submit">検索</button>
        </form>
 
+
+       {% include 'post/components/pagination.html' %}
+
        <!--<form action="" method="get2"><!-- getメソッドでインデックス関数を呼び出す -->
          <!--<label><input type="checkbox" class="checks" name="query2">お気に入り登録したスポットのみ表示</label>
          <input type="button" value="表示" ></input>
@@ -81,7 +84,6 @@
 
 　　<!--<a href="{% url 'create-post' %}" class="btn btn-light">スポットを追加する</a>-->
 
-　　<a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>
-
     {% include 'post/components/pagination.html' %}
+    <a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>
 {% endblock content %}

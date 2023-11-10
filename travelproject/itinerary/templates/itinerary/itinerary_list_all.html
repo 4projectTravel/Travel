@@ -13,6 +13,7 @@
 
     {% for item in object_list %}
     {% if item.category|stringformat:"s" == "記入済み" %}
+    <div class="p-4 m-4 bg-light border border-info rounded">
 
     <div class="card">
       <h5 class="card-header">{{ item.title }}</h5>
@@ -75,10 +76,11 @@
           <td>{{ item.schedule_12 }}</td>
         </tr>
 
-        
+
         </table>
         <a href="{% url 'detail-itinerary-all' item.pk %}">詳細へ</a>
       </div>
+    </div>
     </div>
     {% endif %}
     {% endfor %}
