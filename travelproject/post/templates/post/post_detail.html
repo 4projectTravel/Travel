@@ -19,6 +19,9 @@
     }).then(response => {
       return response.json();
     }).then(response => {
+      // いいね数を書き換える
+      const counter = document.getElementById('like-count')
+      counter.textContent = response.like_count
       const icon = document.getElementById('like-icon')
       // いいねした時はハートを塗る
       if (response.method == 'create') {
@@ -40,22 +43,28 @@
 
 {% block content %}
   <div class="p-4 m-4 bg-light border border-info rounded">
-    {% if is_user_liked %}
-    <button type="button" id="ajax-like" style="border:none;background:none">
-      <!-- すでにいいねしている時はfasクラス -->
-      <i class="fas fa-heart text-danger" id="like-icon"></i>
-    </button>
-    {% else %}
-    <button type="button" id="ajax-like" style="border:none;background:none">
-      <!-- いいねしていないときはfarクラス -->
-      <i class="far fa-heart text-danger" id="like-icon"></i>
-    </button>
-    {% endif %}
+    <div class="card-header">
+      {% if is_user_liked %}
+      <button type="button" id="ajax-like" style="border:none;background:none">
+        <!-- すでにいいねしている時はfasクラス -->
+        <i class="fas fa-heart text-danger" id="like-icon"></i>
+      </button>
+      {% else %}
+      <button type="button" id="ajax-like" style="border:none;background:none">
+        <!-- いいねしていないときはfarクラス -->
+        <i class="far fa-heart text-danger" id="like-icon"></i>
+      </button>
+      {% endif %}
+      <!-- いいねの数 -->
+      <span id="like-count">{{ like_count }}</span>
+      <span>いいね</span>
+    </div>
+    
     <h2 class="text-info">{{ object.name }}</h2>
     <p>住所: {{ object.address }}</p>
     <p>カテゴリー: {{ object.category }}</p>
     <p>おすすめポイント: {{ object.comment }}</p>
-
+    <a href="{% url 'list-kamakura-itinerary-all' %}">このスポットがある地域の旅行記録を見る</a>
     <div class="border p-4 mb-2">
       {% for review in object.review_set.all %}
       <div>

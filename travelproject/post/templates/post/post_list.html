@@ -19,6 +19,8 @@
     }).then(response => {
       return response.json();
     }).then(response => {
+      const counter = document.getElementById('like-count')
+      counter.textContent = response.like_count
       const icon = document.getElementById('like-icon')
       // いいねした時はハートを塗る
       if (response.method == 'create') {
@@ -49,13 +51,29 @@
          <input type="button" value="表示" ></input>
        </form>-->
 
-    {% for item in post_list %}
-
-    <div class="p-4 m-4 bg-light border border-info rounded">
-        <!--<h2 class="text-info">{{ item.number }}</h2>-->
-        <a href="{% url 'detail-post' item.pk %}"><h2 class="text-info">{{ item.number }}.{{ item.name }}</h2></a>
-    </div>
-    {% endfor %}
+      <div class="main">
+        {% for item in post_list %}
+        <div class="item">
+          <div class="p-4 m-4 bg-light border border-info rounded">
+            {% if is_user_liked %}
+            <button type="button" id="ajax-like" style="border:none;background:none">
+              <!-- すでにいいねしている時はfasクラス -->
+              <i class="fas fa-heart text-danger" id="like-icon"></i>
+            </button>
+            {% else %}
+            <button type="button" id="ajax-like" style="border:none;background:none">
+              <!-- いいねしていないときはfarクラス -->
+              <i class="far fa-heart text-danger" id="like-icon"></i>
+            </button>
+            {% endif %}
+            <a href="{% url 'detail-post' item.pk %}"><h2 class="text-info">{{ item.number }}.{{ item.name }}</h2></a>
+            {% if item.thumbnail %}
+               <a class="thumbnail"><img src="{{ item.thumbnail.url }}" class="img-thumbnail" /></a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
 
 
 

@@ -73,7 +73,9 @@ class ListItineraryAllView(ListView):
              object_list = Itinerary.objects.all()
              return render(request, 'itinerary_list_all.html', {'object_list': object_list})
 
-
+class ListKamakuraItineraryAllView(ListView):
+    template_name = 'itinerary/itinerary_kamakura_list_all.html'
+    model = Itinerary
 
 class DetailItineraryView(DetailView):
     template_name = 'itinerary/itinerary_detail.html'

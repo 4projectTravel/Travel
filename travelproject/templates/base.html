@@ -26,7 +26,7 @@
         <a class="nav-link mx-3" href="{% url 'list-post' %}"> 口コミを閲覧・投稿する </a>
         <!--<a class="nav-link mx-3" href="{% url 'create-post' %}"> 口コミ登録 </a>-->
         <a class="nav-link mx-3" href="{% url 'move_to_mypage' %}"> マイページ(旅程表作成・閲覧) </a>
-        <!--<a class="nav-link mx-3" href="{% url 'move_to_traveling' %}"> 現在旅行中の方はこちら </a>-->
+        <a class="nav-link mx-3" href="{% url 'list-likepost' %}"> お気に入り登録済みスポット </a>
       </div>
       <div class="narbar-nav d-flex flex-row">
         {% if request.user.is_authenticated %}

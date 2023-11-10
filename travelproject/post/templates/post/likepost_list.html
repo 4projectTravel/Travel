@@ -4,5 +4,9 @@
 {% block h1 %}お気に入りスポット一覧{% endblock %}
 
 {% block content %}
-  <p>Hello</p>
+{% for item in postlike_list %}
+<div class="p-4 m-4 bg-light border border-info rounded">
+  <h2 class="text-info">{{ item.target }}</h2>
+</div>
+{% endfor %}
 {% endblock content %}

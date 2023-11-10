@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.title }}{% endblock %}
+{% block h1 %}スポット詳細{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+  // いいねボタンが押された時
+  document.getElementById('ajax-like').addEventListener('click', e => {
+    e.preventDefault();
+    const url = '{% url "postlike" %}';
+    fetch(url, {
+      method: 'POST',
+      body: `post_pk={{ post.pk }}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+    }).then(response => {
+      return response.json();
+    }).then(response => {
+      // いいね数を書き換える
+      const counter = document.getElementById('like-count')
+      counter.textContent = response.like_count
+      const icon = document.getElementById('like-icon')
+      // いいねした時はハートを塗る
+      if (response.method == 'create') {
+        icon.classList.remove('far')
+        icon.classList.add('fas')
+        icon.id = 'like-icon'
+      } else {
+        icon.classList.remove('fas')
+        icon.classList.add('far')
+        icon.id = 'like-icon'
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  });
+</script>
+{% endblock %}
+
+
+{% block content %}
+  <div class="p-4 m-4 bg-light border border-info rounded">
+    {% if is_user_liked %}
+    <button type="button" id="ajax-like" style="border:none;background:none">
+      <!-- すでにいいねしている時はfasクラス -->
+      <i class="fas fa-heart text-danger" id="like-icon"></i>
+    </button>
+    {% else %}
+    <button type="button" id="ajax-like" style="border:none;background:none">
+      <!-- いいねしていないときはfarクラス -->
+      <i class="far fa-heart text-danger" id="like-icon"></i>
+    </button>
+    {% endif %}
+    <!-- いいねの数 -->
+    <span id="like-count">{{ like_count }}</span>
+    <span>いいね</span>
+
+    <h2 class="text-info">{{ object.name }}</h2>
+    <p>住所: {{ object.address }}</p>
+    <p>カテゴリー: {{ object.category }}</p>
+    <p>おすすめポイント: {{ object.comment }}</p>
+    <a href="{% url 'list-kamakura-itinerary-all' %}">このスポットがある地域の旅行記録を見る</a>
+    <div class="border p-4 mb-2">
+      {% for review in object.review_set.all %}
+      <div>
+        <h3 class="h4">{{ review.title }}</h3>
+        <div class="px-2">
+          <span>(投稿ユーザー: {{ review.user.username }})</span>
+          <h6>評価：{{ review.rate }}点</h6>
+          <p>{{ review.text }}</p>
+        </div>
+      </div>
+      {% endfor %}
+      <a href="{% url 'review-post' object.pk %}" class="btn btn-light">口コミを書く</a>
+    </div>
+  </div>
+{% endblock %}

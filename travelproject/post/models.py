@@ -7,11 +7,12 @@ RATE_CHOICES = [(x, str(x)) for x in range(0, MAX_RATE + 1)]
 # Create your models here.
 CATEGORY = (('ごはん', 'ごはん'),('カフェ・パン・スイーツ・お菓子','カフェ・パン・スイーツ・お菓子'),('イベント','イベント'),('風景・景色','風景・景色'),('アート・カルチャー','アート・カルチャー'),
 ('お土産・お酒・雑貨','お土産・お酒・雑貨'),('神社・寺院','神社・寺院'),('アクティビティ・体験・その他施設','アクティビティ・体験・その他施設'))
-#CATEGORY = (('北海道', '北海道'),('東北','東北'),('関東','関東'),('中部','中部'),('近畿','近畿'),('中国','中国'),('四国','四国'),('九州','九州'))
+
 class Post(models.Model):
     number = models.CharField(max_length=5, null=True)
     name = models.TextField(null=True)
     address = models.TextField(null=True)
+    thumbnail = models.ImageField(null=True)
     category = models.CharField(
               max_length = 100,
               choices = CATEGORY,
@@ -30,6 +31,15 @@ class Post(models.Model):
 class PostLike(models.Model):
     user_id = models.ForeignKey('auth.User',on_delete=models.CASCADE)
     target = models.ForeignKey(Post,on_delete=models.CASCADE)
+    #post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    """
+    number = models.ForeignKey(Post,on_delete=models.CASCADE)
+    name = models.ForeignKey(Post,on_delete=models.CASCADE)
+    address = models.ForeignKey(Post,on_delete=models.CASCADE)
+    thumbnail = models.ForeignKey(Post,on_delete=models.CASCADE)
+    category = models.ForeignKey(Post,on_delete=models.CASCADE)
+    comment = models.ForeignKey(Post,on_delete=models.CASCADE)
+    """
 
 
 class Review(models.Model):

@@ -48,7 +48,7 @@ class ListPostView(LoginRequiredMixin, ListView):
     def get_queryset(self): # 検索機能のために追加
         query = self.request.GET.get('query')
         #query = Map.number
-        
+
         if query:
             post_list = Post.objects.filter(number__icontains=query)
         else:
@@ -60,6 +60,12 @@ class ListPostView(LoginRequiredMixin, ListView):
     #いいね機能
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+
+        # 投稿に対するいいねの数
+        for item in self.object_list:
+            like_count = item.postlike_set.count()
+            context['like_count'] = like_count
 
         for item in self.object_list:
             if item.postlike_set.filter(user_id=self.request.user).exists():
@@ -85,7 +91,16 @@ def postlike(request):
         like.create(target=post, user_id=request.user)
         context['method'] = 'create'
 
+    context['like_count'] = post.postlike_set.count()
+
     return JsonResponse(context)
+
+
+
+class ListLikePostView(LoginRequiredMixin, ListView):
+    template_name = 'post/likepost_list.html'
+    model = PostLike
+
 
 
 class DetailPostView(LoginRequiredMixin, DetailView):
@@ -95,6 +110,29 @@ class DetailPostView(LoginRequiredMixin, DetailView):
     #いいね機能
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # 投稿に対するいいねの数
+        like_count = self.object.postlike_set.count()
+        context['like_count'] = like_count
+
+        if self.object.postlike_set.filter(user_id=self.request.user).exists():
+            context['is_user_liked'] = True
+        else:
+            context['is_user_liked'] = False
+
+        return context
+
+class DetailLikePostView(LoginRequiredMixin, DetailView):
+    template_name = 'post/likepost_detail.html'
+    model = Post
+
+    #いいね機能
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # 投稿に対するいいねの数
+        like_count = self.object.postlike_set.count()
+        context['like_count'] = like_count
 
         if self.object.postlike_set.filter(user_id=self.request.user).exists():
             context['is_user_liked'] = True
@@ -106,7 +144,7 @@ class DetailPostView(LoginRequiredMixin, DetailView):
 class CreatePostView(LoginRequiredMixin, CreateView):
     template_name = 'post/post_create.html'
     model = Post
-    fields = ('name', 'address', 'category')
+    fields = ('name', 'address', 'category', 'thumbnail')
     success_url = reverse_lazy('list-post')
 
     def form_valid(self, form):
@@ -130,7 +168,7 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
 
 class UpdatePostView(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ('name', 'address', 'category')
+    fields = ('name', 'address', 'category', 'thumbnail')
     template_name = 'post/post_update.html'
 
     def get_object(self, queryset=None):
