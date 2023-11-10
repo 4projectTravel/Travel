@@ -1,6 +1,15 @@
 from django.contrib import admin
 from .models import Post , Review
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
 
-admin.site.register(Post)
+class PostResource(resources.ModelResource):
+    class Meta:
+        model = Post
+
+class PostAdmin(ImportExportModelAdmin):
+    resource_class = PostResource
+
+admin.site.register(Post, PostAdmin)
 admin.site.register(Review)

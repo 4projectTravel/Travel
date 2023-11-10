@@ -20,7 +20,7 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def map_restaurant(request):
-    template = loader.get_template('map/map_restaurant.html')
+    template = loader.get_template('map/map_kamakura.html')
     context = {}
 
     model = Map

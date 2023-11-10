@@ -16,9 +16,17 @@ a {
   color: white;
 }
 
-.container {
+.main {
   display: flex;
   justify-content: center;
+  width: 95%;
+  margin: auto;
+  flex-wrap: wrap;
+}
+
+.item{
+  margin: 10px;
+  padding: 10px;
 }
 
 .wrap{

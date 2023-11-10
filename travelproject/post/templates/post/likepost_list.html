@@ -6,7 +6,7 @@
 {% block content %}
 {% for item in postlike_list %}
 <div class="p-4 m-4 bg-light border border-info rounded">
-  <h2 class="text-info">{{ item.target }}</h2>
+  <a href="{% url 'detail-post' item.target.pk %}"><h2 class="text-info">{{ item.target.name }}</h2></a>
 </div>
 {% endfor %}
 {% endblock content %}
