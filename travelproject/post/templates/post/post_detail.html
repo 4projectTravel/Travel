@@ -62,8 +62,12 @@
 
     <h2 class="text-info">{{ object.name }}</h2>
     <p>住所: {{ object.address }}</p>
-    <p>カテゴリー: {{ object.category }}</p>
-    <p>おすすめポイント: {{ object.comment }}</p>
+    <p>カテゴリー:</p>
+    {% for item in object.category.all %}
+    <p>{{ item.name }}</p>
+    {% endfor %}
+
+    <p>おすすめポイント: {{ object.comment }} </p>
     <a href="{% url 'list-kamakura-itinerary-all' %}">このスポットがある地域の旅行記録を見る</a>
     <div class="border p-4 mb-2">
       {% for review in object.review_set.all %}
@@ -80,7 +84,7 @@
     </div>
 
     <!--<div class="border p-4 mb-2">-->
-      <a href="{% url 'list-likepost' %}" class="btn btn-light">一覧へ</a>
+      <a href="{% url 'list-post' %}" class="btn btn-light">一覧へ</a>
     <!--</div>-->
 
   </div>

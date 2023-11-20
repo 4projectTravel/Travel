@@ -16,7 +16,7 @@ class MapSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('name', 'address', 'lat', 'lng', 'genre', 'ranking', 'number', 'comment')
 class MapViewSet(viewsets.ModelViewSet):
     #queryset = Map.objects.all()
-    queryset = Map.objects.order_by('ranking') #ランキング順に並び替える
+    queryset = Map.objects.order_by('number','ranking') #ランキング順に並び替える
     serializer_class = MapSerializer
 
 router = routers.DefaultRouter()

@@ -19,6 +19,7 @@
     }).then(response => {
       return response.json();
     }).then(response => {
+      // いいね数を書き換える
       const counter = document.getElementById('like-count')
       counter.textContent = response.like_count
       const icon = document.getElementById('like-icon')
@@ -37,40 +38,82 @@
     });
   });
 </script>
+
+<!--<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
+async defer></script>-->
+<!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"></script>-->
+
+
 {% endblock %}
 
 {% block content %}
       <!--formを追加-->
-       <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
-         <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/>
+       <!--<form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
+         <!--<input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/>
   　　　　<button type="submit">検索</button>
        </form>
 
+       <form action="" method="get" class="mb-5" enctype="multipart/form-data"><!--{% csrf_token %}-->
+        <!--<div class = "form-row">
+            <div class = "col-5">
+              <div class="BoxList">
+                <ul>
+                  <!--<li class="c1"><label><input type="checkbox" id="top20" name="top20" value="top20" checked>この地域の人気スポットトップ20</label></li>-->
+                  <!--<li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall">全て選択</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="ごはん">ごはん</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="カフェ・パン・スイーツ・お菓子">カフェ・パン・スイーツ・お菓子</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="イベント">イベント</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="風景・景色">風景・景色</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アート・カルチャー">アート・カルチャー</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="お土産・お酒・雑貨">お土産・お酒・雑貨</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="神社・寺院">神社・寺院</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アクティビティ・体験・その他施設">アクティビティ・体験・その他施設</label></li>
+                </ul>
+                <button type="submit" class="btn btn-light">検索する</button>
+                <a href="./"  class="btn btn-light">クリア</a>
+                <!--<input type="checkbox" name="post" value="1" class = "ml-2">カテゴリー</input>-->
+              <!--</div>
+            </div>
+        </div>
+      </form>-->
 
-       {% include 'post/components/pagination.html' %}
+
+
+
 
        <!--<form action="" method="get2"><!-- getメソッドでインデックス関数を呼び出す -->
          <!--<label><input type="checkbox" class="checks" name="query2">お気に入り登録したスポットのみ表示</label>
          <input type="button" value="表示" ></input>
        </form>-->
 
+
+      <ul>
+        {% for item in post_list %}
+        <a href="#{{ item.name }}"></li>{{ item.name }}</li><br></a>
+        {% endfor %}
+      </ul>
+
+      {% include 'post/components/pagination.html' %}
+
       <div class="container text-center">
         <div class="row row-cols-2">
         {% for item in post_list %}
         <div class="col">
           <div class="p-4 m-4 bg-light border border-info rounded">
-            {% if is_user_liked %}
+            <!--{% if is_user_liked %}
             <button type="button" id="ajax-like" style="border:none;background:none">
               <!-- すでにいいねしている時はfasクラス -->
-              <i class="fas fa-heart text-danger" id="like-icon"></i>
+            <!--<i class="fas fa-heart text-danger" id="like-icon"></i>
             </button>
             {% else %}
             <button type="button" id="ajax-like" style="border:none;background:none">
               <!-- いいねしていないときはfarクラス -->
-              <i class="far fa-heart text-danger" id="like-icon"></i>
+              <!--<i class="far fa-heart text-danger" id="like-icon"></i>
             </button>
-            {% endif %}
+            {% endif %}-->
+            <div id="{{ item.name }}"></div>
             <a href="{% url 'detail-post' item.pk %}"><h2 class="text-info">{{ item.number }}.{{ item.name }}</h2></a>
+
             {% if item.thumbnail %}
                <div class="thumbnail"><img src="{{ item.thumbnail.url }}" class="img-thumbnail" style="width:450px;height:280px"></div>
             {% endif %}
@@ -85,5 +128,6 @@
 　　<!--<a href="{% url 'create-post' %}" class="btn btn-light">スポットを追加する</a>-->
 
     {% include 'post/components/pagination.html' %}
-    <a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>
+    <!--<a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>-->
+
 {% endblock content %}

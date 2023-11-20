@@ -15,6 +15,8 @@
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{% static 'post/css/style.css' %}">
+
+
   </head>
   <body>
     <nav class="navbar navbar-dark bg-info sticky-top">
@@ -43,11 +45,17 @@
 
     <div class='p-4' style="margin:60px;">
       <h1>{% block h1 %}{% endblock %}</h1>
+
         {% block content %}{% endblock content %}
     </div>
 
+
+    <!--<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
+    async defer></script>-->
+
     <!--追加-->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
+
     {% block extrajs %}
     {% endblock %}
 

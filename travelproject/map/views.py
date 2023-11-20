@@ -7,7 +7,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse # 追加
-
+from django.views.generic import ListView
 
 
 #class TemplateMapView(TemplateView):
@@ -19,10 +19,14 @@ def index(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
+
 def map_restaurant(request):
     template = loader.get_template('map/map_kamakura.html')
     context = {}
-
     model = Map
-
     return HttpResponse(template.render(context, request))
+"""
+class ListMapView(ListView):
+    model = Map
+    template_name = 'map/map_kamakura.html'
+"""

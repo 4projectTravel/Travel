@@ -6,7 +6,7 @@ from django.db.models import Avg
 from django.core.paginator import Paginator
 from django.http import JsonResponse # 追加
 
-
+from django.views import View
 from django.views.generic import (
     ListView,
     DetailView,
@@ -14,7 +14,7 @@ from django.views.generic import (
     DeleteView,
     UpdateView,
 )
-from .models import Post, Review, PostLike
+from .models import Post, Review, PostLike, Category
 from map.models import Map
 from .consts import ITEM_PER_PAGE
 '''
@@ -39,21 +39,33 @@ def index_view(request):
 '''
 
 
+
 class ListPostView(LoginRequiredMixin, ListView):
     template_name = 'post/post_list.html'
     model = Post
     paginate_by = ITEM_PER_PAGE
 
-    # 検索フォーム
-    def get_queryset(self): # 検索機能のために追加
-        query = self.request.GET.get('query')
-        #query = Map.number
 
-        if query:
-            post_list = Post.objects.filter(name__icontains=query)
+
+    # 検索フォーム
+    def get_queryset(self):# 検索機能のために追加
+        chk1 = self.request.GET.get('chk1')
+        if chk1:
+            post_list = Post.objects.filter(name__icontains=chk1)
         else:
             post_list = Post.objects.all()
         return post_list
+
+
+
+    """
+        query = self.request.GET.get('query')
+        if query:
+            post_list = Post.objects.filter(category__icontains=query)
+        else:
+            post_list = Post.objects.all()
+        return post_list
+     """
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,26 +81,8 @@ class ListPostView(LoginRequiredMixin, ListView):
                 context['is_user_liked'] = False
         return context
 
-"""
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # 投稿に対するいいねの数
-        like_count = self.post.postlike_set.count()
-        context['like_count'] = like_count
-
-        if self.post.postlike_set.filter(user_id=self.request.user).exists():
-            context['is_user_liked'] = True
-        else:
-            context['is_user_liked'] = False
-        return context
-"""
-
 
     #いいね機能
-
-
-
-
 def postlike(request):
     post_pk = request.POST.get('post_pk')
     context = {
@@ -109,7 +103,6 @@ def postlike(request):
     return JsonResponse(context)
 
 
-
 class ListLikePostView(LoginRequiredMixin, ListView):
     template_name = 'post/likepost_list.html'
     model = PostLike
@@ -120,24 +113,13 @@ class DetailPostView(LoginRequiredMixin, DetailView):
     template_name = 'post/post_detail.html'
     model = Post
 
-    #いいね機能
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # 投稿に対するいいねの数
-        like_count = self.object.postlike_set.count()
-        context['like_count'] = like_count
-
-        if self.object.postlike_set.filter(user_id=self.request.user).exists():
-            context['is_user_liked'] = True
-        else:
-            context['is_user_liked'] = False
-
+        post_list = Post.objects.filter(post_id=self.kwargs['pk']) # pkを指定してデータを絞り込む
+        context['post_list'] = post_list
         return context
-
-class DetailLikePostView(LoginRequiredMixin, DetailView):
-    template_name = 'post/likepost_detail.html'
-    model = Post
 
     #いいね機能
     def get_context_data(self, **kwargs):
