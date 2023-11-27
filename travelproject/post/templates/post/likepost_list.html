@@ -4,13 +4,30 @@
 {% block h1 %}お気に入りスポット一覧{% endblock %}
 
 {% block content %}
+<style>
+  /* 右寄せにするスタイル */
+  .border-style{
+    border: solid;
+    border-color: #60a8f0;
+    border-radius: 5px 5px 5px 5px;
+  }
+
+  .text{
+    color: #60a8f0;
+  }
+
+  a {
+    color:#f0a860;
+  }
+  
+</style>
 
 <div class="container text-center">
   <div class="row row-cols-2">
   {% for item in postlike_list %}
   <div class="col">
-    <div class="p-4 m-4 bg-light border border-info rounded">
-      <a href="{% url 'detail-post' item.target.pk %}"><h2 class="text-info">{{ item.target.number }}.{{ item.target.name }}</h2></a>
+    <div class="border-style p-4 m-4">
+      <a href="{% url 'detail-post' item.target.pk %}"><h2 class="text">{{ item.target.number }}.{{ item.target.name }}</h2></a>
       {% if item.target.thumbnail %}
          <div class="thumbnail"><img src="{{ item.target.thumbnail.url }}" class="img-thumbnail" style="width:450px;height:280px"></div>
       {% endif %}

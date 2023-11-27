@@ -4,6 +4,28 @@
 {% block h1 %}スポット詳細{% endblock %}
 
 {% block extrajs %}
+<style>
+  /* 右寄せにするスタイル */
+  .border-style{
+    border: solid;
+    border-color: #60a8f0;
+    border-radius: 5px 5px 5px 5px;
+  }
+
+  .right-align {
+      text-align: right;
+  }
+
+  .text{
+    color: #60a8f0;
+  }
+
+  a {
+    color:#f0a860;
+  }
+  
+</style>
+
 <script type="text/javascript">
   // いいねボタンが押された時
   document.getElementById('ajax-like').addEventListener('click', e => {
@@ -42,7 +64,7 @@
 
 
 {% block content %}
-  <div class="p-4 m-4 bg-light border border-info rounded">
+  <div class="border-style p-4 m-4">
     <div class="card-header">
       {% if is_user_liked %}
       <button type="button" id="ajax-like" style="border:none;background:none">
@@ -60,7 +82,7 @@
       <span>いいね</span>
     </div>
 
-    <h2 class="text-info">{{ object.name }}</h2>
+    <h2 class="text">{{ object.name }}</h2>
     <p>住所: {{ object.address }}</p>
     <p>カテゴリー:</p>
     {% for item in object.category.all %}
