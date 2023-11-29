@@ -71,15 +71,28 @@
       padding: 5px;
       border-color: #60a8f0;
     }
+    /* 右寄せにするスタイル */
+    .border-style{
+      border: solid;
+      border-color: #60a8f0;
+      border-radius: 5px 5px 5px 5px;
+    }
+
+    .text{
+      color: #60a8f0;
+    }
+
+    a {
+      color:#f0a860;
+    }
 
   </style>
 
 </head>
 <body>
-
-  <nav class="navbar navbar-dark bg-info sticky-top">
+  <nav class="navbar navbar-light sticky-top" style="background-color:#60a8f0;">
     <div class="navbar-nav d-flex flex-row">
-      <a class="navbar-brand text-light" href="{% url 'topA' %}">ほっとりっぷ</a>
+      <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;">ほっと<span style="color: white;">りっぷ</span></a>
       <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
       <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
       <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
