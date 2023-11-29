@@ -19,6 +19,7 @@
 
   </head>
   <body>
+<<<<<<< HEAD
     <style>
     h1.top {
       border-width: 0px 0px 0px 3px;
@@ -33,6 +34,18 @@
         <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
         <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
         <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
+=======
+    <nav class="navbar navbar-light sticky-top" style="background-color:#60a8f0;">
+      <div class="navbar-nav d-flex flex-row">
+        <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;"><font size="6">ほっと<span style="color: white;">りっぷ</span></font></a>
+        <!--<a class="nav-link mx-3" href="{% url 'create-itinerary' %}"> 旅行日程表を作成する </a>-->
+        <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> 旅行記録を閲覧する </a>
+        <!--<a class="nav-link mx-3" href="{% url 'move_to_record' %}"> 旅行記録を作成する </a>-->
+        <a class="nav-link mx-3" href="{% url 'list-post' %}"> 口コミを閲覧・投稿する </a>
+        <!--<a class="nav-link mx-3" href="{% url 'create-post' %}"> 口コミ登録 </a>-->
+        <a class="nav-link mx-3" href="{% url 'move_to_mypage' %}"> マイページ(旅程表作成・閲覧) </a>
+        <a class="nav-link mx-3" href="{% url 'list-likepost' %}"> お気に入り登録済みスポット </a>
+>>>>>>> 6ce9129e216d8cb8882d9b4237b46f8e5178ebec
       </div>
       <!--<div class="narbar-nav d-flex flex-row">
         {% if request.user.is_authenticated %}

@@ -9,6 +9,7 @@ a {
   weight: 50%;
 }
 
+<<<<<<< HEAD
 .container {
   display: flex;
   gap: 80px;
@@ -24,13 +25,30 @@ a {
 }
 
 
+=======
+/* ボタン */
+.btn {
+  font-size: 1.375rem;
+  display: block;
+  width: 300px;
+  margin:auto;
+  padding: 18px 32px;
+  border-radius: 5px;
+  background-color: #ffbf1f;
+  padding: 10px;
+  color: white;
+}
+
+>>>>>>> 6ce9129e216d8cb8882d9b4237b46f8e5178ebec
 .main {
   display: flex;
+  justify-content: center;
   width: 95%;
   margin: auto;
   flex-wrap: wrap;
 }
 
+<<<<<<< HEAD
 .main {
         width: 1200px;
         margin: auto;
@@ -46,6 +64,12 @@ a {
 }
 
 
+=======
+.item{
+  margin: 10px;
+  padding: 10px;
+}
+>>>>>>> 6ce9129e216d8cb8882d9b4237b46f8e5178ebec
 
 .wrap{
   text-align: right;
@@ -77,6 +101,7 @@ input.button {
   text-align: center;
   padding: 6px 12px;
 }
+<<<<<<< HEAD
 */
 /*
 .flex {
@@ -89,16 +114,16 @@ input.button {
   width: 500px;
   margin: auto;
 }
+=======
+>>>>>>> 6ce9129e216d8cb8882d9b4237b46f8e5178ebec
 
+/*
 input.button:hover{
   background: #0090aa;
 }
 */
 
-.thumbnail {
-    text-align: center;
-}
-
-.thumbnail img {
-    padding-top: 30px;
-}
+.btn:hover{
+  background-color: #60a8f0;
+  color: #f0a860;
+ }
