@@ -29,11 +29,15 @@ class Post(models.Model):
     category = models.ManyToManyField(Category, related_name='categories')
     #comment = models.TextField(null=True)
 
+
     def __str__(self):
         return str(self.name)
 #追加
     def get_absolute_url(self):
         return reverse('post:list-post', kwargs={'pk': self.pk})
+
+    class Meta:
+        ordering = ['-postlike']
 #追加
 class PostLike(models.Model):
     user_id = models.ForeignKey('auth.User',on_delete=models.CASCADE)

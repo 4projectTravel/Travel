@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404 # 追加
 from django.db import models
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
@@ -11,10 +11,33 @@ from django.views.generic import (
 from .models import Itinerary, Review
 from .forms import AddItineraryForm
 from django.contrib.admin.widgets import AdminDateWidget
+from django.http import JsonResponse # 追加
+from django.views import View
+
 
 
 class ListItineraryView(ListView):
     template_name = 'itinerary/itinerary_list.html'
+    model = Itinerary
+
+    # 検索フォーム
+    def get_queryset(self): # 検索機能のために追加
+        query = self.request.GET.get('query')
+
+        if query:
+            object_list = Itinerary.objects.filter(title__icontains=query)
+        else:
+            object_list = Itinerary.objects.all()
+        return object_list
+
+    # 投稿ユーザーとログインユーザーが一致した時のみ表示する。
+    """
+    def mypagefunc(request):
+        object_list = Itinerary.objects.all()
+        return render(request, 'itinerary_list_all.html', {'object_list': object_list})
+    """
+class ListItineraryRecordView(ListView):
+    template_name = 'itinerary/itinerary_list_record.html'
     model = Itinerary
 
     # 検索フォーム
@@ -41,7 +64,8 @@ class ListItineraryView(ListView):
     # 投稿ユーザーとログインユーザーが一致した時のみ表示する。
     def mypagefunc(request):
         object_list = Itinerary.objects.all()
-        return render(request, 'itinerary_list.html', {'object_list': object_list})
+        return render(request, 'itinerary_list_record.html', {'object_list': object_list})
+
 
 class ListItineraryAllView(ListView):
      template_name = 'itinerary/itinerary_list_all.html'
@@ -52,18 +76,7 @@ class ListItineraryAllView(ListView):
          query = self.request.GET.get('query')
 
          if query:
-             itinerary_list = Itinerary.objects.filter(schedule_1__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_2__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_3__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_4__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_5__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_6__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_7__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_8__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_9__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_10__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_11__icontains=query)
-             itinerary_list = Itinerary.objects.filter(schedule_12__icontains=query)
+             itinerary_list = Itinerary.objects.filter(title__icontains=query)
          else:
              itinerary_list = Itinerary.objects.all()
          return itinerary_list
@@ -124,7 +137,7 @@ class UpdateItineraryView(UpdateView):
     template_name = 'itinerary/itinerary_update.html'
     model = Itinerary
     fields = ('title','date_1','date_2','date_3','time_1','time_2','time_3','time_4','time_5','time_6','time_7','time_8','time_9','time_10','time_11','time_12',
-'schedule_1','schedule_2','schedule_3','schedule_4','schedule_5','schedule_6','schedule_7','schedule_8','schedule_9','schedule_10','schedule_11','schedule_12','category','contributer')
+'schedule_1','schedule_2','schedule_3','schedule_4','schedule_5','schedule_6','schedule_7','schedule_8','schedule_9','schedule_10','schedule_11','schedule_12','category','contributer','companion')
 
     def get_success_url(self):
         return reverse('detail-itinerary', kwargs={'pk': self.object.id})
@@ -151,3 +164,8 @@ class DeleteItineraryView(DeleteView):
     template_name = 'itinerary/itinerary_confirm_delete.html'
     model = Itinerary
     success_url = reverse_lazy('list-itinerary')
+
+
+class ListItineraryNewView(ListView):
+    template_name = 'itinerary/mypage_top.html'
+    model = Itinerary

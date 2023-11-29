@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'mypage_top.html' %}
 
-{% block title %}旅行記録一覧{% endblock %}
-{% block h1 %}旅行記録一覧{% endblock %}
+{% block title %}あなたの旅行日程表一覧{% endblock %}
+{% block h1 %}あなたの旅行日程表一覧{% endblock %}
 
 
 {% block content %}
@@ -11,15 +11,17 @@
      <button type="submit">検索</button>
    </form>
 
-    {% for item in object_list %}
+    {% for item in itinerary_list %}
     {% if user.username == item.contributer %}
+    {% if item.category|stringformat:"s" == "未記入" or "記入済み" %}
+
+
     <div class="p-4 m-4 bg-light border border-info rounded">
 
     <div class="card">
-      <h5 class="card-header">{{ item.title }}</h5>
+      <a href="{% url 'detail-itinerary' item.pk %}"><h5 class="card-header">{{ item.title }}</h5></a>
 
       <div class="card-body">
-        <p>ユーザー名:  {{ item.contributer }}</p>
         <p>旅行記録の記入状況: {{ item.category }}</p>
         <table>
         <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
@@ -74,19 +76,12 @@
           <td width="90">{{ item.time_12|date:"H-i" }}</td>
           <td>{{ item.schedule_12 }}</td>
         </tr>
-
-        <!--<tr><td>{{ object.contnt }}</td></tr>-->
-        <!--<tr><td><p id="output1"></p></td><td><p id="output2"></p></td><td><p id="output3"></p></td><td><p id="output4"></p></td></tr>-->
-        <!--<tr><td>{{ object.date }}</td><td>{{ object.time }}</td><td>{{ object.schedule }}</td><td>{{ object.note }}</td></tr>-->
-        <!--<tr><td>{{ object.date }}</td><td>{{ object.time }}</td><td>{{ object.schedule }}</td><td>{{ object.note }}</td></tr>
-        <tr><td>{{ object.date }}</td><td>{{ object.time }}</td><td>{{ object.schedule }}</td><td>{{ object.note }}</td></tr>-->
-
         </table>
-        <a href="{% url 'detail-itinerary' item.pk %}">詳細へ</a>
+
       </div>
     </div>
     </div>
-
+    {% endif %}
     {% endif %}
     {% endfor %}
 {% endblock content %}

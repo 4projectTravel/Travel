@@ -1,118 +1,96 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ object.title }}{% endblock %}
+{% block title %}旅行日程表詳細{% endblock %}
 {% block h1 %}旅行日程表詳細{% endblock %}
 
 {% block content %}
-   <div class="border col-7">
-     <div class="card">
-       <h5 class="card-header">{{ object.title }}</h5>
-       <h7 class="card-header"> ユーザー名:  {{ user.username }} </h7>
-       <div class="card-body">
-
-    <table>
-    <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
-    <tr>
-      <td rowspan="4">{{ object.date_1|date:"Y-m-j" }}</td>
-      <td width="90">{{ object.time_1|date:"H-i" }}</td>
-      <td>{{ object.schedule_1 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_2|date:"H-i" }}</td>
-      <td>{{ object.schedule_2 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_3|date:"H-i" }}</td>
-      <td>{{ object.schedule_3 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_4|date:"H-i" }}</td>
-      <td>{{ object.schedule_4 }}</td>
-    </tr>
-    <tr>
-      <td rowspan="4">{{ object.date_2|date:"Y-m-j" }}</td>
-      <td width="90">{{ object.time_5|date:"H-i" }}</td>
-      <td>{{ object.schedule_5 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_6|date:"H-i" }}</td>
-      <td>{{ object.schedule_6 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_7|date:"H-i" }}</td>
-      <td>{{ object.schedule_7 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_8|date:"H-i" }}</td>
-      <td>{{ object.schedule_8 }}</td>
-    </tr>
-    <tr>
-      <td rowspan="4">{{ object.date_3|date:"Y-m-j" }}</td>
-      <td width="90">{{ object.time_9|date:"H-i" }}</td>
-      <td>{{ object.schedule_9 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_10|date:"H-i" }}</td>
-      <td>{{ object.schedule_10 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_11|date:"H-i" }}</td>
-      <td>{{ object.schedule_11 }}</td>
-    </tr>
-    <tr>
-      <td width="90">{{ object.time_12|date:"H-i" }}</td>
-      <td>{{ object.schedule_12 }}</td>
-    </tr>
-
-    <!--<tr><td>{{ object.contnt }}</td></tr>-->
-    <!--<tr><td><p id="output1"></p></td><td><p id="output2"></p></td><td><p id="output3"></p></td><td><p id="output4"></p></td></tr>-->
-    <!--<tr><td>{{ object.date }}</td><td>{{ object.time }}</td><td>{{ object.schedule }}</td><td>{{ object.note }}</td></tr>-->
-    <!--<tr><td>{{ object.date }}</td><td>{{ object.time }}</td><td>{{ object.schedule }}</td><td>{{ object.note }}</td></tr>
-    <tr><td>{{ object.date }}</td><td>{{ object.time }}</td><td>{{ object.schedule }}</td><td>{{ object.note }}</td></tr>-->
-
-    </table>
-    <div class="border p-4 mb-2">
+<div class="border col">
+  <div class="card">
+    <img src="../../../media/kamakura.jpg" class="card-img-top">
+    <div class="card-body">
       {% for review in object.review_set.all %}
-
-        <h3 class="h4">{{ review.title }}</h3>
-        <!--<div class="px-2">-->
-          <!--<span>(投稿ユーザー: {{ review.user.username }})</span>-->
-          <h6>計画に対する評価：{{ review.rate_1 }}点</h6>
-          <h6>旅行に対する総評：{{ review.rate_2 }}点</h6>
-          <p>コメント：{{ review.text }}</p>
-        <!--</div>-->
-
-       {% endfor %}
-    </div>
-
-    <!--<div class="border p-4 mb-2">
-      <!--<a href="{% url 'review-itinerary' object.pk %}" class="btn btn-light">旅行記録を書く</a>-->
-      <a href="{% url 'list-itinerary-all' %}" class="btn btn-light">一覧へ</a>
-      <!--<a href="{% url 'update-itinerary' object.pk %}" class="btn btn-light">修正する</a>-->
-      <!--<a href="{% url 'delete-itinerary' object.pk %}" class="btn btn-light">削除する</a>-->
-    <!--</div>
+        <b><h5 class="card-title">{{ review.title }}</h5></b>
+      {% endfor %}
+      <div class="card">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">by {{ object.contributer }} さん</li>
+          <li class="list-group-item">
+            <ul>
+              <li>エリア：<a href="{% url 'list-post' %}"> {{ object.title }}</a></li>
+              <li>同行者： {{ object.companion }}</li>
+              <li>滞在日数： 2泊3日（11月26日〜11月28日)</li>
+            </ul>
+          </li>
+          <li class="list-group-item">
+            {% for review in object.review_set.all %}
+            <small class="text-body-secondary" style="text-align: right"><p class="card-text">旅程表に対する評価：{{ review.rate_1 }}点</p></small>
+            <small class="text-body-secondary" style="text-align: right"><p>旅行に対する評価：{{ review.rate_2 }}点</p></small>
+            <p>{{ review.text }}</p>
+            {% endfor %}
+          </li>
+          <li class="list-group-item">
+            <table align="center">
+            <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
+            <tr>
+              <td rowspan="4">{{ object.date_1|date:"Y-m-j" }}</td>
+              <td width="90">{{ object.time_1|date:"H-i" }}</td>
+              <td>{{ object.schedule_1 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_2|date:"H-i" }}</td>
+              <td>{{ object.schedule_2 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_3|date:"H-i" }}</td>
+              <td>{{ object.schedule_3 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_4|date:"H-i" }}</td>
+              <td>{{ object.schedule_4 }}</td>
+            </tr>
+            <tr>
+              <td rowspan="4">{{ object.date_2|date:"Y-m-j" }}</td>
+              <td width="90">{{ object.time_5|date:"H-i" }}</td>
+              <td>{{ object.schedule_5 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_6|date:"H-i" }}</td>
+              <td>{{ object.schedule_6 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_7|date:"H-i" }}</td>
+              <td>{{ object.schedule_7 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_8|date:"H-i" }}</td>
+              <td>{{ object.schedule_8 }}</td>
+            </tr>
+            <tr>
+              <td rowspan="4">{{ object.date_3|date:"Y-m-j" }}</td>
+              <td width="90">{{ object.time_9|date:"H-i" }}</td>
+              <td>{{ object.schedule_9 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_10|date:"H-i" }}</td>
+              <td>{{ object.schedule_10 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_11|date:"H-i" }}</td>
+              <td>{{ object.schedule_11 }}</td>
+            </tr>
+            <tr>
+              <td width="90">{{ object.time_12|date:"H-i" }}</td>
+              <td>{{ object.schedule_12 }}</td>
+            </tr>
+            </table>
+          </li>
+        </ul>
+      </div>
    </div>
   </div>
 </div>
-
-<!--</body>-->
-<!--<script>
-   // submit時にイベント実行をする関数
-   document.getElementById('form').onsubmit = function (event) {
-       // 再読み込み防止
-       event.preventDefault();
-       // 入力フォームの内容を取得
-       let inputForm1 = document.getElementById('form').content1.value;
-       let inputForm2 = document.getElementById('form').content2.value;
-       let inputForm3 = document.getElementById('form').content3.value;
-       let inputForm4 = document.getElementById('form').content4.value;
-   // 入力内容を画面に出力
-       document.getElementById('output1').textContent = `${inputForm1}`;
-       document.getElementById('output2').textContent = `${inputForm2}`;
-       document.getElementById('output3').textContent = `${inputForm3}`;
-       document.getElementById('output4').textContent = `${inputForm4}`;
-   }
-</script>-->
-
-
+<!--<a href="{% url 'review-itinerary' object.pk %}" class="btn btn-light">旅行記録を書く</a>-->
+<a href="{% url 'list-itinerary-all' %}" class="btn btn-light">一覧へ</a>
+<!--<a href="{% url 'update-itinerary' object.pk %}" class="btn btn-light">修正する</a>-->
+<!--<a href="{% url 'delete-itinerary' object.pk %}" class="btn btn-light">削除する</a>-->
 {% endblock %}

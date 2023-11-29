@@ -141,8 +141,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#LOGIN_REDIRECT_URL = 'topA'
-LOGIN_REDIRECT_URL = '/map/api/' #追記
+LOGIN_REDIRECT_URL = 'topA'
+#LOGIN_REDIRECT_URL = '/map/api/' #追記
 LOGOUT_REDIRECT_URL = 'topA'
 
 REST_FRAMEWORK = {

@@ -7,6 +7,8 @@ from . import views
 
 urlpatterns = [
    path('itinerary/list/', views.ListItineraryView.as_view(), name='list-itinerary'),
+   path('mypage_top/', views.ListItineraryNewView.as_view(), name='mypage_top'),
+   path('itinerary/list_record/', views.ListItineraryRecordView.as_view(), name='list-itinerary-record'),
    path('itinerary/list_all/', views.ListItineraryAllView.as_view(), name='list-itinerary-all'),
    path('itinerary/kamakura_list_all/', views.ListKamakuraItineraryAllView.as_view(), name='list-kamakura-itinerary-all'),
    path('itinerary/<int:pk>/detail/', views.DetailItineraryView.as_view(), name='detail-itinerary'),

@@ -67,16 +67,11 @@
     <nav class="navbar navbar-dark bg-info sticky-top">
       <div class="navbar-nav d-flex flex-row">
         <a class="navbar-brand text-light" href="{% url 'topA' %}"><font size="6">ほっとりっぷ</font></a>
-        <!--<a class="nav-link mx-3" href="{% url 'create-itinerary' %}"> 旅行日程表を作成する </a>-->
-        <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> 旅行記録を閲覧する </a>
-        <!--<a class="nav-link mx-3" href="{% url 'move_to_record' %}"> 旅行記録を作成する </a>-->
-        <a class="nav-link mx-3" href="{% url 'list-post' %}"> 口コミを閲覧・投稿する </a>
-        <!--<a class="nav-link mx-3" href="{% url 'create-post' %}"> 口コミ登録 </a>-->
-        <a class="nav-link mx-3" href="{% url 'move_to_mypage' %}"> マイページ(旅程表作成・閲覧) </a>
-        <a class="nav-link mx-3" href="{% url 'list-likepost' %}"> お気に入り登録済みスポット </a>
-        <!--<a class="nav-link mx-3" href="{% url 'move_to_traveling' %}"> 現在旅行中の方はこちら </a>-->
+        <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
+        <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
+        <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
       </div>
-      <div class="narbar-nav d-flex flex-row">
+      <!--<div class="narbar-nav d-flex flex-row">
         {% if request.user.is_authenticated %}
           <a class="nav-link mx-3" href="{% url 'accounts:logout' %}">Logout</a>
 
@@ -86,33 +81,62 @@
 
         {% endif %}
 
-      </div>
+      </div>-->
     </nav>
 
     <div id="map"></div>
-
     <div class="container">
       <div class="BoxList">
-
-        <ul>
-          <li class="c1"><label><input type="checkbox" id="top20" name="top20" value="top20" checked>この地域の人気スポットトップ20</label></li>
-          <li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall">全て選択</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="ごはん">ごはん</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="カフェ・パン・スイーツ・お菓子">カフェ・パン・スイーツ・お菓子</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="イベント">イベント</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="風景・景色">風景・景色</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アート・カルチャー">アート・カルチャー</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="お土産・お酒・雑貨">お土産・お酒・雑貨</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="神社・寺院">神社・寺院</label></li>
-          <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アクティビティ・体験・その他施設">アクティビティ・体験・その他施設</label></li>
-        </ul>
-        <input type="button" value="検索" onclick="clickBtn1()"></input>
+        <form>
+          <div class="form-check">
+              <label><input type="radio" name="pattern" value="ranking"onclick="formSwitch()">ランキングを表示する</label>
+          </div>
+          <div class="form-check">
+              <label><input type="radio" name="pattern" value="category" onclick="formSwitch()">カテゴリーごとに表示する</label>
+          </div>
+          <ul>
+            <div id="rankingList">
+              <div class="form-check">
+                <li class="c1"><label><input class="form-check-input" type="radio" id="top20" name="top20" value="top20">この地域の人気スポットトップ20</label></li>
+              </div>
+              <div class="form-check">
+                <li class="c1"><label><input class="form-check-input" type="radio" id="rankinglike" name="top20" value="rankinglike">いいね数の多いスポットトップ20</label></li>
+              </div>
+            </div>
+            <div id="categoryList">
+              <div class="form-check">
+                <li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall">全て選択</label></li>
+              </div>
+              <div class="form-check">
+                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="ごはん">ごはん</label></li>
+              </div>
+              <div class="form-check">
+                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="カフェ・パン・スイーツ・お菓子">カフェ・パン・スイーツ・お菓子</label></li>
+              </div>
+              <div class="form-check">
+                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="風景・景色">風景・景色</label></li>
+              </div>
+              <div class="form-check">
+                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="アート・カルチャー">アート・カルチャー</label></li>
+              </div>
+              <div class="form-check">
+                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="お土産・お酒・雑貨">お土産・お酒・雑貨</label></li>
+              </div>
+              <div class="form-check">
+                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="神社・寺院">神社・寺院</label></li>
+              </div>
+              <div class="form-check">
+                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="アクティビティ・体験・その他施設">アクティビティ・体験・その他施設</label></li>
+              </div>
+            </div>
+          </ul>
+        </form>
+        <input type="button" value="検索" onclick="clickBtn1()" class="btn btn-info"></input>
 
         <font color="#6495ed"><a onclick="window.location.reload()"　href="#" id="reset">表示をリセットする</a></font>
         <!--<font color="#6495ed"><a href="./"  class="btn btn-light">クリア</a></font>-->
-
-
       </div>
+
       <div class="container2">
         <div>
           <ul>
@@ -138,9 +162,8 @@
       </div>
     </div>
 
-    <!--<a href="{% url 'list-post' %}">この地域のスポット一覧</a>-->
 
-    <div>
+    <div class="container3">
       <table id='data-table'>
         <tr>
           <th></th>
@@ -152,47 +175,84 @@
       </table>
     </div>
 
+    <script>
+    function formSwitch() {
+     hoge = document.getElementsByName('pattern')
+     if (hoge[0].checked) {
+         // ランキングを表示するが選択されたら下記を実行します
+         document.getElementById('rankingList').style.display = "";
+         document.getElementById('categoryList').style.display = "none";
+         var inputItem = document.getElementById("rankingList").getElementsByTagName("input");
+         for(var i=0; i<inputItem.length; i++){
+         inputItem[i].checked = "";
+         }
+     } else if (hoge[1].checked) {
+         // カテゴリーごとに表示するが選択されたら下記を実行します
+         document.getElementById('rankingList').style.display = "none";
+         var inputItem = document.getElementById("categoryList").getElementsByTagName("input");
+         for(var i=0; i<inputItem.length; i++){
+         inputItem[i].checked = "";
+         }
+         document.getElementById('categoryList').style.display = "";
+     } else {
+         document.getElementById('rankingList').style.display = "none";
+         //var inputItem = document.getElementById("rankingList").getElementsByTagName("input");
+         //for(var i=0; i<selectItem.length; i++){
+         //inputItem[i].value = "";
+         //}
+         document.getElementById('categoryList').style.display = "none";
+         //var inputItem = document.getElementById("categoryList").getElementsByTagName("input");
+         //for(var i=0; i<inputItem.length; i++){
+             //inputItem[i].checked = "";
+         //}
+      }
+    }
+    window.addEventListener('load', formSwitch());
+
+    /*検索フォーム*/
+    //「全て選択」のチェックボックス
+    let checkAll = document.getElementById("checkAll");
+    //「全て選択」以外のチェックボックス
+    let el = document.getElementsByClassName("checks");
+
+    //全てのチェックボックスをON/OFFする
+    const funcCheckAll = (bool) => {
+      for (let i = 0; i < el.length; i++) {
+          el[i].checked = bool;
+      }
+    }
+
+    //「checks」のclassを持つ要素のチェック状態で「全て選択」のチェック状態をON/OFFする
+    const funcCheck = () => {
+      let count = 0;
+      for (let i = 0; i < el.length; i++) {
+           if (el[i].checked) {
+                count += 1;
+           }
+       }
+
+       if (el.length === count) {
+           checkAll.checked = true;
+      } else {
+         checkAll.checked = false;
+      }
+    };
+
+    //「全て選択」のチェックボックスをクリックした時
+    checkAll.addEventListener("click",() => {
+         funcCheckAll(checkAll.checked);
+    },false);
+
+    //「全て選択」以外のチェックボックスをクリックした時
+    for (let i = 0; i < el.length; i++) {
+         el[i].addEventListener("click", funcCheck, false);
+    }
+    </script>
+
 
     <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js">-->
     <script>
-      /*検索フォーム*/
-      //「全て選択」のチェックボックス
-      let checkAll = document.getElementById("checkAll");
-      //「全て選択」以外のチェックボックス
-      let el = document.getElementsByClassName("checks");
 
-      //全てのチェックボックスをON/OFFする
-      const funcCheckAll = (bool) => {
-        for (let i = 0; i < el.length; i++) {
-            el[i].checked = bool;
-        }
-      }
-
-      //「checks」のclassを持つ要素のチェック状態で「全て選択」のチェック状態をON/OFFする
-      const funcCheck = () => {
-        let count = 0;
-        for (let i = 0; i < el.length; i++) {
-             if (el[i].checked) {
-                  count += 1;
-             }
-         }
-
-         if (el.length === count) {
-             checkAll.checked = true;
-        } else {
-           checkAll.checked = false;
-        }
-      };
-
-      //「全て選択」のチェックボックスをクリックした時
-      checkAll.addEventListener("click",() => {
-           funcCheckAll(checkAll.checked);
-      },false);
-
-      //「全て選択」以外のチェックボックスをクリックした時
-      for (let i = 0; i < el.length; i++) {
-           el[i].addEventListener("click", funcCheck, false);
-      }
 
       var arr;
       var chk1;
@@ -798,11 +858,12 @@
 
                  var tr = document.createElement('tr');
                  var td1 = document.createElement('td');
-                 var td2 = document.createElement('td');
+                 //var td2 = document.createElement('td');
                  var td3 = document.createElement('td');
                  //var td4 = document.createElement('td');
                  var td5 = document.createElement('td');
                  var td6 = document.createElement('td');
+                 var td7 = document.createElement('td');
 
                  var num = mapJson[i].number
                  var num = 2
@@ -819,10 +880,20 @@
                  var text2 = '</a>'
 
 
-                 td1.innerHTML = mapJson[i].number+'. ';
-                 td2.innerHTML = text1 + mapJson[i].name + text2;
+                 td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
+                 //td2.innerHTML = text1 + mapJson[i].name + text2;
                  td3.innerHTML = mapJson[i].genre;
                  //td4.innerHTML = mapJson[i].comment;
+                 if(i==0){
+                   td7.innerHTML = '<img src="/media/NO.1.png" style="width:30px;height:30px">';
+                 }else if(i==1){
+                   td7.innerHTML = '<img src="/media/NO.2.png" style="width:30px;height:30px">';
+                 }else if(i==2){
+                   td7.innerHTML = '<img src="/media/NO.3.png" style="width:30px;height:30px">';
+                 }else{
+                   td7.innerHTML = 'No.'+(i+1);
+                   //td7.style.color = '#f0a860';
+                 }
 
                  directionsService.route(requestwalking, function (response, status){
                    if(status == 'OK'){
@@ -858,8 +929,9 @@
                    }
                  });
 
+                 tr.appendChild(td7);
                  tr.appendChild(td1);
-                 tr.appendChild(td2);
+                 //tr.appendChild(td2);
                  tr.appendChild(td3);
                  //tr.appendChild(td4);
                  tr.appendChild(td5);
@@ -886,16 +958,21 @@
 
          for(var j = 0; j < chk1.length; j++){
            for (var i = 0; i< mapJson.length; i++){
-             
+/*
              if(count2 == eachnumber){
                count2 = 0;
                break;
              }
 
-             /*
+*/
+             if(count2 == 5){
+               count2 = 0;
+               break;
+              }
+/*
              if(eachnumber_int != eachnumber){
                if(10-count3<=count){
-                 if(count2 == eachnumber+3){
+                 if(count2 == eachnumber+1){
                    count2 = 0;
                    break;
                  }
@@ -913,8 +990,8 @@
                }
 
              }
-*/
 
+*/
 
              if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre){
 

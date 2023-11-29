@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}旅行記録作成{% endblock %}
-{% block h1 %}旅行記録作成{% endblock %}
+{% block title %}旅行記録作成画面{% endblock %}
+{% block h1 %}旅行記録作成画面{% endblock %}
 {% block content %}
   <form method="post" class="p-4 m-4 bg-light border border-info rounded form-group">
     {% csrf_token %}
@@ -14,7 +14,7 @@
     </label>
     <input class = "form-control" name="title">
     <label>
-      本文
+      コメント
     </label>
     <textarea class="form-control" name="text" rows="3"></textarea>
     <label>
@@ -42,6 +42,7 @@
     </select>
 
     <input type="hidden" name='itinerary' value="{{ itinerary.id }}">
+    <a href="{% url 'update-itinerary' itinerary.pk %}">旅行記録の記入状況を変更する</a>
     <button type="submit" class="btn btn-light mt-4">投稿する</button>
   </form>
 {% endblock %}

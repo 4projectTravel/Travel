@@ -11,6 +11,13 @@ class PostResource(resources.ModelResource):
 class PostAdmin(ImportExportModelAdmin):
     resource_class = PostResource
 
+class ReviewResource(resources.ModelResource):
+    class Meta:
+        model = Review
+
+class ReviewAdmin(ImportExportModelAdmin):
+    resource_class = ReviewResource
+
 admin.site.register(Post, PostAdmin)
-admin.site.register(Review)
+admin.site.register(Review, ReviewAdmin)
 admin.site.register(Category)

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ object.title }}{% endblock %}
-{% block h1 %}スポット詳細{% endblock %}
+{% block title %}{{ object.name }}の詳細{% endblock %}
+{% block h1 %}{{ object.name }}の詳細{% endblock %}
 
 {% block extrajs %}
 <script type="text/javascript">
@@ -42,50 +42,81 @@
 
 
 {% block content %}
-  <div class="p-4 m-4 bg-light border border-info rounded">
-    <div class="card-header">
+<style>
+  p.top {
+    border-width: 0px 0px 0px 3px;
+    border-style: solid;
+    padding: 5px;
+    border-color: #f0a860;
+  }
+  .circle{
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  text-align:center;
+  line-height: 40px;
+  border-radius: 50%;
+  border: solid 1px black;
+  background: white;
+}
+
+</style>
+<div class="border col" style="width:1000px;">
+  <div class="card">
+    <img src="{{ object.thumbnail.url }}" class="card-img-top" style="width:1000px;height:580px">
+    <div class="card-body">
+      <p class="card-text" style="text-align: right"><small class="text-body-secondary">鎌倉人気スポットランキング第{{ object.number }}位</small></p>
       {% if is_user_liked %}
-      <button type="button" id="ajax-like" style="border:none;background:none">
+      <div style="text-align: right">
+      <a class="circle"><button type="button" id="ajax-like" style="border:none;background:none">
         <!-- すでにいいねしている時はfasクラス -->
         <i class="fas fa-heart text-danger" id="like-icon"></i>
-      </button>
+      </button></a>
+      </div>
       {% else %}
-      <button type="button" id="ajax-like" style="border:none;background:none">
+      <div style="text-align: right">
+      <a class="circle"><button type="button" id="ajax-like" style="border:none;background:none">
         <!-- いいねしていないときはfarクラス -->
         <i class="far fa-heart text-danger" id="like-icon"></i>
-      </button>
-      {% endif %}
-      <!-- いいねの数 -->
-      <span id="like-count">{{ like_count }}</span>
-      <span>いいね</span>
-    </div>
-
-    <h2 class="text-info">{{ object.name }}</h2>
-    <p>住所: {{ object.address }}</p>
-    <p>カテゴリー:</p>
-    {% for item in object.category.all %}
-    <p>{{ item.name }}</p>
-    {% endfor %}
-
-    <p>おすすめポイント: {{ object.comment }} </p>
-    <a href="{% url 'list-kamakura-itinerary-all' %}">このスポットがある地域の旅行記録を見る</a>
-    <div class="border p-4 mb-2">
-      {% for review in object.review_set.all %}
-      <div>
-        <h3 class="h4">{{ review.title }}</h3>
-        <div class="px-2">
-          <span>(投稿ユーザー: {{ review.user.username }})</span>
-          <h6>評価：{{ review.rate }}点</h6>
-          <p>{{ review.text }}</p>
-        </div>
+      </button></a>
       </div>
-      {% endfor %}
-      <a href="{% url 'review-post' object.pk %}" class="btn btn-light">口コミを書く</a>
-    </div>
+      {% endif %}
 
-    <!--<div class="border p-4 mb-2">-->
-      <a href="{% url 'list-post' %}" class="btn btn-light">一覧へ</a>
-    <!--</div>-->
-
+      <b><h5 class="card-title">{{ object.name }}</h5></b>
+      <div class="card">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <ul>
+              <li>住所：{{ object.address }}</li>
+              {% for item in object.category.all %}
+              <li>ジャンル：{{ item.name }}</li>
+              {% endfor %}
+              {% for review in item.review_set.all %}
+              <li>口コミ数： {{ review.review_set.all.count }}人</li>
+　　　　　　　　{% endfor %}
+              <li>いいね数： <span id="like-count">{{ like_count }}</span> いいね</li>
+            </ul>
+          </li>
+          <li class="list-group-item">
+            <p class="card-text top">口コミ</p>
+            <a href="{% url 'review-post' object.pk %}" style="text-align: right">投稿する</a>
+            {% for review in object.review_set.all %}
+            <div>
+              <small class="text-body-secondary"><p class="card-text"></p>{{ review.user.username }}  さん</small>
+              <h3 class="h4">{{ review.title }}</h3>
+              <div class="px-2">
+                <h6>評価：{{ review.rate }}点</h6>
+                <p>コメント：{{ review.text }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </li>
+        </ul>
+      </div>
+   </div>
   </div>
+</div>
+<a href="{% url 'list-post' %}" class="btn btn-light">一覧へ</a>
+<a href="{% url 'list-kamakura-itinerary-all' %}">このスポットがある地域の旅行記録を見る</a>
+
 {% endblock %}

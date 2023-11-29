@@ -1,89 +1,54 @@
 {% extends 'base.html' %}
 
-{% block title %}旅行記録一覧(全体向け){% endblock %}
-{% block h1 %}旅行記録一覧(全体向け){% endblock %}
+{% block title %}ユーザーの旅行記録{% endblock %}
+{% block h1 %}ユーザーの旅行記録{% endblock %}
 
 
 {% block content %}
    <!--formを追加-->
+
+   <style>
+     .container {
+       display: flex;
+       gap: 80px;
+       margin-top: 20px;
+       margin-left: 100px;
+     }
+     ul li{
+       list-style:none;
+     }
+   </style>
    <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
-     <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/>
+     <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" エリア名を入力 "/>
      <button type="submit">検索</button>
+     <a href="./">クリア</a>
    </form>
 
+    <div class="row row-cols-2">
+    <!--<div class="container">-->
     {% for item in object_list %}
     {% if item.category|stringformat:"s" == "記入済み" %}
-    <div class="p-4 m-4 bg-light border border-info rounded">
-
-    <div class="card">
-      <h5 class="card-header">{{ item.title }}</h5>
-
-
-      <div class="card-body">
-        <p>ユーザー名:  {{ item.contributer }}</p>
-
-        <table>
-        <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
-        <tr>
-          <td rowspan="4">{{ item.date_1|date:"Y-m-j" }}</td>
-          <td width="90">{{ item.time_1|date:"H-i" }}</td>
-          <td>{{ item.schedule_1 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_2|date:"H-i" }}</td>
-          <td>{{ item.schedule_2 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_3|date:"H-i" }}</td>
-          <td>{{ item.schedule_3 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_4|date:"H-i" }}</td>
-          <td>{{ item.schedule_4 }}</td>
-        </tr>
-        <tr>
-          <td rowspan="4">{{ item.date_2|date:"Y-m-j" }}</td>
-          <td width="90">{{ item.time_5|date:"H-i" }}</td>
-          <td>{{ item.schedule_5 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_6|date:"H-i" }}</td>
-          <td>{{ item.schedule_6 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_7|date:"H-i" }}</td>
-          <td>{{ item.schedule_7 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_8|date:"H-i" }}</td>
-          <td>{{ item.schedule_8 }}</td>
-        </tr>
-        <tr>
-          <td rowspan="4">{{ item.date_3|date:"Y-m-j" }}</td>
-          <td width="90">{{ item.time_9|date:"H-i" }}</td>
-          <td>{{ item.schedule_9 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_10|date:"H-i" }}</td>
-          <td>{{ item.schedule_10 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_11|date:"H-i" }}</td>
-          <td>{{ item.schedule_11 }}</td>
-        </tr>
-        <tr>
-          <td width="90">{{ item.time_12|date:"H-i" }}</td>
-          <td>{{ item.schedule_12 }}</td>
-        </tr>
-
-
-        </table>
-        <a href="{% url 'detail-itinerary-all' item.pk %}">詳細へ</a>
+    <div class="col">
+      <div class="card" style="width:450px;">
+        <img src="../../media/kamakura.jpg" class="card-img-top" style="width:450px;height:280px">
+        <div class="card-body">
+          {% for review in item.review_set.all %}
+            <a href="{% url 'detail-itinerary-all' item.pk %}"><h5 class="card-title">{{ review.title }}</h5></a>
+          {% endfor %}
+          <ul>
+            <li>{{ item.category }}</li>
+            <li><img src="../../media/pin.png" style="width:20px;height:25px">{{ item.title }}</li>
+            <li><img src="../../media/people.png" style="width:20px;height:25px">{{ item.companion }}</li>
+            <li><img src="../../media/calender.png" style="width:20px;height:20px"> 2泊3日（11月26日〜11月28日)</li>
+          </ul>
+          <hr>
+          <small class="text-body-secondary"><p class="card-text" style="text-align: right">by {{ item.contributer }} さん</p></small>
+        </div>
       </div>
-    </div>
     </div>
     {% endif %}
     {% endfor %}
-
-    <a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>
+    <!--</div>-->
+    </div>
+    <!--<a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>-->
 {% endblock content %}

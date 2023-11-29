@@ -17,11 +17,12 @@ from django.views.generic import (
 from .models import Post, Review, PostLike, Category
 from map.models import Map
 from .consts import ITEM_PER_PAGE
-'''
+"""
 def logout_view(request):
     logout(request)
     return redirect('accounts/login')
-
+"""
+"""
 def index_view(request):
     #object_list = Post.objects.order_by('category')
     object_list = Post.objects.order_by('-id')
@@ -36,7 +37,7 @@ def index_view(request):
         'post/index.html',
         {'post_list': object_list, 'ranking_list': ranking_list, 'page_obj':page_obj },
     )
-'''
+"""
 
 
 
@@ -44,28 +45,9 @@ class ListPostView(LoginRequiredMixin, ListView):
     template_name = 'post/post_list.html'
     model = Post
     paginate_by = ITEM_PER_PAGE
+    #post_list = Post.objects.order_by('-id')
+    ranking_list = Post.objects.annotate(avg_rating=Avg('review__rate')).order_by('-avg_rating')
 
-
-
-    # 検索フォーム
-    def get_queryset(self):# 検索機能のために追加
-        chk1 = self.request.GET.get('chk1')
-        if chk1:
-            post_list = Post.objects.filter(name__icontains=chk1)
-        else:
-            post_list = Post.objects.all()
-        return post_list
-
-
-
-    """
-        query = self.request.GET.get('query')
-        if query:
-            post_list = Post.objects.filter(category__icontains=query)
-        else:
-            post_list = Post.objects.all()
-        return post_list
-     """
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -80,6 +62,28 @@ class ListPostView(LoginRequiredMixin, ListView):
             else:
                 context['is_user_liked'] = False
         return context
+
+"""
+    # 検索フォーム
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        if query:
+            post_list = Post.objects.filter(name__icontains=query)
+        else:
+            post_list = Post.objects.all()
+        return post_list
+"""
+"""
+        chk1 = self.request.GET.get('chk1')
+        if chk1:
+            post_list = Post.objects.filter(name__icontains=chk1)
+        else:
+            post_list = Post.objects.all()
+        return post_list
+"""
+
+
+
 
 
     #いいね機能
@@ -107,12 +111,18 @@ class ListLikePostView(LoginRequiredMixin, ListView):
     template_name = 'post/likepost_list.html'
     model = PostLike
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        like_count = self.object_list.count()
+        context['like_count'] = like_count
+        return context
+
+
 
 
 class DetailPostView(LoginRequiredMixin, DetailView):
     template_name = 'post/post_detail.html'
     model = Post
-
 
 
     def get_context_data(self, **kwargs):
@@ -198,9 +208,6 @@ class CreateReviewView(LoginRequiredMixin, CreateView):
 def like(request):
         return render(request, 'post/postlike.html')
 
-def move_to_mypage(request):
-        return render(request, 'mypage.html')
-
 def move_to_itinerary(request):
         return render(request, 'itinerary.html')
 
@@ -213,8 +220,8 @@ def topB(request):
 def selection(request):
         return render(request, 'selection.html')
 
-def move_to_record(request):
-        return render(request, 'record.html')
+def move_to_mypage_top(request):
+        return render(request, 'mypage_top.html')
 
 def move_to_traveling(request):
         return render(request, 'traveling.html')

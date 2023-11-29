@@ -30,6 +30,12 @@ a {
   flex-wrap: wrap;
 }
 
+.container {
+  display: flex;
+  gap: 80px;
+  margin-top: 20px;
+}
+
 .item{
   margin: 10px;
   padding: 10px;

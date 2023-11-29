@@ -3,74 +3,83 @@
 {% block title %}旅行日程修正{% endblock %}
 
 {% block content %}
-<form method='post'>{% csrf_token %}
-  <p>
-    <label>旅行記録の記入状況</label>
-    <p>{{ form.category }}</p>
-  </p>
-  <p>
-    <label>タイトル</label>
-    <p>{{ form.title }}</p>
-  </p>
-  <table id="table">
-  <tr><th>日付</th><th>時間</th><th>スケジュール</th></tr>
-  <tr>
-    <td rowspan="4">{{ form.date_1 }}</td>
-    <td>{{ form.time_1 }}</td>
-    <td>{{ form.schedule_1 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_2 }}</td>
-    <td>{{ form.schedule_2 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_3 }}</td>
-    <td>{{ form.schedule_3 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_4 }}</td>
-    <td>{{ form.schedule_4 }}</td>
-  </tr>
-  <tr>
-    <td rowspan="4">{{ form.date_2 }}</td>
-    <td>{{ form.time_5 }}</td>
-    <td>{{ form.schedule_5 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_6 }}</td>
-    <td>{{ form.schedule_6 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_7 }}</td>
-    <td>{{ form.schedule_7 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_8 }}</td>
-    <td>{{ form.schedule_8 }}</td>
-  </tr>
-  <tr>
-    <td rowspan="4">{{ form.date_3 }}</td>
-    <td>{{ form.time_9 }}</td>
-    <td>{{ form.schedule_9 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_10 }}</td>
-    <td>{{ form.schedule_10 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_11 }}</td>
-    <td>{{ form.schedule_11 }}</td>
-  </tr>
-  <tr>
-    <td>{{ form.time_12 }}</td>
-    <td>{{ form.schedule_12 }}</td>
-  </tr>
-
-  </table>
-
-
-  <button type='submit' class="btn btn-light">修正する</button>
-</form>
-
+<div class="row">
+  <div class="co-md">
+    <form method='POST'>{% csrf_token %}
+      <p class="card-text">
+        <b><label>1.エリア名を入力してください</label></b>
+        <p>{{ form.title }}</p>
+        <!--<input type= "title" class="form-control" name="title">-->
+      </p>
+      <p class="card-text">
+        <b><label>2.同行者を選択してください</label></b>
+        <p>{{ form.companion }}</p>
+        <!--<input type= "title" class="form-control" name="title">-->
+      </p>
+      <p class="card-text">
+        <b><label>3.旅行記録の記入状況を選択してください</label></b>
+        <p>{{ form.category }}</p>
+      </p>
+      <p class="card-text">
+        <b><label>4.スケジュールを入力してください(全ての項目を入力する必要はありません)</label></b>
+      </p>
+      <table id="table">
+      <tr><th>日付</th><th>時間</th><th>スケジュール</th></tr>
+      <tr>
+        <td rowspan="4">{{ form.date_1 }}</td>
+        <td>{{ form.time_1 }}</td>
+        <td>{{ form.schedule_1 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_2 }}</td>
+        <td>{{ form.schedule_2 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_3 }}</td>
+        <td>{{ form.schedule_3 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_4 }}</td>
+        <td>{{ form.schedule_4 }}</td>
+      </tr>
+      <tr>
+        <td rowspan="4">{{ form.date_2 }}</td>
+        <td>{{ form.time_5 }}</td>
+        <td>{{ form.schedule_5 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_6 }}</td>
+        <td>{{ form.schedule_6 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_7 }}</td>
+        <td>{{ form.schedule_7 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_8 }}</td>
+        <td>{{ form.schedule_8 }}</td>
+      </tr>
+      <tr>
+        <td rowspan="4">{{ form.date_3 }}</td>
+        <td>{{ form.time_9 }}</td>
+        <td>{{ form.schedule_9 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_10 }}</td>
+        <td>{{ form.schedule_10 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_11 }}</td>
+        <td>{{ form.schedule_11 }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.time_12 }}</td>
+        <td>{{ form.schedule_12 }}</td>
+      </tr>
+    </table>
+    <input type="submit" value="修正する" class="btn btn-light">
+    </form>
+   </div>
+ </div>
 
 {% endblock %}

@@ -1,17 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'mypage_top.html' %}
 
-{% block title %}旅行日程表作成{% endblock %}
-{% block h1 %}旅行日程表作成{% endblock %}
+{% block title %}旅行日程表作成画面{% endblock %}
+{% block h1 %}旅行日程表作成画面{% endblock %}
 
 {% block content %}
   <div class="row">
     <div class="co-md">
       <form method='POST'>{% csrf_token %}
-        <p>
-          <b><label>タイトル</label></b>
+        <p class="card-text">
+          <b><label>1.エリア名を入力してください</label></b>
           <p>{{ form.title }}</p>
           <!--<input type= "title" class="form-control" name="title">-->
-
+        </p>
+        <p class="card-text">
+          <b><label>2.同行者を選択してください</label></b>
+          <p>{{ form.companion }}</p>
+          <!--<input type= "title" class="form-control" name="title">-->
+        </p>
+        <p class="card-text">
+          <b><label>3.旅行記録の記入状況を選択してください</label></b>
+          <p>{{ form.category }}</p>
+        </p>
+        <p class="card-text">
+          <b><label>4.スケジュールを入力してください(全ての項目を入力する必要はありません)</label></b>
         </p>
         <table id="table">
         <tr><th>日付</th><th>時間</th><th>スケジュール</th></tr>
@@ -66,19 +77,8 @@
           <td>{{ form.time_12 }}</td>
           <td>{{ form.schedule_12 }}</td>
         </tr>
+      </table>
 
-
-        <!--<tr><td>{{ object.}}<td><input type= "time" class="form-control" value="20:40" name="content2"></td><td><input type= "text" class="form-control" name="content3"></td><td><input type= "text" class="form-control" name="content4"></td></tr>-->
-        <!--<tr><td><input type= "date" class="form-control" name="content1"></td><td><input type= "time" class="form-control" value="20:40" name="content2"></td><td><input type= "schedule" class="form-control" name="content3"></td><td><input type= "note" class="form-control" name="content4"></td></tr>
-        <!--<tr><td><input type= "date" class="form-control" name="content1"></td><td><input type= "time" class="form-control" value="20:40" name="content2"></td><td><input type= "text" class="form-control" name="content3"></td><td><input type= "text" class="form-control" name="content4"></td></tr>-->
-        <!--<tr><td><input type= "date" class="form-control" name="content1"></td><td><input type= "time" class="form-control" value="20:40" name="content2"></td><td><input type= "text" class="form-control" name="content3"></td><td><input type= "text" class="form-control" name="content4"></td></tr>-->
-        </table>
-        <p>
-          <b><label>旅行記録の記入状況</label></b>
-          <p>{{ form.category }}</p>
-        </p>
-
-        <br>
         <input type="submit" value="登録する" class="btn btn-light">
       </form>
       <!--行を追加する-->

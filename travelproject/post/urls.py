@@ -12,8 +12,6 @@ urlpatterns = [
     #path('post/', views.index_view, name='index'),
     path('post/', views.ListPostView.as_view(), name='list-post'),
     path('post/likepost/', views.ListLikePostView.as_view(), name='list-likepost'),
-    #path('post/<int:pk>/detail/', views.DetailPostView.as_view(),
-#name='detail-post'),
     path('post/<int:pk>/detail/', views.DetailPostView.as_view(),
 name='detail-post'),
     path('post/create/', views.CreatePostView.as_view(), name='create-post'),
@@ -25,9 +23,7 @@ name='update-post'),
 name='review-post'),
     path('postlike/', views.postlike, name='postlike'),  # 追加
     path('like/', views.like, name='like'),  # 追加
-    path('mypage/', views.move_to_mypage, name='move_to_mypage'),
     path('itinerary/', views.move_to_itinerary, name='move_to_itinerary'),
-    path('record/', views.move_to_record, name='move_to_record'),
     path('travelling/', views.move_to_traveling, name='move_to_traveling'),
     #path('', views.logout_view, name='logout'),
     #path('login/', views.logoin_view, name='login'),

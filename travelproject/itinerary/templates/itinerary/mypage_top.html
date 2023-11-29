@@ -1,0 +1,149 @@
+{% extends 'mypage_base.html' %}
+
+{% block title %}マイページTOP{% endblock %}
+{% block h1 %}マイページTOP{% endblock %}
+
+{% block extrajs %}
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  $(function() {
+    var API_KEY = 'adbc9bb9431b4c26099e46183b7041fd'
+    var item_id = 'lat=35.333911&lon=139.540807'
+    var url = 'https://api.openweathermap.org/data/2.5/forecast?' + item_id + '&lang=ja&units=metric&appid=' + API_KEY
+    //var url = 'http://api.openweathermap.org/geo/1.0/direct?q=kamakurashi,392&limit=5&appid=adbc9bb9431b4c26099e46183b7041fd'
+    console.log(url)
+    $.ajax({
+      url: url,
+      dataType: "json",
+      type: 'GET',
+    })
+    .done(function(data) {
+      var insertHTML = "";
+      var cityName = '<h2>' + data.city.name + '</h2>';
+      $('#city-name').html(cityName);
+      for (var i = 0; i <= 39; i = i + 8) {
+        insertHTML += buildHTML(data, i);
+      }
+      $('#weather').html(insertHTML);
+    })
+    .fail(function(data) {
+      console.log("失敗しました");
+    });
+  });
+
+  function buildHTML(data, i) {
+    var Week = new Array("（日）","（月）","（火）","（水）","（木）","（金）","（土）");
+    var date = new Date (data.list[i].dt_txt);
+    date.setHours(date.getHours() + 9);
+    var month = date.getMonth()+1;
+    var day = month + "月" + date.getDate() + "日" + Week[date.getDay()] + date.getHours() + "：00";
+    var icon = data.list[i].weather[0].icon;
+    var html =
+    '<div class="weather-report">' +
+      /*'<div id="cityname">' + data.city.name + '</div>' +*/
+      '<img src="https://openweathermap.org/img/w/' + icon + '.png">' +
+      '<div class="weather-date">' + day + '</div>' +
+      '<div class="weather-main">'+ data.list[i].weather[0].description + '</div>' +
+      '<div class="weather-temp">' + Math.round(data.list[i].main.temp) + '℃</div>' +
+    '</div>';
+    return html
+  }
+
+</script>
+{% endblock %}
+
+{% block content %}
+<style>
+  p.top {
+    border-width: 0px 0px 0px 3px;
+    border-style: solid;
+    padding: 5px;
+    border-color: #f0a860;
+  }
+</style>
+<p class="top"> 最新の旅行日程表</p>
+
+
+{% for item in object_list %}
+{% if user.username == item.contributer %}
+{% if forloop.counter <= 3 %}
+
+
+<div class="p-4 m-4 bg-light border border-info rounded">
+
+<div class="card">
+  <a href="{% url 'detail-itinerary' item.pk %}"><h5 class="card-header">{{ item.title }}</h5></a>
+
+  <div class="card-body">
+    <!--<p>ユーザー名:  {{ item.contributer }}</p>-->
+    <p>旅行記録の記入状況: {{ item.category }}</p>
+    <table>
+    <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
+    <tr>
+      <td rowspan="4">{{ item.date_1|date:"Y-m-j" }}</td>
+      <td width="90">{{ item.time_1|date:"H-i" }}</td>
+      <td>{{ item.schedule_1 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_2|date:"H-i" }}</td>
+      <td>{{ item.schedule_2 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_3|date:"H-i" }}</td>
+      <td>{{ item.schedule_3 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_4|date:"H-i" }}</td>
+      <td>{{ item.schedule_4 }}</td>
+    </tr>
+    <tr>
+      <td rowspan="4">{{ item.date_2|date:"Y-m-j" }}</td>
+      <td width="90">{{ item.time_5|date:"H-i" }}</td>
+      <td>{{ item.schedule_5 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_6|date:"H-i" }}</td>
+      <td>{{ item.schedule_6 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_7|date:"H-i" }}</td>
+      <td>{{ item.schedule_7 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_8|date:"H-i" }}</td>
+      <td>{{ item.schedule_8 }}</td>
+    </tr>
+    <tr>
+      <td rowspan="4">{{ item.date_3|date:"Y-m-j" }}</td>
+      <td width="90">{{ item.time_9|date:"H-i" }}</td>
+      <td>{{ item.schedule_9 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_10|date:"H-i" }}</td>
+      <td>{{ item.schedule_10 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_11|date:"H-i" }}</td>
+      <td>{{ item.schedule_11 }}</td>
+    </tr>
+    <tr>
+      <td width="90">{{ item.time_12|date:"H-i" }}</td>
+      <td>{{ item.schedule_12 }}</td>
+    </tr>
+    </table>
+
+  </div>
+</div>
+</div>
+{% endif %}
+{% endif %}
+{% endfor %}
+
+<p class="top"> 鎌倉市の天気予報</p>
+<div class="content">
+  <div id="weather"></div>
+</div>
+
+
+
+{% endblock content %}

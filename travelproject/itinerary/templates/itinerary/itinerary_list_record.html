@@ -1,0 +1,93 @@
+{% extends 'mypage_top.html' %}
+
+{% block title %}あなたの旅行日程表一覧{% endblock %}
+{% block h1 %}あなたの旅行日程表一覧{% endblock %}
+
+
+{% block content %}
+   <!--formを追加-->
+   <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
+     <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/>
+     <button type="submit">検索</button>
+   </form>
+
+    {% for item in object_list %}
+    {% if user.username == item.contributer %}
+
+    <div class="p-4 m-4 bg-light border border-info rounded">
+
+    <div class="card">
+      <a href="{% url 'detail-itinerary' item.pk %}"><h5 class="card-header">{{ item.title }}</h5></a>
+
+      <div class="card-body">
+        <p>ユーザー名:  {{ item.contributer }}</p>
+        <p>旅行記録の記入状況: {{ item.category }}</p>
+        <table>
+        <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
+        <tr>
+          <td rowspan="4">{{ item.date_1|date:"Y-m-j" }}</td>
+          <td width="90">{{ item.time_1|date:"H-i" }}</td>
+          <td>{{ item.schedule_1 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_2|date:"H-i" }}</td>
+          <td>{{ item.schedule_2 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_3|date:"H-i" }}</td>
+          <td>{{ item.schedule_3 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_4|date:"H-i" }}</td>
+          <td>{{ item.schedule_4 }}</td>
+        </tr>
+        <tr>
+          <td rowspan="4">{{ item.date_2|date:"Y-m-j" }}</td>
+          <td width="90">{{ item.time_5|date:"H-i" }}</td>
+          <td>{{ item.schedule_5 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_6|date:"H-i" }}</td>
+          <td>{{ item.schedule_6 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_7|date:"H-i" }}</td>
+          <td>{{ item.schedule_7 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_8|date:"H-i" }}</td>
+          <td>{{ item.schedule_8 }}</td>
+        </tr>
+        <tr>
+          <td rowspan="4">{{ item.date_3|date:"Y-m-j" }}</td>
+          <td width="90">{{ item.time_9|date:"H-i" }}</td>
+          <td>{{ item.schedule_9 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_10|date:"H-i" }}</td>
+          <td>{{ item.schedule_10 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_11|date:"H-i" }}</td>
+          <td>{{ item.schedule_11 }}</td>
+        </tr>
+        <tr>
+          <td width="90">{{ item.time_12|date:"H-i" }}</td>
+          <td>{{ item.schedule_12 }}</td>
+        </tr>
+
+
+        </table>
+        <!--<a href="{% url 'detail-itinerary' item.pk %}">詳細へ</a>-->
+        {% if item.category|stringformat:"s" == "記入済み" %}
+        <a href="{% url 'review-itinerary' item.pk %}" class="btn btn-light">旅行記録を修正する</a>
+        {% else %}
+        <a href="{% url 'review-itinerary' item.pk %}" class="btn btn-light">旅行記録を書く</a>
+        {% endif %}
+      </div>
+    </div>
+    </div>
+
+    {% endif %}
+    {% endfor %}
+{% endblock content %}
