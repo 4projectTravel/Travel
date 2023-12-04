@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from post.models import Post
 
 class Map(models.Model):
     name = models.CharField('名前', max_length=20)
@@ -11,6 +11,7 @@ class Map(models.Model):
     ranking = models.CharField('ランキング', max_length=5, null=True)
     number = models.CharField('番号', max_length=5, null=True)
     comment = models.CharField('一言', max_length=50, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return str(self.name)

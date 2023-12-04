@@ -9,6 +9,7 @@
    <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
      <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/>
      <button type="submit">検索</button>
+     <a href="./">クリア</a>
    </form>
 
     {% for item in itinerary_list %}

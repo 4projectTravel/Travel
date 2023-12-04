@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}旅行日程表詳細{% endblock %}
-{% block h1 %}旅行日程表詳細{% endblock %}
+{% block title %}ユーザーの旅行記録詳細{% endblock %}
+{% block h1 %}ユーザーの旅行記録詳細{% endblock %}
 
 {% block content %}
 <div class="border col">
@@ -11,14 +11,18 @@
       {% for review in object.review_set.all %}
         <b><h5 class="card-title">{{ review.title }}</h5></b>
       {% endfor %}
-      <div class="card">
+      <!--<div class="card">-->
         <ul class="list-group list-group-flush">
           <li class="list-group-item">by {{ object.contributer }} さん</li>
           <li class="list-group-item">
             <ul>
               <li>エリア：<a href="{% url 'list-post' %}"> {{ object.title }}</a></li>
               <li>同行者： {{ object.companion }}</li>
-              <li>滞在日数： 2泊3日（11月26日〜11月28日)</li>
+              {% if object.date_3 == null %}
+              <li>滞在日程：{{ object.date_1|date:"Y-m-j" }} 〜 {{ object.date_2|date:"Y-m-j" }}</li>
+              {% else %}
+              <li>滞在日程：{{ object.date_1|date:"Y-m-j" }} 〜 {{ object.date_3|date:"Y-m-j" }}</li>
+              {% endif %}
             </ul>
           </li>
           <li class="list-group-item">
@@ -85,12 +89,15 @@
             </table>
           </li>
         </ul>
-      </div>
+      <!--</div>-->
    </div>
   </div>
 </div>
+<br>
+<ul align="right">
+  <li><a href="{% url 'list-itinerary-all' %}">一覧へ</a></li>
+</ul>
 <!--<a href="{% url 'review-itinerary' object.pk %}" class="btn btn-light">旅行記録を書く</a>-->
-<a href="{% url 'list-itinerary-all' %}" class="btn btn-light">一覧へ</a>
 <!--<a href="{% url 'update-itinerary' object.pk %}" class="btn btn-light">修正する</a>-->
 <!--<a href="{% url 'delete-itinerary' object.pk %}" class="btn btn-light">削除する</a>-->
 {% endblock %}

@@ -9,19 +9,16 @@
    <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
      <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/>
      <button type="submit">検索</button>
+     <a href="./">クリア</a>
    </form>
 
     {% for item in object_list %}
     {% if user.username == item.contributer %}
 
     <div class="p-4 m-4 bg-light border border-info rounded">
-
     <div class="card">
       <a href="{% url 'detail-itinerary' item.pk %}"><h5 class="card-header">{{ item.title }}</h5></a>
-
       <div class="card-body">
-        <p>ユーザー名:  {{ item.contributer }}</p>
-        <p>旅行記録の記入状況: {{ item.category }}</p>
         <table>
         <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
         <tr>
@@ -75,14 +72,13 @@
           <td width="90">{{ item.time_12|date:"H-i" }}</td>
           <td>{{ item.schedule_12 }}</td>
         </tr>
-
-
         </table>
-        <!--<a href="{% url 'detail-itinerary' item.pk %}">詳細へ</a>-->
+        <br>
+        <p>旅行記録の記入状況: {{ item.category }}</p>
         {% if item.category|stringformat:"s" == "記入済み" %}
-        <a href="{% url 'review-itinerary' item.pk %}" class="btn btn-light">旅行記録を修正する</a>
+        <a href="{% url 'review-itinerary' item.pk %}" class="btn" style="background-color:#60a8f0">旅行記録を修正する</a>
         {% else %}
-        <a href="{% url 'review-itinerary' item.pk %}" class="btn btn-light">旅行記録を書く</a>
+        <a href="{% url 'review-itinerary' item.pk %}" class="btn" style="background-color:#60a8f0">旅行記録を書く</a>
         {% endif %}
       </div>
     </div>

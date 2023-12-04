@@ -7,8 +7,8 @@ from . import views
 urlpatterns = [
 
     path('topA', views.topA, name='topA'),
-    path('topB', views.topB, name='topB'),
-    path('selection/', views.selection, name='selection'),
+    #path('topB', views.topB, name='topB'),
+    #path('selection/', views.selection, name='selection'),
     #path('post/', views.index_view, name='index'),
     path('post/', views.ListPostView.as_view(), name='list-post'),
     path('post/likepost/', views.ListLikePostView.as_view(), name='list-likepost'),

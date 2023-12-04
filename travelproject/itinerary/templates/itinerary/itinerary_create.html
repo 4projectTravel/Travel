@@ -22,7 +22,11 @@
           <p>{{ form.category }}</p>
         </p>
         <p class="card-text">
-          <b><label>4.スケジュールを入力してください(全ての項目を入力する必要はありません)</label></b>
+          <b><label>4.ユーザー名を入力してください</label></b>
+          <p>{{ form.contributer }}</p>
+        </p>
+        <p class="card-text">
+          <b><label>5.スケジュールを入力してください(全ての項目を入力する必要はありません)</label></b>
         </p>
         <table id="table">
         <tr><th>日付</th><th>時間</th><th>スケジュール</th></tr>
@@ -78,15 +82,11 @@
           <td>{{ form.schedule_12 }}</td>
         </tr>
       </table>
-
-        <input type="submit" value="登録する" class="btn btn-light">
-      </form>
-      <!--行を追加する-->
-      <!--<input type="button" value="行を追加" id="coladd" onclick="coladd()">-->
-
+      <br>
+      <input type="submit" value="登録する" class="btn" style="background-color:#60a8f0">
+     </form>
      </div>
    </div>
-
 
 
 {% endblock content %}

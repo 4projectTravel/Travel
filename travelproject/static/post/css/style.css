@@ -1,6 +1,9 @@
 a {
   text-decoration: none;
 }
+ul li{
+  list-style:none;
+　　}
 
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
@@ -9,7 +12,7 @@ a {
   weight: 50%;
 }
 
-<<<<<<< HEAD
+/*
 .container {
   display: flex;
   gap: 80px;
@@ -23,23 +26,8 @@ a {
  justify-items: center;
  grid-template-rows: 200px 200px 200px 200px 200px;
 }
+*/
 
-
-=======
-/* ボタン */
-.btn {
-  font-size: 1.375rem;
-  display: block;
-  width: 300px;
-  margin:auto;
-  padding: 18px 32px;
-  border-radius: 5px;
-  background-color: #ffbf1f;
-  padding: 10px;
-  color: white;
-}
-
->>>>>>> 6ce9129e216d8cb8882d9b4237b46f8e5178ebec
 .main {
   display: flex;
   justify-content: center;
@@ -48,28 +36,23 @@ a {
   flex-wrap: wrap;
 }
 
-<<<<<<< HEAD
-.main {
-        width: 1200px;
-        margin: auto;
-    }
 
+/*
 .item {
   width: 100px;
   height: 400px;
   margin: 20px !important;
   border: #8d3d47 solid 2px;
   position: relative;
-
 }
+*/
 
-
-=======
+/*
 .item{
   margin: 10px;
   padding: 10px;
 }
->>>>>>> 6ce9129e216d8cb8882d9b4237b46f8e5178ebec
+*/
 
 .wrap{
   text-align: right;
@@ -92,17 +75,8 @@ table {
   width: 500px;
   height: 100px;
 }
-/*
-input.button {
-  background-color: #ffbf1f;
-  color: #fff;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-align: center;
-  padding: 6px 12px;
-}
-<<<<<<< HEAD
-*/
+
+
 /*
 .flex {
   width: 50%;
@@ -114,16 +88,3 @@ input.button {
   width: 500px;
   margin: auto;
 }
-=======
->>>>>>> 6ce9129e216d8cb8882d9b4237b46f8e5178ebec
-
-/*
-input.button:hover{
-  background: #0090aa;
-}
-*/
-
-.btn:hover{
-  background-color: #60a8f0;
-  color: #f0a860;
- }

@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}ログイン画面{% endblock %}
+{% block h1 %}ログイン画面{% endblock %}
+
+
 {% block content %}
-  <h1>ログイン</h1>
+
   <form method="post" class="p-4 m-4 bg-light border border-info rounded form-group">
     {% csrf_token %}
     {% for error in form.errors.values %}
@@ -15,6 +19,8 @@
       Password
     </label>
     <input type="password" class="form-control" name="password">
-    <button type="submit" class="btn btn-info mt-4">Login</button>
+    <br>
+    <button type="submit" class="btn" style="background-color:#60a8f0">Login</button>
+    <a href="{% url 'accounts:signup' %}">アカウント登録がお済みでない方はこちら</a>
   </form>
 {% endblock %}

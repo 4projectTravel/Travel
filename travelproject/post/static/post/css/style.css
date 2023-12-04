@@ -9,19 +9,6 @@ a {
   weight: 50%;
 }
 
-/* ボタン */
-.btn {
-  font-size: 1.375rem;
-  display: block;
-  width: 300px;
-  margin:auto;
-  padding: 18px 32px;
-  border-radius: 5px;
-  background-color: #ffbf1f;
-  padding: 10px;
-  color: white;
-}
-
 .main {
   display: flex;
   justify-content: center;
@@ -46,12 +33,9 @@ a {
   padding: 30px;
 }
 
-ul.class1 {
-  width: 200px;
-  border-width: 1px;
-  border-style: solid;
-  text-align: left;
-}
+ul li{
+  list-style:none;
+　　}
 
 th,td {
   border:solid 1px;
@@ -62,17 +46,3 @@ table {
   width: 500px;
   height: 100px;
 }
-input.button {
-  background-color: #ffbf1f;
-  color: #fff;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-align: center;
-  padding: 6px 12px;
-}
-
-/*
-input.button:hover{
-  background: #0090aa;
-}
-*/

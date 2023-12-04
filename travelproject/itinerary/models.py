@@ -12,7 +12,7 @@ CATEGORY_WITH = (('家族','家族'),('友人・知人','友人・知人'),('ひ
 
 
 class Itinerary(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=20)
     date_1 = models.DateField(default=timezone.now, blank=True)
     date_2 = models.DateField(default=timezone.now, blank=True)
     date_3 = models.DateField(default=timezone.now, blank=True)
@@ -43,9 +43,9 @@ class Itinerary(models.Model):
     schedule_11 = models.TextField(blank=True)
     schedule_12 = models.TextField(blank=True)
 
-    category = models.CharField(max_length=100, choices = CATEGORY, blank=True)
-    contributer = models.CharField(max_length=50, blank=True)
-    companion = models.CharField(max_length=100, choices = CATEGORY_WITH, blank=True)
+    category = models.CharField(max_length=20, choices = CATEGORY, blank=True)
+    contributer = models.CharField(max_length=10, blank=True)
+    companion = models.CharField(max_length=20, choices = CATEGORY_WITH, blank=True)
 
 
 
@@ -57,7 +57,7 @@ class Itinerary(models.Model):
 
 class Review(models.Model):
     itinerary = models.ForeignKey(Itinerary, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=20)
     text = models.TextField()
     rate_1 = models.IntegerField(choices=RATE_CHOICES,null=True)
     rate_2 = models.IntegerField(choices=RATE_CHOICES,null=True)

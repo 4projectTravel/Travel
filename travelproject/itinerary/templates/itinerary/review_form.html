@@ -42,7 +42,9 @@
     </select>
 
     <input type="hidden" name='itinerary' value="{{ itinerary.id }}">
+    <br>
+    <button type="submit" class="btn" style="background-color:#60a8f0">投稿する</button>
+    <br>
     <a href="{% url 'update-itinerary' itinerary.pk %}">旅行記録の記入状況を変更する</a>
-    <button type="submit" class="btn btn-light mt-4">投稿する</button>
   </form>
 {% endblock %}

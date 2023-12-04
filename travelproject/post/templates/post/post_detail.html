@@ -81,6 +81,9 @@
   border: solid 1px black;
   background: white;
 }
+.button_1 {
+  text-align: right;
+}
 
 </style>
 <div class="border col" style="width:1000px;">
@@ -105,7 +108,6 @@
       {% endif %}
 
       <b><h5 class="card-title">{{ object.name }}</h5></b>
-      <div class="card">
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
             <ul>
@@ -121,7 +123,10 @@
           </li>
           <li class="list-group-item">
             <p class="card-text top">口コミ</p>
-            <a href="{% url 'review-post' object.pk %}" style="text-align: right">投稿する</a>
+            <!--<a href="{% url 'review-post' object.pk %}"class="btn btn-light">投稿する</a>-->
+            <!--<a type="button" href="{% url 'review-post' object.pk %}" class="btn btn-light btn-sm">投稿する</a>-->
+            <a href="{% url 'review-post' object.pk %}" class="btn" style="background-color:#60a8f0">口コミを書く</a>
+
             {% for review in object.review_set.all %}
             <div>
               <small class="text-body-secondary"><p class="card-text"></p>{{ review.user.username }}  さん</small>
@@ -134,11 +139,12 @@
             {% endfor %}
           </li>
         </ul>
-      </div>
    </div>
   </div>
 </div>
-<a href="{% url 'list-post' %}" class="btn btn-light">一覧へ</a>
-<a href="{% url 'list-kamakura-itinerary-all' %}">このスポットがある地域の旅行記録を見る</a>
-
+<br>
+<ul align="right">
+  <li><a href="{% url 'list-post' %}">一覧へ</a></li>
+  <li><a href="{% url 'list-kamakura-itinerary-all' %}">このスポットがある地域の旅行記録を見る</a></li>
+</ul>
 {% endblock %}

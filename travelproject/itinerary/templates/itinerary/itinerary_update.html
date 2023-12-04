@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}旅行日程修正{% endblock %}
+{% block title %}旅行日程修正画面{% endblock %}
+{% block h1 %}旅行日程修正画面{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -17,11 +18,15 @@
         <!--<input type= "title" class="form-control" name="title">-->
       </p>
       <p class="card-text">
-        <b><label>3.旅行記録の記入状況を選択してください</label></b>
+        <b><label>3.旅行記録の記入状況を選択してください(「記入済み」を選択すると全てのユーザに旅行記録と旅行日程表が公開されます。)</label></b>
         <p>{{ form.category }}</p>
       </p>
       <p class="card-text">
-        <b><label>4.スケジュールを入力してください(全ての項目を入力する必要はありません)</label></b>
+        <b><label>4.ユーザー名を入力してください</label></b>
+        <p>{{ form.contributer }}</p>
+      </p>
+      <p class="card-text">
+        <b><label>5.スケジュールを入力してください(全ての項目を入力する必要はありません)</label></b>
       </p>
       <table id="table">
       <tr><th>日付</th><th>時間</th><th>スケジュール</th></tr>
@@ -77,7 +82,8 @@
         <td>{{ form.schedule_12 }}</td>
       </tr>
     </table>
-    <input type="submit" value="修正する" class="btn btn-light">
+    <br>
+    <input type="submit" value="修正する" class="btn" style="background-color:#60a8f0">
     </form>
    </div>
  </div>

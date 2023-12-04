@@ -1,168 +1,10 @@
-<!--現在地とピンの表示-->
-<!DOCTYPE html>
-<html>
-  <head>
+{% extends 'map_base.html' %}
 
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.rtl.min.css" integrity="sha384-PRrgQVJ8NNHGieOA1grGdCTIt4h21CzJs6SnWH4YMQ6G5F5+IEzOHz67L4SQaF0o" crossorigin="anonymous">
+{% block title %}鎌倉のスポットを探す{% endblock %}
+{% block h1 %}鎌倉のスポットを探す{% endblock %}
 
 
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 50%;
-        weight: 50%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      table, th, td {
-        border-collapse: collapse;
-        border-style: solid;
-        margin-left: 30px;
-      }
-
-      .container {
-        display:flex;
-        gap: 350px;
-
-      }
-      .container2{
-        border-style: solid;
-        padding: 10px;
-      }
-
-      ul li{
-        list-style:none;
-  　　}
-     .c2 {
-       padding-left: 2em;
-     }
-
-     a:hover{
-       cursor: pointer;
-     }
-
-     .box{
-       background: white;
-       cursor: pointer;
-     }
-     a{
-       text-decoration: none;
-     }
-
-   </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-light sticky-top" style="background-color:#60a8f0;">
-      <div class="navbar-nav d-flex flex-row">
-        <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;">ほっと<span style="color: white;">りっぷ</span></a>
-        <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
-        <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
-        <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
-      </div>
-    </nav>
-
-    <div id="map"></div>
-    <div class="container">
-      <div class="BoxList">
-        <form>
-          <div class="form-check">
-              <label><input type="radio" name="pattern" value="ranking"onclick="formSwitch()">ランキングを表示する</label>
-          </div>
-          <div class="form-check">
-              <label><input type="radio" name="pattern" value="category" onclick="formSwitch()">カテゴリーごとに表示する</label>
-          </div>
-          <ul>
-            <div id="rankingList">
-              <div class="form-check">
-                <li class="c1"><label><input class="form-check-input" type="radio" id="top20" name="top20" value="top20">この地域の人気スポットトップ20</label></li>
-              </div>
-              <div class="form-check">
-                <li class="c1"><label><input class="form-check-input" type="radio" id="rankinglike" name="top20" value="rankinglike">いいね数の多いスポットトップ20</label></li>
-              </div>
-            </div>
-            <div id="categoryList">
-              <div class="form-check">
-                <li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall">全て選択</label></li>
-              </div>
-              <div class="form-check">
-                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="ごはん">ごはん</label></li>
-              </div>
-              <div class="form-check">
-                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="カフェ・パン・スイーツ・お菓子">カフェ・パン・スイーツ・お菓子</label></li>
-              </div>
-              <div class="form-check">
-                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="風景・景色">風景・景色</label></li>
-              </div>
-              <div class="form-check">
-                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="アート・カルチャー">アート・カルチャー</label></li>
-              </div>
-              <div class="form-check">
-                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="お土産・お酒・雑貨">お土産・お酒・雑貨</label></li>
-              </div>
-              <div class="form-check">
-                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="神社・寺院">神社・寺院</label></li>
-              </div>
-              <div class="form-check">
-                <li class="c2"><label><input type="checkbox" class="checks form-check-input" name="chk1" value="アクティビティ・体験・その他施設">アクティビティ・体験・その他施設</label></li>
-              </div>
-            </div>
-          </ul>
-        </form>
-        <input type="button" value="検索" onclick="clickBtn1()" class="btn btn-info"></input>
-
-        <font color="#6495ed"><a onclick="window.location.reload()"　href="#" id="reset">表示をリセットする</a></font>
-        <!--<font color="#6495ed"><a href="./"  class="btn btn-light">クリア</a></font>-->
-      </div>
-
-      <div class="container2">
-        <div>
-          <ul>
-            <li><<b>スポットのカテゴリー</b>></li>
-            <li><span style="color: #ffdc00; font-size: 18px;">●</span>：ごはん</li>
-            <li><span style="color: #ff0000; font-size: 18px;">●</span>：カフェ・パン・スイーツ・お菓子</li>
-            <li><span style="color: #00bfff; font-size: 18px;">●</span>：イベント</li>
-            <li><span style="color: #ee7800; font-size: 18px;">●</span>：風景・景色</li>
-            <li><span style="color: #ffa0ed; font-size: 18px;">●</span>：アート・カルチャー</li>
-            <li><span style="color: #a260bf; font-size: 18px;">●</span>：お土産・お酒・雑貨</li>
-            <li><span style="color: #3333FF; font-size: 18px;">●</span>：神社・寺院</li>
-            <li><span style="color: #008000; font-size: 18px;">●</span>：アクティビティ・体験・その他施設</li>
-          </ul>
-        </div>
-        <div>
-          <ul>
-            <li><<b>現在地からの距離</b>></li>
-            <li><font color="#028760">緑</font>：徒歩5分圏内</li>
-            <li><font color="#ff0000">赤</font>：徒歩15分圏内</li>
-            <li><font color="#0095d9">青</font>：徒歩30分圏内</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="container3">
-      <table id='data-table'>
-        <tr>
-          <th></th>
-          <th>　　　スポット名　　　</th>
-          <th>　　　カテゴリー　　　</th>
-          <!--<th>　　　一言　　　</th>-->
-          <th colspan="2">　　　移動時間　　　</th>
-        </tr>
-      </table>
-    </div>
-
+{% block extrajs %}
     <script>
     function formSwitch() {
      hoge = document.getElementsByName('pattern')
@@ -407,9 +249,7 @@
             for(var m=0; m < top20.length; m++){
             if((chk1[j].checked==true && chk1[j].value==mapJson[i].genre) || top20[m].checked==true){
               console.log("hello")
-              var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
-              '<a href="{% url 'detail-post' 28 %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
-
+              var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>';
               var infowindow = new google.maps.InfoWindow({
                 content: contentStr
               });
@@ -457,24 +297,6 @@
                   map: map,
                   icon: {
                     fillColor: "#ff0000",//塗り潰し色
-                    scale: 10,
-                    fillOpacity: 0.8,
-                    //strokeColor: "#ff6633",              //枠の色
-                     strokeWeight: 1.0,
-                     path: google.maps.SymbolPath.CIRCLE, //円を指定
-                 },
-                 label: {
-                  text: mapJson[i].number,                           //ラベル文字
-                  color: '#000000',                    //文字の色
-                  fontSize: '15px'                     //文字のサイズ
-                 }
-                });
-              }else if(mapJson[i].genre == 'イベント'){
-                var marker = new google.maps.Marker({
-                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-                  map: map,
-                  icon: {
-                    fillColor: "#00bfff",//塗り潰し色
                     scale: 10,
                     fillOpacity: 0.8,
                     //strokeColor: "#ff6633",              //枠の色
@@ -572,8 +394,7 @@
             for(var m=0; m < top20.length; m++){
             if(top20[m].checked==true){
               console.log("hello")
-              var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>'+'<br>'+
-              '<a href="{% url 'detail-post' 28 %}">'+'口コミを見る'+'</a>'+'<br>'+'<a href="{% url 'list-itinerary-all' %}">'+'このスポットが入った旅行記録を見る'+'</a>';
+              var contentStr = '<p>'+mapJson[i].name + '<br>' + mapJson[i].address+'</p>';
 
               var infowindow = new google.maps.InfoWindow({
 
@@ -622,24 +443,6 @@
                   map: map,
                   icon: {
                     fillColor: "#ff0000",//塗り潰し色
-                    scale: 10,
-                    fillOpacity: 0.8,
-                    //strokeColor: "#ff6633",              //枠の色
-                     strokeWeight: 1.0,
-                     path: google.maps.SymbolPath.CIRCLE, //円を指定
-                 },
-                 label: {
-                  text: mapJson[i].number,                           //ラベル文字
-                  color: '#000000',                    //文字の色
-                  fontSize: '15px'                     //文字のサイズ
-                 }
-                });
-              }else if(mapJson[i].genre == 'イベント'){
-                var marker = new google.maps.Marker({
-                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
-                  map: map,
-                  icon: {
-                    fillColor: "#00bfff",//塗り潰し色
                     scale: 10,
                     fillOpacity: 0.8,
                     //strokeColor: "#ff6633",              //枠の色
@@ -770,8 +573,12 @@
                    var td5 = document.createElement('td');
                    var td6 = document.createElement('td');
 
+                   if(mapJson[i].number == 13){
+                     var text1 = '<a href="{% url 'detail-post' 35 %}">'
+                   }else{
+                     var text1 = '<a href="{% url 'detail-post' 28 %}">'
+                   }
 
-                   var text1 = '<a href="{% url 'detail-post' 3 %}">'
                    var text2 = '</a>'
 
                    td1.innerHTML = mapJson[i].number+'. ';
@@ -856,22 +663,15 @@
                  var num = mapJson[i].number
                  var num = 2
 
-                 //var text1 = '<a href="{% url 'detail-post' 28 %}">'
 
-                 if(mapJson[i].number<=11){
-                   var text1 = '<a href="../post/?page=1">'
+                 if(mapJson[i].number == 13){
+                   var text1 = '<a href="{% url 'detail-post' 35 %}">'
                  }else{
-                   var text1 = '<a href="../post/?page=2">'
+                   var text1 = '<a href="{% url 'detail-post' 28 %}">'
                  }
-                 //var text1 = '<a href="../post/{{ post.id }}/detail">'
-                 //var text1 = '<a href="../post/28/detail">'
                  var text2 = '</a>'
-
-
                  td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
-                 //td2.innerHTML = text1 + mapJson[i].name + text2;
                  td3.innerHTML = mapJson[i].genre;
-                 //td4.innerHTML = mapJson[i].comment;
                  if(i==0){
                    td7.innerHTML = '<img src="/media/NO.1.png" style="width:30px;height:30px">';
                  }else if(i==1){
@@ -879,7 +679,7 @@
                  }else if(i==2){
                    td7.innerHTML = '<img src="/media/NO.3.png" style="width:30px;height:30px">';
                  }else{
-                   td7.innerHTML = 'No.'+(i+1);
+                   td7.innerHTML = '<font size="1">'+'No.'+(i+1)+ '</font>';
                    //td7.style.color = '#f0a860';
                  }
 
@@ -1168,6 +968,4 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
     async defer></script>
-
-  </body>
-</html>
+{% endblock %}

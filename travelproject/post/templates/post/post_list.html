@@ -106,7 +106,10 @@ async defer></script>-->
                 <img src="{{ item.thumbnail.url }}" class="card-img-top" style="width:400px;height:280px">
                {% endif %}
                <div class="card-body">
+
+                 {% if item.number <= '20' %}
                  <p class="card-text" style="text-align: right"><small class="text-body-secondary">人気No.{{ item.number }}</small></p>
+                 {% endif %}
                  <a href="{% url 'detail-post' item.pk %}"><h5 class="card-title">{{ item.number }}.{{ item.name }}</h5></a>
                  <ul>
                    {% if '鎌倉' in item.address  %}

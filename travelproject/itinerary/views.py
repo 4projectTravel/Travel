@@ -136,11 +136,17 @@ class CreateItineraryView(CreateView):
 class UpdateItineraryView(UpdateView):
     template_name = 'itinerary/itinerary_update.html'
     model = Itinerary
-    fields = ('title','date_1','date_2','date_3','time_1','time_2','time_3','time_4','time_5','time_6','time_7','time_8','time_9','time_10','time_11','time_12',
-'schedule_1','schedule_2','schedule_3','schedule_4','schedule_5','schedule_6','schedule_7','schedule_8','schedule_9','schedule_10','schedule_11','schedule_12','category','contributer','companion')
-
+    form_class = AddItineraryForm
+    widgets = {
+       'date_field':AdminDateWidget(),
+       #attrs={
+          #'placeholder': '内容を1,024文字以内で入力してください。',
+          #'rows':4, 'cols':15}),
+    }
+    
     def get_success_url(self):
         return reverse('detail-itinerary', kwargs={'pk': self.object.id})
+
 
 class CreateReviewView(CreateView):
     model = Review
@@ -156,6 +162,14 @@ class CreateReviewView(CreateView):
         form.instance.user = self.request.user
 
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('detail-itinerary', kwargs={'pk': self.object.itinerary.id})
+
+class UpdateReviewView(UpdateView):
+    template_name = 'itinerary/review_update.html'
+    model = Review
+    fields = ('itinerary','title','text','rate_1','rate_2')
 
     def get_success_url(self):
         return reverse('detail-itinerary', kwargs={'pk': self.object.itinerary.id})

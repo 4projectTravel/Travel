@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}{{ object.title }}{% endblock %}
-{% block h1 %}旅行日程表詳細{% endblock %}
+{% block h1 %}ユーザーの旅行記録詳細{% endblock %}
 
 {% block content %}
    <div class="border col-7">
@@ -13,12 +13,16 @@
              <li class="list-group-item">
                <ul>
                  <li>同行者： {{ object.companion }}</li>
-                 <li>滞在日数： 2泊3日（11月26日〜11月28日)</li>
+                 {% if object.date_3 == null %}
+                 <li>滞在日程：{{ object.date_1|date:"Y-m-j" }} 〜 {{ object.date_2|date:"Y-m-j" }}</li>
+                 {% else %}
+                 <li>滞在日程：{{ object.date_1|date:"Y-m-j" }} 〜 {{ object.date_3|date:"Y-m-j" }}</li>
+                 {% endif %}
                </ul>
              </li>
              <li class="list-group-item">
                {% for review in object.review_set.all %}
-               <p class="card-text" style="text-align: center">{{ review.text }}</p>
+               <p class="card-text" style="text-align: center">{{ review.title }}</p>
                <small class="text-body-secondary" style="text-align: right"><p class="card-text">旅程表に対する評価：{{ review.rate_1 }}点</p></small>
                <small class="text-body-secondary" style="text-align: right"><p>旅行に対する評価：{{ review.rate_2 }}点</p></small>
                <p class="card-text">{{ review.text }}</p>
@@ -82,14 +86,15 @@
              </li>
            </ul>
 
-      </div>
+         </div>
+        </div>
      </div>
- </div>
-
-      <!--<a href="{% url 'review-itinerary' object.pk %}" class="btn btn-light">旅行記録を書く</a>-->
-      <a href="{% url 'list-itinerary' %}" class="btn btn-light">一覧へ</a>
-      <a href="{% url 'update-itinerary' object.pk %}" class="btn btn-light">修正する</a>
-      <!--<a href="{% url 'delete-itinerary' object.pk %}" class="btn btn-light">削除する</a>-->
-
+     <br>
+     <ul align="center">
+       <p>旅行記録記入後は下記のボタンをクリックし、旅行記録の記入状況を「記入済み」に変更してください。</p>
+       <li><a href="{% url 'update-itinerary' object.pk %}" class="btn" style="background-color:#60a8f0">旅行日程表を修正する</a><li>
+       <!--<li><a href="{% url 'update-review' object.pk %}" class="btn" style="background-color:#60a8f0">旅行記録を修正する</a><li>-->
+     </ul>
+     <a href="{% url 'list-itinerary' %}">一覧へ</a>
 
 {% endblock %}

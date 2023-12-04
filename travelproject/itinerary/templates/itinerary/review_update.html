@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}旅行記録修正画面{% endblock %}
+{% block h1 %}旅行記録修正画面{% endblock %}
+{% block content %}
+  <form method="post" class="p-4 m-4 bg-light border border-info rounded form-group">
+    {% csrf_token %}
+    <label>
+      レビューする旅行
+    </label>
+    <input class = "form-control" value="{{ form.title }}" readonly>
+    <label>
+      タイトル
+    </label>
+    <input class = "form-control" name="form.title">
+    <label>
+      コメント
+    </label>
+    <textarea class="form-control" name="form.text" rows="3"></textarea>
+    <label>
+      星の数(計画に対する評価)
+    </label>
+    <select class="form-control" name="form.rate_1">
+      <option value="0">0 (最低)</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5 (最高)</option>
+    </select>
+
+    <label>
+      星の数(旅行に対する評価)
+    </label>
+    <select class="form-control" name="form.rate_2">
+      <option value="0">0 (最低)</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5 (最高)</option>
+    </select>
+
+    <input type="hidden" name='itinerary' value="{{ form.id }}">
+    <br>
+    <button type="submit" class="btn" style="background-color:#60a8f0">修正する</button>
+  </form>
+{% endblock %}
