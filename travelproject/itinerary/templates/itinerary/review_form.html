@@ -3,7 +3,7 @@
 {% block title %}旅行記録作成画面{% endblock %}
 {% block h1 %}旅行記録作成画面{% endblock %}
 {% block content %}
-  <form method="post" class="p-4 m-4 bg-light border border-info rounded form-group">
+  <form method="post" enctype="multipart/form-data" class="p-4 m-4 bg-light border border-info rounded form-group">
     {% csrf_token %}
     <label>
       レビューする旅行
@@ -41,10 +41,19 @@
       <option value="5">5 (最高)</option>
     </select>
 
+    <label>
+      写真
+    </label>
+    <br>
+    <input type="file" name="record">
+
     <input type="hidden" name='itinerary' value="{{ itinerary.id }}">
     <br>
-    <button type="submit" class="btn" style="background-color:#60a8f0">投稿する</button>
-    <br>
-    <a href="{% url 'update-itinerary' itinerary.pk %}">旅行記録の記入状況を変更する</a>
+    <div style="text-align: center">
+      <button type="submit" class="btn" style="background-color:#60a8f0">投稿する</button>
+    </div>
+
   </form>
+    <!--<a href="{% url 'update-itinerary' itinerary.pk %}">旅行記録の記入状況を変更する</a>-->
+
 {% endblock %}

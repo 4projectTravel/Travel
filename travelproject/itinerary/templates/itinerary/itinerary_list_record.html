@@ -19,6 +19,13 @@
     <div class="card">
       <a href="{% url 'detail-itinerary' item.pk %}"><h5 class="card-header">{{ item.title }}</h5></a>
       <div class="card-body">
+        <p>旅行記録の記入状況: {{ item.category }}</p>
+        {% if item.category|stringformat:"s" == "記入済み" %}
+        <a href="{% url 'review-itinerary' item.pk %}" class="btn" style="background-color:#60a8f0">旅行記録を修正する</a>
+        {% else %}
+        <a href="{% url 'review-itinerary' item.pk %}" class="btn" style="background-color:#60a8f0">旅行記録を書く</a>
+        {% endif %}
+        <hr>
         <table>
         <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
         <tr>
@@ -73,13 +80,6 @@
           <td>{{ item.schedule_12 }}</td>
         </tr>
         </table>
-        <br>
-        <p>旅行記録の記入状況: {{ item.category }}</p>
-        {% if item.category|stringformat:"s" == "記入済み" %}
-        <a href="{% url 'review-itinerary' item.pk %}" class="btn" style="background-color:#60a8f0">旅行記録を修正する</a>
-        {% else %}
-        <a href="{% url 'review-itinerary' item.pk %}" class="btn" style="background-color:#60a8f0">旅行記録を書く</a>
-        {% endif %}
       </div>
     </div>
     </div>

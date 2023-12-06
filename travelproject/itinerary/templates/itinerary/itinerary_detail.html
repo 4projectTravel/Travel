@@ -1,15 +1,30 @@
 {% extends 'base.html' %}
 
 {% block title %}{{ object.title }}{% endblock %}
-{% block h1 %}ユーザーの旅行記録詳細{% endblock %}
+{% block h1 %}旅行記録詳細{% endblock %}
 
 {% block content %}
+   <style>
+     p.border {
+       text-decoration:underline wavy
+    }
+  </style>
+
    <div class="border col-7">
      <div class="card">
        <h5 class="card-header">{{ object.title }}</h5>
        <div class="card-body">
 
            <ul class="list-group list-group-flush">
+             <li class="list-group-item">
+               <div style="text-align: center">
+                 {% for review in object.review_set.all %}
+                 {% if review.record %}
+                 <img src="{{ review.record.url }}" style="width:400px;height:280px">
+                 {% endif %}
+                 {% endfor %}
+               </div>
+             </li>
              <li class="list-group-item">
                <ul>
                  <li>同行者： {{ object.companion }}</li>
@@ -85,16 +100,15 @@
                </table>
              </li>
            </ul>
-
          </div>
         </div>
      </div>
      <br>
-     <ul align="center">
-       <p>旅行記録記入後は下記のボタンをクリックし、旅行記録の記入状況を「記入済み」に変更してください。</p>
-       <li><a href="{% url 'update-itinerary' object.pk %}" class="btn" style="background-color:#60a8f0">旅行日程表を修正する</a><li>
-       <!--<li><a href="{% url 'update-review' object.pk %}" class="btn" style="background-color:#60a8f0">旅行記録を修正する</a><li>-->
-     </ul>
-     <a href="{% url 'list-itinerary' %}">一覧へ</a>
-
+     <p>※<b>旅行記録記入後</b>は下記のボタンをクリックし、旅行記録の記入状況を「<b>記入済み</b>」に変更してください。<br> 全てのユーザに旅行記録が公開されます。</p>
+     <div align="center">
+       <a href="{% url 'update-itinerary' object.pk %}" class="btn" style="background-color:#60a8f0">旅行日程表を修正する</a>
+     </div>
+     <div align="right">
+       <a href="{% url 'list-itinerary' %}">一覧へ</a>
+     </div>
 {% endblock %}

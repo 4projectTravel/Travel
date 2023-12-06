@@ -27,7 +27,8 @@ class Post(models.Model):
     thumbnail = models.ImageField(null=True)
     #category = models.ForeignKey(Category,on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category, related_name='categories')
-    #comment = models.TextField(null=True)
+    wordcloud = models.ImageField(null=True)
+
 
 
     def __str__(self):

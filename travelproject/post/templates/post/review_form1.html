@@ -8,7 +8,7 @@
     <label>
       対象スポット
     </label>
-    <input class = "form-control" value="{{ post.title }}" readonly>
+    <input class = "form-control" value="{{ post.name }}" readonly>
     <label>
       タイトル
     </label>
@@ -29,6 +29,9 @@
       <option value="5">5 (最高)</option>
     </select>
     <input type="hidden" name='post' value="{{ post.id }}">
-    <button type="submit" class="btn btn-light mt-4">投稿する</button>
+    <br>
+    <div style="text-align: center">
+      <button type="submit" class="btn" style="background-color:#60a8f0">投稿する</button>
+    </div>
   </form>
 {% endblock %}

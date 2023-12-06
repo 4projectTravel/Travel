@@ -86,9 +86,9 @@
 }
 
 </style>
-<div class="border col" style="width:1000px;">
+<div class="border col" style="width:800px;">
   <div class="card">
-    <img src="{{ object.thumbnail.url }}" class="card-img-top" style="width:1000px;height:580px">
+    <img src="{{ object.thumbnail.url }}" class="card-img-top" style="width:800px;height:580px">
     <div class="card-body">
       <p class="card-text" style="text-align: right"><small class="text-body-secondary">鎌倉人気スポットランキング第{{ object.number }}位</small></p>
       {% if is_user_liked %}
@@ -110,6 +110,7 @@
       <b><h5 class="card-title">{{ object.name }}</h5></b>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
+            <p class="card-text top">基本情報</p>
             <ul>
               <li>住所：{{ object.address }}</li>
               {% for item in object.category.all %}
@@ -122,11 +123,18 @@
             </ul>
           </li>
           <li class="list-group-item">
+            <p class="card-text top">{{ object.name }}に関連する単語</p>
+            {% if object.wordcloud %}
+            <div style="text-align: center">
+              <img src="{{ object.wordcloud.url }}" style="width:400px;height:225px">
+            </div>
+            {% endif %}
+          </li>
+          <li class="list-group-item">
             <p class="card-text top">口コミ</p>
-            <!--<a href="{% url 'review-post' object.pk %}"class="btn btn-light">投稿する</a>-->
-            <!--<a type="button" href="{% url 'review-post' object.pk %}" class="btn btn-light btn-sm">投稿する</a>-->
-            <a href="{% url 'review-post' object.pk %}" class="btn" style="background-color:#60a8f0">口コミを書く</a>
-
+            <div style="text-align: right">
+               <a href="{% url 'review-post' object.pk %}" class="btn" style="background-color:#60a8f0">口コミを書く</a>
+            </div>
             {% for review in object.review_set.all %}
             <div>
               <small class="text-body-secondary"><p class="card-text"></p>{{ review.user.username }}  さん</small>
@@ -144,7 +152,7 @@
 </div>
 <br>
 <ul align="right">
-  <li><a href="{% url 'list-post' %}">一覧へ</a></li>
+  <li><a href="{% url 'list-post' %}">鎌倉のスポット一覧へ</a></li>
   <li><a href="{% url 'list-kamakura-itinerary-all' %}">このスポットがある地域の旅行記録を見る</a></li>
 </ul>
 {% endblock %}

@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget    #インポート
-from .models import Itinerary
+from .models import Itinerary, Review
 from django.forms import ModelForm
+
 
 
 
@@ -48,6 +49,9 @@ class AddItineraryForm(forms.ModelForm):
 
             #'category':forms.Chararea(max_length=100),
             #'contributer':forms.Chararea(max_length=50),
-
-
         }
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('itinerary', 'title', 'text', 'rate_1', 'rate_2', 'record')

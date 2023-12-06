@@ -3,7 +3,7 @@
 <html>
   <head>
 
-    <title>Simple Map</title>
+    <title>ほっとリップ</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
 
@@ -53,7 +53,7 @@
   <body>
     <nav class="navbar navbar-light sticky-top" style="background-color:#60a8f0;">
       <div class="navbar-nav d-flex flex-row">
-        <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;">ほっと<span style="color: white;">りっぷ</span></a>
+        <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;">ほっと<span style="color: white;">リップ</span></a>
         <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
         <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
         <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
@@ -94,8 +94,14 @@
         zoom: 4.5
       });
       var kamakura = {lat: 35.3188764, lng: 139.55197}
+      var sapporo = {lat: 43.062087, lng: 141.35440}
       var marker_kamakura = new google.maps.Marker({
         position: kamakura,
+        map: map,
+        icon: "https://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
+      });
+      var marker_sapporo = new google.maps.Marker({
+        position: sapporo,
         map: map,
         icon: "https://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
       });

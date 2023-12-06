@@ -49,6 +49,7 @@ class Itinerary(models.Model):
 
 
 
+
     def __str__(self):
        return self.title
 
@@ -62,6 +63,7 @@ class Review(models.Model):
     rate_1 = models.IntegerField(choices=RATE_CHOICES,null=True)
     rate_2 = models.IntegerField(choices=RATE_CHOICES,null=True)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE,related_name='user_itinerary',null=True)
+    record = models.ImageField(null=True, blank=True)
 
 
     def __str__(self):

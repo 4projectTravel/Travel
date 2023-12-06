@@ -34,7 +34,11 @@
     {% if item.category|stringformat:"s" == "記入済み" %}
     <div class="col">
       <div class="card" style="width:450px;">
-        <img src="../../media/kamakura.jpg" class="card-img-top" style="width:450px;height:280px">
+        {% for review in item.review_set.all %}
+        {% if review.record %}
+        <img src="{{ review.record.url }}" class="card-img-top" style="width:450px;height:280px">
+        {% endif %}
+        {% endfor %}
         <div class="card-body">
           {% for review in item.review_set.all %}
             <a href="{% url 'detail-itinerary-all' item.pk %}"><h5 class="card-title">{{ review.title }}</h5></a>

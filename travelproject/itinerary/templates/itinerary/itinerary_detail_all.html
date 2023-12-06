@@ -4,19 +4,38 @@
 {% block h1 %}ユーザーの旅行記録詳細{% endblock %}
 
 {% block content %}
-<div class="border col">
+<style>
+  p.top {
+    border-width: 0px 0px 0px 3px;
+    border-style: solid;
+    padding: 5px;
+    border-color: #f0a860;
+  }
+</style>
+<div class="border col" style="width:800px;">
   <div class="card">
-    <img src="../../../media/kamakura.jpg" class="card-img-top">
+    {% for review in object.review_set.all %}
+    {% if review.record %}
+    <img src="{{ review.record.url }}" class="card-img-top" style="width:800px;height:580px">
+    {% endif %}
+    {% endfor %}
     <div class="card-body">
       {% for review in object.review_set.all %}
-        <b><h5 class="card-title">{{ review.title }}</h5></b>
+        <b><h5 class="card-title" style="text-align: center">{{ review.title }}</h5></b>
       {% endfor %}
       <!--<div class="card">-->
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">by {{ object.contributer }} さん</li>
+          <li style="text-align: right" class="list-group-item">by {{ object.contributer }} さん</li>
           <li class="list-group-item">
+            <p class="card-text top">基本情報</p>
             <ul>
+              {% if object.title == "鎌倉" %}
               <li>エリア：<a href="{% url 'list-post' %}"> {{ object.title }}</a></li>
+              {% elif object.title == "札幌" %}
+              <li>エリア：<a href="{% url 'list-post' %}"> {{ object.title }}</a></li>
+              {% else %}
+              <li>エリア：{{ object.title }}</li>
+              {% endif %}
               <li>同行者： {{ object.companion }}</li>
               {% if object.date_3 == null %}
               <li>滞在日程：{{ object.date_1|date:"Y-m-j" }} 〜 {{ object.date_2|date:"Y-m-j" }}</li>
@@ -26,6 +45,7 @@
             </ul>
           </li>
           <li class="list-group-item">
+            <p class="card-text top">旅行記録</p>
             {% for review in object.review_set.all %}
             <small class="text-body-secondary" style="text-align: right"><p class="card-text">旅程表に対する評価：{{ review.rate_1 }}点</p></small>
             <small class="text-body-secondary" style="text-align: right"><p>旅行に対する評価：{{ review.rate_2 }}点</p></small>
@@ -33,6 +53,7 @@
             {% endfor %}
           </li>
           <li class="list-group-item">
+            <p class="card-text top">旅行日程表</p>
             <table align="center">
             <tr><th width="60">日付</th><th width="60">時間</th><th width="380">スケジュール</th></tr>
             <tr>
@@ -95,7 +116,7 @@
 </div>
 <br>
 <ul align="right">
-  <li><a href="{% url 'list-itinerary-all' %}">一覧へ</a></li>
+  <li><a href="{% url 'list-itinerary-all' %}">ユーザの旅行記録一覧へ</a></li>
 </ul>
 <!--<a href="{% url 'review-itinerary' object.pk %}" class="btn btn-light">旅行記録を書く</a>-->
 <!--<a href="{% url 'update-itinerary' object.pk %}" class="btn btn-light">修正する</a>-->

@@ -9,7 +9,7 @@ from django.views.generic import (
      DeleteView,
 )
 from .models import Itinerary, Review
-from .forms import AddItineraryForm
+from .forms import AddItineraryForm, ReviewForm
 from django.contrib.admin.widgets import AdminDateWidget
 from django.http import JsonResponse # 追加
 from django.views import View
@@ -143,15 +143,16 @@ class UpdateItineraryView(UpdateView):
           #'placeholder': '内容を1,024文字以内で入力してください。',
           #'rows':4, 'cols':15}),
     }
-    
+
     def get_success_url(self):
         return reverse('detail-itinerary', kwargs={'pk': self.object.id})
 
 
 class CreateReviewView(CreateView):
     model = Review
-    fields = ('itinerary', 'title', 'text', 'rate_1', 'rate_2')
+    #fields = ('itinerary', 'title', 'text', 'rate_1', 'rate_2', 'record')
     template_name = 'itinerary/review_form.html'
+    form_class = ReviewForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -165,15 +166,15 @@ class CreateReviewView(CreateView):
 
     def get_success_url(self):
         return reverse('detail-itinerary', kwargs={'pk': self.object.itinerary.id})
-
+"""
 class UpdateReviewView(UpdateView):
     template_name = 'itinerary/review_update.html'
     model = Review
-    fields = ('itinerary','title','text','rate_1','rate_2')
+    fields = ('itinerary','title','text','rate_1','rate_2', 'record')
 
     def get_success_url(self):
         return reverse('detail-itinerary', kwargs={'pk': self.object.itinerary.id})
-
+"""
 class DeleteItineraryView(DeleteView):
     template_name = 'itinerary/itinerary_confirm_delete.html'
     model = Itinerary
