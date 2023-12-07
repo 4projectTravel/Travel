@@ -10,35 +10,10 @@ from django.http import JsonResponse # 追加
 from django.views.generic import ListView
 from post.models import Post
 
-#class TemplateMapView(TemplateView):
-    #template_name = 'map/index.html'
-    #model = Map
-
-def index(request):
-    template = loader.get_template('map/index.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
 
 
-def map_restaurant(request):
+def map_kamakura(request):
     template = loader.get_template('map/map_kamakura.html')
     context = {}
     model = Map, Post
     return HttpResponse(template.render(context, request))
-
-"""
-class ListMapView(ListView):
-    model = Map
-    template_name = 'map/map_kamakura.html'
-"""
-"""
-class ListMapView(ListView):
-    #template_name = 'map/map_kamakura.html'
-    model = Post
-
-    def map_restaurant(request):
-        template = loader.get_template('map/map_kamakura.html')
-        context = {}
-        model = Map, Post
-        return HttpResponse(template.render(context, request))
-"""

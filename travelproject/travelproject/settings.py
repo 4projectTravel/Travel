@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'spot.apps.SpotConfig',
     'import_export',  #add_spot
     'map.apps.MapConfig',
+    'map_kamakura.apps.MapKamakuraConfig',
     'rest_framework',
 
 ]

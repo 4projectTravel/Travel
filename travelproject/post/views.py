@@ -214,17 +214,9 @@ def move_to_itinerary(request):
 def topA(request):
     return render(request, 'topA.html')
 
-def topB(request):
-    return render(request, 'topB.html')
-
-def selection(request):
-        return render(request, 'selection.html')
 
 def move_to_mypage_top(request):
         return render(request, 'mypage_top.html')
 
 def move_to_traveling(request):
         return render(request, 'traveling.html')
-
-def map_restaurant(request):
-        return render(request, 'map_restaurant.html')

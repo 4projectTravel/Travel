@@ -27,6 +27,4 @@ name='review-post'),
     path('travelling/', views.move_to_traveling, name='move_to_traveling'),
     #path('', views.logout_view, name='logout'),
     #path('login/', views.logoin_view, name='login'),
-    path('map_kamakura/', views.map_restaurant, name='map_kamakura'),
-
 ]
