@@ -8,48 +8,95 @@
 <script type="text/javascript">
   $(function() {
     var API_KEY = 'adbc9bb9431b4c26099e46183b7041fd'
-    var item_id = 'lat=35.333911&lon=139.540807'
-    var url = 'https://api.openweathermap.org/data/2.5/forecast?' + item_id + '&lang=ja&units=metric&appid=' + API_KEY
+    var item_id_1 = 'lat=35.333911&lon=139.540807'
+    var url1 = 'https://api.openweathermap.org/data/2.5/forecast?' + item_id_1 + '&lang=ja&units=metric&appid=' + API_KEY
     //var url = 'http://api.openweathermap.org/geo/1.0/direct?q=kamakurashi,392&limit=5&appid=adbc9bb9431b4c26099e46183b7041fd'
-    console.log(url)
+
     $.ajax({
-      url: url,
+      url: url1,
       dataType: "json",
       type: 'GET',
     })
-    .done(function(data) {
-      var insertHTML = "";
-      var cityName = '<h2>' + data.city.name + '</h2>';
-      $('#city-name').html(cityName);
+    .done(function(data1) {
+      var insertHTML1 = "";
+      var cityName1 = '<h2>' + data1.city.name + '</h2>';
+      $('#city-name').html(cityName1);
       for (var i = 0; i <= 39; i = i + 8) {
-        insertHTML += buildHTML(data, i);
+        insertHTML1 += buildHTML(data1, i);
       }
-      $('#weather').html(insertHTML);
+      $('#weather1').html(insertHTML1);
     })
-    .fail(function(data) {
+    .fail(function(data1) {
       console.log("失敗しました");
     });
   });
 
-  function buildHTML(data, i) {
+
+
+  function buildHTML(data1, i) {
     var Week = new Array("（日）","（月）","（火）","（水）","（木）","（金）","（土）");
-    var date = new Date (data.list[i].dt_txt);
-    date.setHours(date.getHours() + 9);
-    var month = date.getMonth()+1;
-    var day = month + "月" + date.getDate() + "日" + Week[date.getDay()] + date.getHours() + "：00";
-    var icon = data.list[i].weather[0].icon;
+    var date1 = new Date (data1.list[i].dt_txt);
+    date1.setHours(date1.getHours() + 9);
+    var month = date1.getMonth()+1;
+    var day = month + "月" + date1.getDate() + "日" + Week[date1.getDay()] + date1.getHours() + "：00";
+    var icon = data1.list[i].weather[0].icon;
     var html =
     '<div class="weather-report">' +
-      /*'<div id="cityname">' + data.city.name + '</div>' +*/
       '<img src="https://openweathermap.org/img/w/' + icon + '.png">' +
       '<div class="weather-date">' + day + '</div>' +
-      '<div class="weather-main">'+ data.list[i].weather[0].description + '</div>' +
-      '<div class="weather-temp">' + Math.round(data.list[i].main.temp) + '℃</div>' +
+      '<div class="weather-main">'+ data1.list[i].weather[0].description + '</div>' +
+      '<div class="weather-temp">' + Math.round(data1.list[i].main.temp) + '℃</div>' +
     '</div>';
     return html
   }
 
+
 </script>
+<script>
+  $(function() {
+    var API_KEY = 'adbc9bb9431b4c26099e46183b7041fd'
+    var item_id_2 = 'lat=43.062087&lon=141.35440'
+    var url2 = 'https://api.openweathermap.org/data/2.5/forecast?' + item_id_2 + '&lang=ja&units=metric&appid=' + API_KEY
+    //var url = 'http://api.openweathermap.org/geo/1.0/direct?q=kamakurashi,392&limit=5&appid=adbc9bb9431b4c26099e46183b7041fd'
+
+    $.ajax({
+      url: url2,
+      dataType: "json",
+      type: 'GET',
+    })
+    .done(function(data2) {
+      var insertHTML2 = "";
+      var cityName2 = '<h2>' + data2.city.name + '</h2>';
+      $('#city-name').html(cityName2);
+      for (var i = 0; i <= 39; i = i + 8) {
+        insertHTML2 += buildHTML(data2, i);
+      }
+      $('#weather2').html(insertHTML2);
+    })
+    .fail(function(data2) {
+      console.log("失敗しました");
+    });
+  });
+
+  function buildHTML(data2, i) {
+    var Week = new Array("（日）","（月）","（火）","（水）","（木）","（金）","（土）");
+    var date2 = new Date (data2.list[i].dt_txt);
+    date2.setHours(date2.getHours() + 9);
+    var month = date2.getMonth()+1;
+    var day = month + "月" + date2.getDate() + "日" + Week[date2.getDay()] + date2.getHours() + "：00";
+    var icon = data2.list[i].weather[0].icon;
+    var html =
+    '<div class="weather-report">' +
+      '<img src="https://openweathermap.org/img/w/' + icon + '.png">' +
+      '<div class="weather-date">' + day + '</div>' +
+      '<div class="weather-main">'+ data2.list[i].weather[0].description + '</div>' +
+      '<div class="weather-temp">' + Math.round(data2.list[i].main.temp) + '℃</div>' +
+    '</div>';
+    return html
+  }
+</script>
+
+
 {% endblock %}
 
 {% block content %}
@@ -66,7 +113,7 @@
 
 {% for item in object_list %}
 {% if user.username == item.contributer %}
-{% if forloop.counter <= 3 %}
+{% if forloop.counter <= 1 %}
 <div class="p-4 m-4 bg-light border border-info rounded">
 
 <div class="card">
@@ -139,8 +186,10 @@
 
 <p class="top"> 鎌倉市の天気予報</p>
 <div class="content">
-  <div id="weather"></div>
+  <div id="weather1"></div>
 </div>
+
+
 
 
 

@@ -54,7 +54,7 @@ async defer></script>-->
             display: flex;
             gap: 80px;
             margin-top: 20px;
-            margin-left: 100px;
+            margin-left: 10px;
           }
           .col {
             margin-top: 20px;
@@ -66,9 +66,7 @@ async defer></script>-->
 
       <!--formを追加-->
       <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
-         <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/>
-  　　　　<button type="submit">検索</button>
-  　　　　<a href="./">クリア</a>
+         <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/> <button type="submit">検索</button>  <a href="./">クリア</a>
        </form>
 
         <!--<form action="" method="get" class="mb-5" enctype="multipart/form-data"><!--{% csrf_token %}-->
@@ -97,7 +95,7 @@ async defer></script>-->
 
       {% include 'post/components/pagination.html' %}
       <div class="container">
-        <div class="row row-cols-2">
+        <div class="row row-cols-3">
           <!--<div class="container">-->
            {% for item in post_list %}
            <div class="col">
@@ -109,6 +107,8 @@ async defer></script>-->
 
                  {% if item.number <= '20' %}
                  <p class="card-text" style="text-align: right"><small class="text-body-secondary">人気No.{{ item.number }}</small></p>
+                 {% else %}
+                 <br>
                  {% endif %}
                  <a href="{% url 'detail-post' item.pk %}"><h5 class="card-title">{{ item.number }}.{{ item.name }}</h5></a>
                  <ul>

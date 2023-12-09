@@ -95,6 +95,7 @@
       <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;">ほっと<span style="color: white;">リップ</span></a>
       <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
       <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
+      <a class="nav-link mx-3" href="{% url 'list-post' %}">札幌のスポット一覧</a>
       <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
     </div>
   </nav>
@@ -127,6 +128,7 @@
       <div class='p-4' style="margin:60px;">
           <h1 class="top">{% block h1 %}{% endblock %}</h1>
           {% block content %}{% endblock content %}
+
       </div>
     </div>
   </div>
@@ -135,6 +137,8 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
   {% block extrajs %}
   {% endblock %}
+
+
 
 </body>
 

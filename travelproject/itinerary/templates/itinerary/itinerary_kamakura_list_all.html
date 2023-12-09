@@ -20,7 +20,7 @@
             <a href="{% url 'detail-itinerary-all' item.pk %}"><h5 class="card-title">{{ review.title }}</h5></a>
           {% endfor %}
           <ul>
-            <li><img src="../../media/pin.png" style="width:20px;height:25px">{{ item.title }}</li>
+            <li><img src="../../media/pin.png" style="width:20px;height:25px"> {{ item.title }}</li>
             <li><img src="../../media/people.png" style="width:20px;height:25px"> {{ item.companion }}</li>
             {% if item.date_3 == null %}
             <li><img src="../../media/calender.png" style="width:20px;height:20px"> {{ item.date_1|date:"Y-m-j" }} 〜 {{ item.date_2|date:"Y-m-j" }}</li>
