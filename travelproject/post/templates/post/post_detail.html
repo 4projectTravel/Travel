@@ -73,14 +73,26 @@
   }
   .circle{
   display: inline-block;
-  width: 40px;
-  height: 40px;
+  width: 80px;
+  height: 50px;
+  border-radius: 100vh;
   text-align:center;
   line-height: 40px;
   border-radius: 50%;
   border: solid 1px black;
   background: white;
 }
+.circle span {
+  position: absolute;
+  display: inline-block;
+  left: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width :80px;
+  text-align:center;
+}
+
 .button_1 {
   text-align: right;
 }
@@ -95,14 +107,14 @@
       <div style="text-align: right">
       <a class="circle"><button type="button" id="ajax-like" style="border:none;background:none">
         <!-- すでにいいねしている時はfasクラス -->
-        <i class="fas fa-heart text-danger" id="like-icon"></i>
+        <i class="fas fa-heart text-danger" id="like-icon"></i> 保存
       </button></a>
       </div>
       {% else %}
       <div style="text-align: right">
       <a class="circle"><button type="button" id="ajax-like" style="border:none;background:none">
         <!-- いいねしていないときはfarクラス -->
-        <i class="far fa-heart text-danger" id="like-icon"></i>
+        <i class="far fa-heart text-danger" id="like-icon"></i>　保存
       </button></a>
       </div>
       {% endif %}
