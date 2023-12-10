@@ -15,5 +15,5 @@ from post.models import Post
 def map_kamakura(request):
     template = loader.get_template('map/map_kamakura.html')
     context = {}
-    model = Map, Post
+    model = Map
     return HttpResponse(template.render(context, request))

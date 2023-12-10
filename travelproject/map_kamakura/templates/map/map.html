@@ -8,9 +8,11 @@
     <script>
     function formSwitch() {
      hoge = document.getElementsByName('pattern')
+
      if (hoge[0].checked) {
          // ランキングを表示するが選択されたら下記を実行します
          document.getElementById('rankingList').style.display = "";
+         //document.getElementById('rankingList').style.display = "none";
          document.getElementById('categoryList').style.display = "none";
          var inputItem = document.getElementById("rankingList").getElementsByTagName("input");
          for(var i=0; i<inputItem.length; i++){

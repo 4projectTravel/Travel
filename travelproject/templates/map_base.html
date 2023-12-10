@@ -38,13 +38,14 @@
       .container {
         margin-top: 20px;
         display:flex;
-        gap: 350px;
-
+        gap : 600px;
       }
       .container2{
         margin-top: 20px;
+        margin-right: 20px;
         border-style: solid;
         padding: 10px;
+        width : 300px;
       }
       .container3{
         margin-top: 20px;
@@ -109,9 +110,9 @@
               <div class="form-check">
                 <li class="c1"><label><input class="form-check-input" type="radio" id="top20" name="top20" value="top20">この地域の人気スポットトップ20</label></li>
               </div>
-              <div class="form-check">
+              <!--<div class="form-check">
                 <li class="c1"><label><input class="form-check-input" type="radio" id="rankinglike" name="top20" value="rankinglike">いいね数の多いスポットトップ20</label></li>
-              </div>
+              </div>-->
             </div>
             <div id="categoryList">
               <div class="form-check">
@@ -172,16 +173,19 @@
 
       </div>
     </div>
+
     <div class="container3">
       <table id='data-table'>
         <tr id="midashi" style="background-color: #60a8f0;">
-          <th></th>
-          <th><font color="#ffffff">  　　　スポット名　　　  </font></th>
-          <th><font color="#ffffff">　　  　カテゴリー　　  　</font></th>
-          <th colspan="2"><font color="#ffffff">　  　　移動時間　　  　</font></th>
-        </tr>
+            <th></th>
+            <th><font color="#ffffff">  　　　スポット名　　　  </font></th>
+            <th><font color="#ffffff">　　  　カテゴリー　　  　</font></th>
+            <th colspan="2"><font color="#ffffff">　  　　移動時間　　  　</font></th>
+         </tr>
       </table>
-    </div>
+     </div>
+
+
     {% block extrajs %}
     {% endblock %}
 
