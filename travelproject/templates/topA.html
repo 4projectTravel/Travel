@@ -56,7 +56,7 @@
         <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;">ほっと<span style="color: white;">リップ</span></a>
         <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
         <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
-        <a class="nav-link mx-3" href="{% url 'list-post' %}">札幌のスポット一覧</a>
+        <a class="nav-link mx-3" href="{% url 'list-post2' %}">札幌のスポット一覧</a>
         <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
       </div>
     </nav>
@@ -70,7 +70,7 @@
         <div class="card">
           <img src="media/kamakura.jpg" class="card-img-top" style="width:450px;height:280px">
           <div class="card-body">
-            <a href="http://127.0.0.1:8000/map_kamakura/"><h5 class="card-title">鎌倉</h5></a>
+            <a href="http://127.0.0.1:8000/map_all/kamakura/"><h5 class="card-title">鎌倉</h5></a>
          </div>
         </div>
     </div>
@@ -79,7 +79,7 @@
         <div class="card">
           <img src="media/sappro.jpg" class="card-img-top" style="width:450px;height:280px">
           <div class="card-body">
-            <a href="{% url 'map_kamakura' %}"><h5 class="card-title">札幌</h5></a>
+            <a href="http://127.0.0.1:8000/map_all/sapporo/"><h5 class="card-title">札幌</h5></a>
          </div>
         </div>
     </div>

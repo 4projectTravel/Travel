@@ -1,0 +1,1203 @@
+{% extends 'map_base.html' %}
+
+{% block title %}札幌のスポットを探す{% endblock %}
+{% block h1 %}札幌のスポットを探す{% endblock %}
+
+
+{% block extrajs %}
+    <script>
+    function formSwitch() {
+     hoge = document.getElementsByName('pattern')
+
+     if (hoge[0].checked) {
+         // ランキングを表示するが選択されたら下記を実行します
+         document.getElementById('rankingList').style.display = "";
+         //document.getElementById('rankingList').style.display = "none";
+         document.getElementById('categoryList').style.display = "none";
+         var inputItem = document.getElementById("rankingList").getElementsByTagName("input");
+         for(var i=0; i<inputItem.length; i++){
+         inputItem[i].checked = "";
+         }
+     } else if (hoge[1].checked) {
+         // カテゴリーごとに表示するが選択されたら下記を実行します
+         document.getElementById('rankingList').style.display = "none";
+         var inputItem = document.getElementById("categoryList").getElementsByTagName("input");
+         for(var i=0; i<inputItem.length; i++){
+         inputItem[i].checked = "";
+         }
+         document.getElementById('categoryList').style.display = "";
+     } else {
+         document.getElementById('rankingList').style.display = "none";
+         //var inputItem = document.getElementById("rankingList").getElementsByTagName("input");
+         //for(var i=0; i<selectItem.length; i++){
+         //inputItem[i].value = "";
+         //}
+         document.getElementById('categoryList').style.display = "none";
+         //var inputItem = document.getElementById("categoryList").getElementsByTagName("input");
+         //for(var i=0; i<inputItem.length; i++){
+             //inputItem[i].checked = "";
+         //}
+      }
+    }
+    window.addEventListener('load', formSwitch());
+
+    /*検索フォーム*/
+    //「全て選択」のチェックボックス
+    let checkAll = document.getElementById("checkAll");
+    //「全て選択」以外のチェックボックス
+    let el = document.getElementsByClassName("checks");
+
+    //全てのチェックボックスをON/OFFする
+    const funcCheckAll = (bool) => {
+      for (let i = 0; i < el.length; i++) {
+          el[i].checked = bool;
+      }
+    }
+
+    //「checks」のclassを持つ要素のチェック状態で「全て選択」のチェック状態をON/OFFする
+    const funcCheck = () => {
+      let count = 0;
+      for (let i = 0; i < el.length; i++) {
+           if (el[i].checked) {
+                count += 1;
+           }
+       }
+
+       if (el.length === count) {
+           checkAll.checked = true;
+      } else {
+         checkAll.checked = false;
+      }
+    };
+
+    //「全て選択」のチェックボックスをクリックした時
+    checkAll.addEventListener("click",() => {
+         funcCheckAll(checkAll.checked);
+    },false);
+
+    //「全て選択」以外のチェックボックスをクリックした時
+    for (let i = 0; i < el.length; i++) {
+         el[i].addEventListener("click", funcCheck, false);
+    }
+    </script>
+
+
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js">-->
+    <script>
+
+
+      var arr;
+      var chk1;
+      var top20;
+      var tableEle;
+
+
+      function clickBtn1() {
+        chk1 = document.getElementsByName("chk1");
+        top20 = document.getElementsByName("top20");
+        //document.getElementById("span1").textContent = arr;
+
+        var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+               if (this.readyState == 4 && this.status == 200) {
+                  setMarker(JSON.parse(this.responseText));
+                  setTable(JSON.parse(this.responseText));
+               }
+          };
+          xhttp.open("GET", "api/map?format=json", true);
+          xhttp.setRequestHeader("Content-type", "application/json");
+          xhttp.send();
+       }
+
+
+      var map;
+      var marker;
+      var circle;
+
+
+      /**
+       * The CenterControl adds a control to the map that recenters the map on
+       * Chicago.
+       * This constructor takes the control DIV as an argument.
+       * @constructor
+       */
+
+
+      function CenterControl(controlDiv, map) {
+
+        // Set CSS for the control border.
+
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to recenter the map';
+        controlDiv.appendChild(controlUI);
+      }
+
+      var currentPos;// 緯度・経度
+      var directionsService;
+      var directionsRenderer;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          /*center: {lat: 35.681236, lng: 139.767125},*/
+           center: {lat: 35.323791, lng: 139.54749},
+          zoom: 9
+
+        });
+
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new CenterControl(centerControlDiv, map);
+
+        centerControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+        /*位置情報を表示する*/
+
+              function success(pos) {
+                 var crd = pos.coords;
+
+
+
+        　　　　　/*現在地*/
+                 //currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);// 緯度・経度
+                 currentPos = new google.maps.LatLng(43.062024, 141.35444);
+                 directionsService = new google.maps.DirectionsService();
+                 directionsRenderer = new google.maps.DirectionsRenderer();
+
+                 if ( marker != undefined )  marker.setMap(null);
+                 if ( circle != undefined )  circle.setMap(null);
+
+                 /* 現在位置にマーカーを設定 */
+                 marker = new google.maps.Marker({
+                    position: currentPos, //マーカーの位置（必須）
+        			      map: map //マーカーを表示する地図
+                  });
+
+
+                 var center_now = {lat: 43.062024, lng: 141.35444};
+
+                 map.setCenter(center_now);
+                 map.setZoom(10);
+                 //setInfo(crd);
+
+                 /*鎌倉市を中心に円を表示する*/
+                 var myCircle_330 = new google.maps.Circle({
+                   strokeColor: '#028760',
+                   strokeOpacity: 0.8,
+                   strokeWeight: 2,
+                   fillColor: '#028760',
+                   fillOpacity: 0.35,
+                   map: map,
+                   center: currentPos,
+                   //center: {lat: 35.323791, lng: 139.54749},
+                   radius: 330  //半径1000メートル
+                 });
+
+                 var myCircle_1000 = new google.maps.Circle({
+                   strokeColor: '#FF0000',
+                   strokeOpacity: 0.8,
+                   strokeWeight: 2,
+                   fillColor: '#FF0000',
+                   fillOpacity: 0.35,
+                   map: map,
+                   //center: {lat: 35.323791, lng: 139.54749},
+                   center: currentPos,
+                   radius: 1000  //半径1000メートル
+                 });
+
+                 var myCircle_2000 = new google.maps.Circle({
+                   strokeColor: '#0095d9',
+                   strokeOpacity: 0.8,
+                   strokeWeight: 2,
+                   fillColor: '#0095d9',
+                   fillOpacity: 0.35,
+                   map: map,
+                   //center: {lat: 35.323791, lng: 139.54749},
+                   center: currentPos,
+                   radius: 2000  //半径2000メートル
+                 });
+
+              }
+
+              navigator.geolocation.getCurrentPosition(success);
+      }
+
+      function setMarker(mapJson) {
+
+      /*ジャンルごとに表示*/
+        var count = 0;
+        var count2 = 0;
+        for(var j = 0; j < chk1.length-1; j++){
+          if(chk1[j].checked == true){
+            count++;
+          }
+        }
+
+        if(count == 1 || count == 2 || count == 5){
+          var eachnumber = 10 / count;
+        }else if(count == 3 || count == 4 || count == 6){
+          var eachnumber = 12 / count;
+        }else{
+          var eachnumber = 14 / count;
+        }
+
+        for(var j = 0; j < chk1.length; j++){
+          for(var i=0; i < mapJson.length; i++){
+
+            if(count2 == eachnumber){
+              count2 = 0;
+              break;
+            }
+
+            if(mapJson[i].area_number == 2){
+
+
+            if(chk1[j].checked==true && chk1[j].value==mapJson[i].genre){
+              var contentStr = '<p>'+mapJson[i].name+ '<br>' + mapJson[i].address+'</p>';
+              var infowindow = new google.maps.InfoWindow({
+                content: contentStr
+              });
+
+
+              if(mapJson[i].genre == 'ごはん'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ffdc00",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                    strokeWeight: 1.0,
+                    path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                  label: {
+                   text: mapJson[i].number,                           //ラベル文字
+                    color: '#000000',                    //文字の色
+                    fontSize: '15px'                     //文字のサイズ
+                   }
+                });
+
+              }else if(mapJson[i].genre == '名所・旧跡'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#3333FF",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'カフェ・パン・スイーツ・お菓子'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ff0000",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == '風景・景色'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ee7800",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'アート・カルチャー'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ffa0ed",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'お土産・お酒・雑貨'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#a260bf",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'アクティビティ・体験・その他施設'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#008000",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }
+              count2++;
+              bindInfoWindow(marker, map, infowindow);
+            }
+           }
+          }
+        }
+        /*トップ20表示*/
+        for(var j = 0; j < chk1.length; j++){
+          for(var i=71; i < 100; i++){
+            for(var m=0; m < top20.length; m++){
+            if(top20[m].checked==true){
+              var contentStr = '<p>'+mapJson[i].name + '<br>' + mapJson[i].address+'</p>';
+
+              var infowindow = new google.maps.InfoWindow({
+                content: contentStr
+              });
+
+              if(mapJson[i].genre == 'ごはん'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ffdc00",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                    strokeWeight: 1.0,
+                    path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                  label: {
+                   text: mapJson[i].number,                           //ラベル文字
+                    color: '#000000',                    //文字の色
+                    fontSize: '15px'                     //文字のサイズ
+                   }
+                });
+
+              }else if(mapJson[i].genre == '名所・旧跡'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#3333FF",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'カフェ・パン・スイーツ・お菓子'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ff0000",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == '風景・景色'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ee7800",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'アート・カルチャー'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#ffa0ed",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'お土産・お酒・雑貨'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#a260bf",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }else if(mapJson[i].genre == 'アクティビティ・体験・その他施設'){
+                var marker = new google.maps.Marker({
+                  position: {lat: Number(mapJson[i].lat), lng: Number(mapJson[i].lng)},
+                  map: map,
+                  icon: {
+                    fillColor: "#008000",//塗り潰し色
+                    scale: 10,
+                    fillOpacity: 0.8,
+                     strokeWeight: 1.0,
+                     path: google.maps.SymbolPath.CIRCLE, //円を指定
+                 },
+                 label: {
+                  text: mapJson[i].number,                           //ラベル文字
+                  color: '#000000',                    //文字の色
+                  fontSize: '15px'                     //文字のサイズ
+                 }
+                });
+              }
+
+              bindInfoWindow(marker, map, infowindow);
+            }
+          }
+          }
+        }
+      }
+
+
+      function setTable(mapJson){
+
+        /*top20一覧表示*/
+        var tableEle = document.getElementById('data-table');
+         for(var i = 71; i<  100; i++){
+             for(var m=0; m < top20.length; m++){
+             if(top20[m].checked==true){
+
+               if((mapJson[i].name == mapJson[i+1].name) || (mapJson[i].name == mapJson[i+1].name == mapJson[i+1].name)){
+
+                 (function (i) {
+                   var origin = currentPos; // 出発地の緯度と経度
+                   //出発地を鎌倉に変更
+                   //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
+                   var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
+
+                   var requestwalking = {
+                     origin: origin,
+                     destination: destination,
+                     travelMode: google.maps.TravelMode.WALKING
+                   };
+
+                   var requestdriving = {
+                     origin: origin,
+                     destination: destination,
+                     travelMode: google.maps.TravelMode.DRIVING
+                   };
+
+                   var tr = document.createElement('tr');
+                   var td1 = document.createElement('td');
+                   var td2 = document.createElement('td');
+                   var td3 = document.createElement('td');
+                   var td5 = document.createElement('td');
+                   var td6 = document.createElement('td');
+                   var td7 = document.createElement('td');
+
+                   /*詳細ページに飛ぶリンク(1,6,13)*/
+                   if(mapJson[i].number == 1){
+                     var text1 = '<a href="{% url 'detail-post' 1 %}">'
+                   }else if (mapJson[i].number == 2){
+                     var text1 = '<a href="{% url 'detail-post' 2 %}">'
+                   }else if (mapJson[i].number == 3){
+                     var text1 = '<a href="{% url 'detail-post' 3 %}">'
+                   }else if (mapJson[i].number == 4){
+                     var text1 = '<a href="{% url 'detail-post' 4 %}">'
+                   }else if (mapJson[i].number == 5){
+                     var text1 = '<a href="{% url 'detail-post' 5 %}">'
+                   }else if (mapJson[i].number == 6){
+                     var text1 = '<a href="{% url 'detail-post' 6 %}">'
+                   }else if (mapJson[i].number == 7){
+                     var text1 = '<a href="{% url 'detail-post' 7 %}">'
+                   }else if (mapJson[i].number == 8){
+                     var text1 = '<a href="{% url 'detail-post' 8 %}">'
+                   }else if (mapJson[i].number == 9){
+                     var text1 = '<a href="{% url 'detail-post' 9 %}">'
+                   }else if (mapJson[i].number == 10){
+                     var text1 = '<a href="{% url 'detail-post' 10 %}">'
+                   }else if (mapJson[i].number == 11){
+                     var text1 = '<a href="{% url 'detail-post' 11 %}">'
+                   }else if (mapJson[i].number == 12){
+                     var text1 = '<a href="{% url 'detail-post' 12 %}">'
+                   }else if (mapJson[i].number == 13){
+                     var text1 = '<a href="{% url 'detail-post' 13 %}">'
+                   }else if (mapJson[i].number == 14){
+                     var text1 = '<a href="{% url 'detail-post' 14 %}">'
+                   }else if (mapJson[i].number == 15){
+                     var text1 = '<a href="{% url 'detail-post' 15 %}">'
+                   }else if (mapJson[i].number == 16){
+                     var text1 = '<a href="{% url 'detail-post' 16 %}">'
+                   }else if (mapJson[i].number == 17){
+                     var text1 = '<a href="{% url 'detail-post' 17 %}">'
+                   }else if (mapJson[i].number == 18){
+                     var text1 = '<a href="{% url 'detail-post' 18 %}">'
+                   }else if (mapJson[i].number == 19){
+                     var text1 = '<a href="{% url 'detail-post' 19 %}">'
+                   }else if (mapJson[i].number == 20){
+                     var text1 = '<a href="{% url 'detail-post' 20 %}">'
+                   }else if (mapJson[i].number == 21){
+                     var text1 = '<a href="{% url 'detail-post' 21 %}">'
+                   }else if (mapJson[i].number == 22){
+                     var text1 = '<a href="{% url 'detail-post' 22 %}">'
+                   }else if (mapJson[i].number == 23){
+                     var text1 = '<a href="{% url 'detail-post' 23 %}">'
+                   }else if (mapJson[i].number == 24){
+                     var text1 = '<a href="{% url 'detail-post' 24 %}">'
+                   }else if (mapJson[i].number == 25){
+                     var text1 = '<a href="{% url 'detail-post' 25 %}">'
+                   }else if (mapJson[i].number == 26){
+                     var text1 = '<a href="{% url 'detail-post' 26 %}">'
+                   }else if (mapJson[i].number == 27){
+                     var text1 = '<a href="{% url 'detail-post' 27 %}">'
+                   }else if (mapJson[i].number == 28){
+                     var text1 = '<a href="{% url 'detail-post' 28 %}">'
+                   }else if (mapJson[i].number == 29){
+                     var text1 = '<a href="{% url 'detail-post' 29 %}">'
+                   }else if (mapJson[i].number == 30){
+                     var text1 = '<a href="{% url 'detail-post' 30 %}">'
+                   }else if (mapJson[i].number == 31){
+                     var text1 = '<a href="{% url 'detail-post' 31 %}">'
+                   }else if (mapJson[i].number == 32){
+                     var text1 = '<a href="{% url 'detail-post' 32 %}">'
+                   }else if (mapJson[i].number == 33){
+                     var text1 = '<a href="{% url 'detail-post' 33 %}">'
+                   }else if (mapJson[i].number == 34){
+                     var text1 = '<a href="{% url 'detail-post' 34 %}">'
+                   }else if (mapJson[i].number == 35){
+                     var text1 = '<a href="{% url 'detail-post' 35 %}">'
+                   }else if (mapJson[i].number == 36){
+                     var text1 = '<a href="{% url 'detail-post' 36 %}">'
+                   }else if (mapJson[i].number == 37){
+                     var text1 = '<a href="{% url 'detail-post' 37 %}">'
+                   }else if (mapJson[i].number == 38){
+                     var text1 = '<a href="{% url 'detail-post' 38 %}">'
+                   }else if (mapJson[i].number == 39){
+                     var text1 = '<a href="{% url 'detail-post' 39 %}">'
+                   }else if (mapJson[i].number == 40){
+                     var text1 = '<a href="{% url 'detail-post' 40 %}">'
+                   }else if (mapJson[i].number == 41){
+                     var text1 = '<a href="{% url 'detail-post' 41 %}">'
+                   }else if (mapJson[i].number == 42){
+                     var text1 = '<a href="{% url 'detail-post' 42 %}">'
+                   }else if (mapJson[i].number == 43){
+                     var text1 = '<a href="{% url 'detail-post' 43 %}">'
+                   }else if (mapJson[i].number == 44){
+                     var text1 = '<a href="{% url 'detail-post' 44 %}">'
+                   }else if (mapJson[i].number == 45){
+                     var text1 = '<a href="{% url 'detail-post' 45 %}">'
+                   }else if (mapJson[i].number == 46){
+                     var text1 = '<a href="{% url 'detail-post' 46 %}">'
+                   }else if (mapJson[i].number == 47){
+                     var text1 = '<a href="{% url 'detail-post' 47 %}">'
+                   }else if (mapJson[i].number == 48){
+                     var text1 = '<a href="{% url 'detail-post' 48 %}">'
+                   }else if (mapJson[i].number == 49){
+                     var text1 = '<a href="{% url 'detail-post' 49 %}">'
+                   }else if (mapJson[i].number == 50){
+                     var text1 = '<a href="{% url 'detail-post' 50 %}">'
+                   }else if (mapJson[i].number == 51){
+                     var text1 = '<a href="{% url 'detail-post' 51 %}">'
+                   }else if (mapJson[i].number == 52){
+                     var text1 = '<a href="{% url 'detail-post' 52 %}">'
+                   }else if (mapJson[i].number == 53){
+                     var text1 = '<a href="{% url 'detail-post' 53 %}">'
+                   }else if (mapJson[i].number == 54){
+                     var text1 = '<a href="{% url 'detail-post' 54 %}">'
+                   }else if (mapJson[i].number == 55){
+                     var text1 = '<a href="{% url 'detail-post' 55 %}">'
+                   }else if (mapJson[i].number == 56){
+                     var text1 = '<a href="{% url 'detail-post' 56 %}">'
+                   }else if (mapJson[i].number == 57){
+                     var text1 = '<a href="{% url 'detail-post' 57 %}">'
+                   }else if (mapJson[i].number == 58){
+                     var text1 = '<a href="{% url 'detail-post' 58 %}">'
+                   }else if (mapJson[i].number == 59){
+                     var text1 = '<a href="{% url 'detail-post' 59 %}">'
+                   }else if (mapJson[i].number == 60){
+                     var text1 = '<a href="{% url 'detail-post' 60 %}">'
+                   }else{
+                     var text1 = '<a href="{% url 'detail-post' 61 %}">'
+                   }
+                   /*ここまで*/
+
+                   var text2 = '</a>'
+                   td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
+                   td2.innerHTML = text1 + mapJson[i].name + text2;
+                   td3.innerHTML = mapJson[i].genre+'   ,   '+mapJson[i+1].genre;
+
+                   directionsService.route(requestwalking, function (response, status){
+                     if(status == 'OK'){
+                       var route = response.routes[0];
+                       var routeLeg = route.legs[0];
+                       var durationText = routeLeg.duration.text;
+
+                       if(route.legs[0].duration.value <= 300){
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#028760';
+                         //td4.style.border = '1px solid black';
+                       }else if(route.legs[0].duration.value <= 900){
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#FF0000';
+                         //td4.style.border = '1px solid black';
+                       }else if(route.legs[0].duration.value <= 1800){
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                         td5.style.color = '#0095d9';
+                         //td4.style.border = '1px solid black';
+                       }else{
+                         td5.innerHTML = '🏃‍♀️' + durationText;
+                       }
+                     }
+                   });
+
+                   directionsService.route(requestdriving, function (response, status){
+                     if(status == 'OK'){
+                       var route = response.routes[0];
+                       var routeLeg = route.legs[0];
+                       var durationText = routeLeg.duration.text;
+
+                       td6.innerHTML = '🚘' + durationText;
+                     }
+                   });
+                   if(mapJson[i].number == 1){
+                     td7.innerHTML = '<img src="/media/NO.1.png" style="width:30px;height:30px">';
+                   }else{
+                     td7.innerHTML = '<font size="1">'+'No.'+ mapJson[i].number + '</font>';
+                   }
+                   tr.appendChild(td7);
+                   tr.appendChild(td1);
+                   tr.appendChild(td3);
+                   tr.appendChild(td5);
+                   tr.appendChild(td6);
+                   tableEle.appendChild(tr);
+                 })(i);
+                 i++;
+             }else
+
+             {
+
+               (function (i) {
+                 var origin = currentPos; // 出発地の緯度と経度
+                 //出発地を鎌倉に変更
+                 //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
+                 var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
+
+                 var requestwalking = {
+                   origin: origin,
+                   destination: destination,
+                   travelMode: google.maps.TravelMode.WALKING
+                 };
+
+                 var requestdriving = {
+                   origin: origin,
+                   destination: destination,
+                   travelMode: google.maps.TravelMode.DRIVING
+                 };
+
+                 var tr = document.createElement('tr');
+                 var td1 = document.createElement('td');
+                 var td3 = document.createElement('td');
+                 var td5 = document.createElement('td');
+                 var td6 = document.createElement('td');
+                 var td7 = document.createElement('td');
+
+                 /*詳細ページに飛ぶリンク(1,6,13以外,20まで)*/
+                 if(mapJson[i].number == 1){
+                     var text1 = '<a href="{% url 'detail-post' 1 %}">'
+                   }else if (mapJson[i].number == 2){
+                     var text1 = '<a href="{% url 'detail-post' 2 %}">'
+                   }else if (mapJson[i].number == 3){
+                     var text1 = '<a href="{% url 'detail-post' 3 %}">'
+                   }else if (mapJson[i].number == 4){
+                     var text1 = '<a href="{% url 'detail-post' 4 %}">'
+                   }else if (mapJson[i].number == 5){
+                     var text1 = '<a href="{% url 'detail-post' 5 %}">'
+                   }else if (mapJson[i].number == 6){
+                     var text1 = '<a href="{% url 'detail-post' 6 %}">'
+                   }else if (mapJson[i].number == 7){
+                     var text1 = '<a href="{% url 'detail-post' 7 %}">'
+                   }else if (mapJson[i].number == 8){
+                     var text1 = '<a href="{% url 'detail-post' 8 %}">'
+                   }else if (mapJson[i].number == 9){
+                     var text1 = '<a href="{% url 'detail-post' 9 %}">'
+                   }else if (mapJson[i].number == 10){
+                     var text1 = '<a href="{% url 'detail-post' 10 %}">'
+                   }else if (mapJson[i].number == 11){
+                     var text1 = '<a href="{% url 'detail-post' 11 %}">'
+                   }else if (mapJson[i].number == 12){
+                     var text1 = '<a href="{% url 'detail-post' 12 %}">'
+                   }else if (mapJson[i].number == 13){
+                     var text1 = '<a href="{% url 'detail-post' 13 %}">'
+                   }else if (mapJson[i].number == 14){
+                     var text1 = '<a href="{% url 'detail-post' 14 %}">'
+                   }else if (mapJson[i].number == 15){
+                     var text1 = '<a href="{% url 'detail-post' 15 %}">'
+                   }else if (mapJson[i].number == 16){
+                     var text1 = '<a href="{% url 'detail-post' 16 %}">'
+                   }else if (mapJson[i].number == 17){
+                     var text1 = '<a href="{% url 'detail-post' 17 %}">'
+                   }else if (mapJson[i].number == 18){
+                     var text1 = '<a href="{% url 'detail-post' 18 %}">'
+                   }else if (mapJson[i].number == 19){
+                     var text1 = '<a href="{% url 'detail-post' 19 %}">'
+                   }else if (mapJson[i].number == 20){
+                     var text1 = '<a href="{% url 'detail-post' 20 %}">'
+                   }else if (mapJson[i].number == 21){
+                     var text1 = '<a href="{% url 'detail-post' 21 %}">'
+                   }else if (mapJson[i].number == 22){
+                     var text1 = '<a href="{% url 'detail-post' 22 %}">'
+                   }else if (mapJson[i].number == 23){
+                     var text1 = '<a href="{% url 'detail-post' 23 %}">'
+                   }else if (mapJson[i].number == 24){
+                     var text1 = '<a href="{% url 'detail-post' 24 %}">'
+                   }else if (mapJson[i].number == 25){
+                     var text1 = '<a href="{% url 'detail-post' 25 %}">'
+                   }else if (mapJson[i].number == 26){
+                     var text1 = '<a href="{% url 'detail-post' 26 %}">'
+                   }else if (mapJson[i].number == 27){
+                     var text1 = '<a href="{% url 'detail-post' 27 %}">'
+                   }else if (mapJson[i].number == 28){
+                     var text1 = '<a href="{% url 'detail-post' 28 %}">'
+                   }else if (mapJson[i].number == 29){
+                     var text1 = '<a href="{% url 'detail-post' 29 %}">'
+                   }else if (mapJson[i].number == 30){
+                     var text1 = '<a href="{% url 'detail-post' 30 %}">'
+                   }else if (mapJson[i].number == 31){
+                     var text1 = '<a href="{% url 'detail-post' 31 %}">'
+                   }else if (mapJson[i].number == 32){
+                     var text1 = '<a href="{% url 'detail-post' 32 %}">'
+                   }else if (mapJson[i].number == 33){
+                     var text1 = '<a href="{% url 'detail-post' 33 %}">'
+                   }else if (mapJson[i].number == 34){
+                     var text1 = '<a href="{% url 'detail-post' 34 %}">'
+                   }else if (mapJson[i].number == 35){
+                     var text1 = '<a href="{% url 'detail-post' 35 %}">'
+                   }else if (mapJson[i].number == 36){
+                     var text1 = '<a href="{% url 'detail-post' 36 %}">'
+                   }else if (mapJson[i].number == 37){
+                     var text1 = '<a href="{% url 'detail-post' 37 %}">'
+                   }else if (mapJson[i].number == 38){
+                     var text1 = '<a href="{% url 'detail-post' 38 %}">'
+                   }else if (mapJson[i].number == 39){
+                     var text1 = '<a href="{% url 'detail-post' 39 %}">'
+                   }else if (mapJson[i].number == 40){
+                     var text1 = '<a href="{% url 'detail-post' 40 %}">'
+                   }else if (mapJson[i].number == 41){
+                     var text1 = '<a href="{% url 'detail-post' 41 %}">'
+                   }else if (mapJson[i].number == 42){
+                     var text1 = '<a href="{% url 'detail-post' 42 %}">'
+                   }else if (mapJson[i].number == 43){
+                     var text1 = '<a href="{% url 'detail-post' 43 %}">'
+                   }else if (mapJson[i].number == 44){
+                     var text1 = '<a href="{% url 'detail-post' 44 %}">'
+                   }else if (mapJson[i].number == 45){
+                     var text1 = '<a href="{% url 'detail-post' 45 %}">'
+                   }else if (mapJson[i].number == 46){
+                     var text1 = '<a href="{% url 'detail-post' 46 %}">'
+                   }else if (mapJson[i].number == 47){
+                     var text1 = '<a href="{% url 'detail-post' 47 %}">'
+                   }else if (mapJson[i].number == 48){
+                     var text1 = '<a href="{% url 'detail-post' 48 %}">'
+                   }else if (mapJson[i].number == 49){
+                     var text1 = '<a href="{% url 'detail-post' 49 %}">'
+                   }else if (mapJson[i].number == 50){
+                     var text1 = '<a href="{% url 'detail-post' 50 %}">'
+                   }else if (mapJson[i].number == 51){
+                     var text1 = '<a href="{% url 'detail-post' 51 %}">'
+                   }else if (mapJson[i].number == 52){
+                     var text1 = '<a href="{% url 'detail-post' 52 %}">'
+                   }else if (mapJson[i].number == 53){
+                     var text1 = '<a href="{% url 'detail-post' 53 %}">'
+                   }else if (mapJson[i].number == 54){
+                     var text1 = '<a href="{% url 'detail-post' 54 %}">'
+                   }else if (mapJson[i].number == 55){
+                     var text1 = '<a href="{% url 'detail-post' 55 %}">'
+                   }else if (mapJson[i].number == 56){
+                     var text1 = '<a href="{% url 'detail-post' 56 %}">'
+                   }else if (mapJson[i].number == 57){
+                     var text1 = '<a href="{% url 'detail-post' 57 %}">'
+                   }else if (mapJson[i].number == 58){
+                     var text1 = '<a href="{% url 'detail-post' 58 %}">'
+                   }else if (mapJson[i].number == 59){
+                     var text1 = '<a href="{% url 'detail-post' 59 %}">'
+                   }else if (mapJson[i].number == 60){
+                     var text1 = '<a href="{% url 'detail-post' 60 %}">'
+                   }else{
+                     var text1 = '<a href="{% url 'detail-post' 61 %}">'
+                   }
+                 /*ここまで*/
+
+                 var text2 = '</a>'
+                 td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
+                 td3.innerHTML = mapJson[i].genre;
+                 if(mapJson[i].number == 2){
+                   td7.innerHTML = '<img src="/media/NO.2.png" style="width:30px;height:30px">';
+                 }else if(mapJson[i].number == 3){
+                   td7.innerHTML = '<img src="/media/NO.3.png" style="width:30px;height:30px">';
+                 }else{
+                   td7.innerHTML = '<font size="1">'+'No.'+　mapJson[i].number + '</font>';
+                 }
+
+                 directionsService.route(requestwalking, function (response, status){
+                   if(status == 'OK'){
+                     var route = response.routes[0];
+                     var routeLeg = route.legs[0];
+                     var durationText = routeLeg.duration.text;
+
+                     if(route.legs[0].duration.value <= 300){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#028760';
+                       //td4.style.border = '1px solid black';
+                     }else if(route.legs[0].duration.value <= 900){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#FF0000';
+                       //td4.style.border = '1px solid black';
+                     }else if(route.legs[0].duration.value <= 1800){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5style.color = '#0095d9';
+                       //td4.style.border = '1px solid black';
+                     }else{
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                     }
+                   }
+                 });
+
+                 directionsService.route(requestdriving, function (response, status){
+                   if(status == 'OK'){
+                     var route = response.routes[0];
+                     var routeLeg = route.legs[0];
+                     var durationText = routeLeg.duration.text;
+
+                     td6.innerHTML = '🚘' + durationText;
+                   }
+                 });
+
+                 tr.appendChild(td7);
+                 tr.appendChild(td1);
+                 tr.appendChild(td3);
+                 tr.appendChild(td5);
+                 tr.appendChild(td6);
+                 tableEle.appendChild(tr);
+               })(i);
+
+             }
+           }
+         }
+       }
+        /*ジャンル別一覧表示*/
+
+        var tableEle = document.getElementById('data-table');
+        var count = 0;
+        var count2 = 0;
+        for(var j = 0; j < chk1.length-1; j++){
+          if(chk1[j].checked == true){
+            count++;
+          }
+        }
+
+        if(count == 1 || count == 2 || count == 5){
+          var eachnumber = 10 / count;
+        }else if(count == 3 || count == 4 || count == 6){
+          var eachnumber = 12 / count;
+        }else{
+          var eachnumber = 14 / count;
+        }
+
+         for(var j = 0; j < chk1.length; j++){
+           for (var i = 0; i< mapJson.length; i++){
+
+             if(count2 == eachnumber){
+               count2 = 0;
+               break;
+             }
+             if(mapJson[i].area_number == 2){
+
+             if(chk1[j].checked == true && chk1[j].value == mapJson[i].genre){
+
+               (function (i) {
+                 var origin = currentPos; // 出発地の緯度と経度
+                 //出発地を鎌倉に変更
+                 //var origin = new google.maps.LatLng( 35.3188764, 139.551976);
+                 var destination = new google.maps.LatLng(mapJson[i].lat, mapJson[i].lng); // 目的地の緯度と経度
+
+                 var requestwalking = {
+                   origin: origin,
+                   destination: destination,
+                   travelMode: google.maps.TravelMode.WALKING
+                 };
+
+                 var requestdriving = {
+                   origin: origin,
+                   destination: destination,
+                   travelMode: google.maps.TravelMode.DRIVING
+                 };
+
+                 var tr = document.createElement('tr');
+                 var td1 = document.createElement('td');
+                 var td2 = document.createElement('td');
+                 var td3 = document.createElement('td');
+                 var td5 = document.createElement('td');
+                 var td6 = document.createElement('td');
+
+                 /*詳細ページに飛ぶリンク(1,6,13以外,20まで)*/
+                 if(mapJson[i].number == 1){
+                     var text1 = '<a href="{% url 'detail-post' 1 %}">'
+                   }else if (mapJson[i].number == 2){
+                     var text1 = '<a href="{% url 'detail-post' 2 %}">'
+                   }else if (mapJson[i].number == 3){
+                     var text1 = '<a href="{% url 'detail-post' 3 %}">'
+                   }else if (mapJson[i].number == 4){
+                     var text1 = '<a href="{% url 'detail-post' 4 %}">'
+                   }else if (mapJson[i].number == 5){
+                     var text1 = '<a href="{% url 'detail-post' 5 %}">'
+                   }else if (mapJson[i].number == 6){
+                     var text1 = '<a href="{% url 'detail-post' 6 %}">'
+                   }else if (mapJson[i].number == 7){
+                     var text1 = '<a href="{% url 'detail-post' 7 %}">'
+                   }else if (mapJson[i].number == 8){
+                     var text1 = '<a href="{% url 'detail-post' 8 %}">'
+                   }else if (mapJson[i].number == 9){
+                     var text1 = '<a href="{% url 'detail-post' 9 %}">'
+                   }else if (mapJson[i].number == 10){
+                     var text1 = '<a href="{% url 'detail-post' 10 %}">'
+                   }else if (mapJson[i].number == 11){
+                     var text1 = '<a href="{% url 'detail-post' 11 %}">'
+                   }else if (mapJson[i].number == 12){
+                     var text1 = '<a href="{% url 'detail-post' 12 %}">'
+                   }else if (mapJson[i].number == 13){
+                     var text1 = '<a href="{% url 'detail-post' 13 %}">'
+                   }else if (mapJson[i].number == 14){
+                     var text1 = '<a href="{% url 'detail-post' 14 %}">'
+                   }else if (mapJson[i].number == 15){
+                     var text1 = '<a href="{% url 'detail-post' 15 %}">'
+                   }else if (mapJson[i].number == 16){
+                     var text1 = '<a href="{% url 'detail-post' 16 %}">'
+                   }else if (mapJson[i].number == 17){
+                     var text1 = '<a href="{% url 'detail-post' 17 %}">'
+                   }else if (mapJson[i].number == 18){
+                     var text1 = '<a href="{% url 'detail-post' 18 %}">'
+                   }else if (mapJson[i].number == 19){
+                     var text1 = '<a href="{% url 'detail-post' 19 %}">'
+                   }else if (mapJson[i].number == 20){
+                     var text1 = '<a href="{% url 'detail-post' 20 %}">'
+                   }else if (mapJson[i].number == 21){
+                     var text1 = '<a href="{% url 'detail-post' 21 %}">'
+                   }else if (mapJson[i].number == 22){
+                     var text1 = '<a href="{% url 'detail-post' 22 %}">'
+                   }else if (mapJson[i].number == 23){
+                     var text1 = '<a href="{% url 'detail-post' 23 %}">'
+                   }else if (mapJson[i].number == 24){
+                     var text1 = '<a href="{% url 'detail-post' 24 %}">'
+                   }else if (mapJson[i].number == 25){
+                     var text1 = '<a href="{% url 'detail-post' 25 %}">'
+                   }else if (mapJson[i].number == 26){
+                     var text1 = '<a href="{% url 'detail-post' 26 %}">'
+                   }else if (mapJson[i].number == 27){
+                     var text1 = '<a href="{% url 'detail-post' 27 %}">'
+                   }else if (mapJson[i].number == 28){
+                     var text1 = '<a href="{% url 'detail-post' 28 %}">'
+                   }else if (mapJson[i].number == 29){
+                     var text1 = '<a href="{% url 'detail-post' 29 %}">'
+                   }else if (mapJson[i].number == 30){
+                     var text1 = '<a href="{% url 'detail-post' 30 %}">'
+                   }else if (mapJson[i].number == 31){
+                     var text1 = '<a href="{% url 'detail-post' 31 %}">'
+                   }else if (mapJson[i].number == 32){
+                     var text1 = '<a href="{% url 'detail-post' 32 %}">'
+                   }else if (mapJson[i].number == 33){
+                     var text1 = '<a href="{% url 'detail-post' 33 %}">'
+                   }else if (mapJson[i].number == 34){
+                     var text1 = '<a href="{% url 'detail-post' 34 %}">'
+                   }else if (mapJson[i].number == 35){
+                     var text1 = '<a href="{% url 'detail-post' 35 %}">'
+                   }else if (mapJson[i].number == 36){
+                     var text1 = '<a href="{% url 'detail-post' 36 %}">'
+                   }else if (mapJson[i].number == 37){
+                     var text1 = '<a href="{% url 'detail-post' 37 %}">'
+                   }else if (mapJson[i].number == 38){
+                     var text1 = '<a href="{% url 'detail-post' 38 %}">'
+                   }else if (mapJson[i].number == 39){
+                     var text1 = '<a href="{% url 'detail-post' 39 %}">'
+                   }else if (mapJson[i].number == 40){
+                     var text1 = '<a href="{% url 'detail-post' 40 %}">'
+                   }else if (mapJson[i].number == 41){
+                     var text1 = '<a href="{% url 'detail-post' 41 %}">'
+                   }else if (mapJson[i].number == 42){
+                     var text1 = '<a href="{% url 'detail-post' 42 %}">'
+                   }else if (mapJson[i].number == 43){
+                     var text1 = '<a href="{% url 'detail-post' 43 %}">'
+                   }else if (mapJson[i].number == 44){
+                     var text1 = '<a href="{% url 'detail-post' 44 %}">'
+                   }else if (mapJson[i].number == 45){
+                     var text1 = '<a href="{% url 'detail-post' 45 %}">'
+                   }else if (mapJson[i].number == 46){
+                     var text1 = '<a href="{% url 'detail-post' 46 %}">'
+                   }else if (mapJson[i].number == 47){
+                     var text1 = '<a href="{% url 'detail-post' 47 %}">'
+                   }else if (mapJson[i].number == 48){
+                     var text1 = '<a href="{% url 'detail-post' 48 %}">'
+                   }else if (mapJson[i].number == 49){
+                     var text1 = '<a href="{% url 'detail-post' 49 %}">'
+                   }else if (mapJson[i].number == 50){
+                     var text1 = '<a href="{% url 'detail-post' 50 %}">'
+                   }else if (mapJson[i].number == 51){
+                     var text1 = '<a href="{% url 'detail-post' 51 %}">'
+                   }else if (mapJson[i].number == 52){
+                     var text1 = '<a href="{% url 'detail-post' 52 %}">'
+                   }else if (mapJson[i].number == 53){
+                     var text1 = '<a href="{% url 'detail-post' 53 %}">'
+                   }else if (mapJson[i].number == 54){
+                     var text1 = '<a href="{% url 'detail-post' 54 %}">'
+                   }else if (mapJson[i].number == 55){
+                     var text1 = '<a href="{% url 'detail-post' 55 %}">'
+                   }else if (mapJson[i].number == 56){
+                     var text1 = '<a href="{% url 'detail-post' 56 %}">'
+                   }else if (mapJson[i].number == 57){
+                     var text1 = '<a href="{% url 'detail-post' 57 %}">'
+                   }else if (mapJson[i].number == 58){
+                     var text1 = '<a href="{% url 'detail-post' 58 %}">'
+                   }else if (mapJson[i].number == 59){
+                     var text1 = '<a href="{% url 'detail-post' 59 %}">'
+                   }else if (mapJson[i].number == 60){
+                     var text1 = '<a href="{% url 'detail-post' 60 %}">'
+                   }else{
+                     var text1 = '<a href="{% url 'detail-post' 61 %}">'
+                   }
+                 /*ここまで*/
+
+                 var text2 = '</a>'
+
+                 td1.innerHTML = mapJson[i].number+'. ';
+                 td2.innerHTML = text1 + mapJson[i].name + text2;
+                 td3.innerHTML = mapJson[i].genre;
+
+                 directionsService.route(requestwalking, function (response, status){
+                   if(status == 'OK'){
+                     var route = response.routes[0];
+                     var routeLeg = route.legs[0];
+                     var durationText = routeLeg.duration.text;
+
+                     if(route.legs[0].duration.value <= 300){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#028760';
+                     }else if(route.legs[0].duration.value <= 900){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5.style.color = '#FF0000';
+                     }else if(route.legs[0].duration.value <= 1800){
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                       td5style.color = '#0095d9';
+                     }else{
+                       td5.innerHTML = '🏃‍♀️' + durationText;
+                     }
+                   }
+                 });
+
+                 directionsService.route(requestdriving, function (response, status){
+                   if(status == 'OK'){
+                     var route = response.routes[0];
+                     var routeLeg = route.legs[0];
+                     var durationText = routeLeg.duration.text;
+
+                     td6.innerHTML = '🚘' + durationText;
+                   }
+                 });
+
+                 tr.appendChild(td1);
+                 tr.appendChild(td2);
+                 tr.appendChild(td3);
+                 tr.appendChild(td5);
+                 tr.appendChild(td6);
+                 tableEle.appendChild(tr);
+               })(i);
+               count2++;
+           }
+         }
+         }
+       }
+      }
+
+      function bindInfoWindow(marker, map, infowindow) {
+        marker.addListener('click', function() {
+          infowindow.open(map, this);
+        });
+      }
+
+    </script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
+    async defer></script>
+{% endblock %}

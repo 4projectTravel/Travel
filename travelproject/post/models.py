@@ -22,6 +22,7 @@ class Category(models.Model):
 
 class Post(models.Model):
     number = models.CharField(max_length=5, null=True)
+    area_number = models.CharField(max_length=5, null=True)
     name = models.TextField(null=True)
     address = models.TextField(null=True)
     thumbnail = models.ImageField(null=True)

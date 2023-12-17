@@ -40,11 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'post.apps.PostConfig',
+    'post2.apps.Post2Config',
     'itinerary.apps.ItineraryConfig',
     'spot.apps.SpotConfig',
     'import_export',  #add_spot
     'map.apps.MapConfig',
-    'map_kamakura.apps.MapKamakuraConfig',
+    'map_all.apps.MapAllConfig',
     'rest_framework',
 
 ]

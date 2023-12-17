@@ -63,6 +63,7 @@ class ListPostView(LoginRequiredMixin, ListView):
                 context['is_user_liked'] = False
         return context
 
+
 """
     # 検索フォーム
     def get_queryset(self):

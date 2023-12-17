@@ -17,3 +17,9 @@ def map_kamakura(request):
     context = {}
     model = Map
     return HttpResponse(template.render(context, request))
+
+def map_sapporo(request):
+    template = loader.get_template('map/map_sapporo.html')
+    context = {}
+    model = Map
+    return HttpResponse(template.render(context, request))

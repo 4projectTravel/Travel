@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}口コミ一覧{% endblock %}
+{% block h1 %}口コミ一覧{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-7">
+    {% for item in post_list %}
+       <div class="p-4 m-4 bg-light border border-info rounded">
+          <a href="{% url 'detail-post' item.pk %}"><h2 class="text-info">{{ item.title }}</h2></a>
+        <h6>カテゴリ：{{ item.category }}</h6>
+        <!--<div class="mt-3">
+          <a href="{% url 'detail-post' item.pk %}">詳細へ</a>
+        </div>-->
+      </div>
+    {% endfor %}
+    </div>
+    <div class="col-3">
+      <h2>評価の高いスポットランキング</h2>
+      {% for ranking_post in page_obj %}
+        <div class="p-4 m-4 bg-light border border-info rounded">
+
+          <a href="{% url 'detail-post' ranking_post.id %}"><h3 class="text-info h5">{{ ranking_post.title }}</h3></a>
+          <h6>評価：{{ ranking_post.avg_rating|floatformat:2 }}点</h6>
+
+        </div>
+      {% endfor %}
+      {% include 'post/components/pagination.html' %}
+    </div>
+</div>
+{% endblock content %}

@@ -43,7 +43,9 @@
           <img src="{{ item.target.thumbnail.url }}" class="card-img-top" style="width:400px;height:280px">
          {% endif %}
          <div class="card-body">
+            {% if item.target.number <= '20' or item.target.number == '3' or item.target.number == '4' or item.target.number == '5' or item.target.number == '6' or item.target.number == '7' or item.target.number == '8' or item.target.number == '9'%}
            <p class="card-text" style="text-align: right"><small class="text-body-secondary">人気No.{{ item.target.number }}</small></p>
+            {% endif %}
            <a href="{% url 'detail-post' item.target.pk %}"><h5 class="card-title">{{ item.target.number }}.{{ item.target.name }}</h5></a>
            <ul>
              {% if '鎌倉' in item.target.address  %}

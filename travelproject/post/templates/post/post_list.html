@@ -94,10 +94,12 @@ async defer></script>-->
       </form>-->
 
       {% include 'post/components/pagination.html' %}
+
       <div class="container">
         <div class="row row-cols-3">
           <!--<div class="container">-->
            {% for item in post_list %}
+
            <div class="col">
              <div class="card" style="width:400px;">
                {% if item.thumbnail %}
@@ -105,10 +107,8 @@ async defer></script>-->
                {% endif %}
                <div class="card-body">
 
-                 {% if item.number <= '20' %}
+                 {% if item.number <= '20' or item.number == '3' or item.number == '4' or item.number == '5' or item.number == '6' or item.number == '7' or item.number == '8' or item.number == '9'%}
                  <p class="card-text" style="text-align: right"><small class="text-body-secondary">人気No.{{ item.number }}</small></p>
-                 {% else %}
-                 <br>
                  {% endif %}
                  <a href="{% url 'detail-post' item.pk %}"><h5 class="card-title">{{ item.number }}.{{ item.name }}</h5></a>
                  <ul>
@@ -125,9 +125,11 @@ async defer></script>-->
                </div>
              </div>
            </div>
+      
            {% endfor %}
           <!--</div>-->
         </div>
       </div>
+
       {% include 'post/components/pagination.html' %}
 {% endblock content %}

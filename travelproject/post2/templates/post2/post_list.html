@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}札幌のスポット一覧{% endblock %}
+{% block h1 %}札幌のスポット一覧{% endblock %}
+
+
+{% block content %}
+        <style>
+          .container {
+            display: flex;
+            gap: 80px;
+            margin-top: 20px;
+            margin-left: 10px;
+          }
+          .col {
+            margin-top: 20px;
+          }
+          ul li{
+            list-style:none;
+          }
+        </style>
+
+      <!--formを追加-->
+      <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
+         <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" スポット名を入力 "/> <button type="submit">検索</button>  <a href="./">クリア</a>
+       </form>
+
+        <!--<form action="" method="get" class="mb-5" enctype="multipart/form-data"><!--{% csrf_token %}-->
+        <!--<div class = "form-row">
+            <div class = "col-5">
+              <div class="BoxList">
+                <ul>
+                  <li class="c1"><label><input type="checkbox" id="top20" name="top20" value="top20" checked>この地域の人気スポットトップ20</label></li>-->
+                  <!--<li class="c1"><label><input type="checkbox" id="checkAll" name="chk1" value="checkall">全て選択</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="ごはん">ごはん</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="カフェ・パン・スイーツ・お菓子">カフェ・パン・スイーツ・お菓子</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="イベント">イベント</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="風景・景色">風景・景色</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アート・カルチャー">アート・カルチャー</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="お土産・お酒・雑貨">お土産・お酒・雑貨</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="神社・寺院">神社・寺院</label></li>
+                  <li class="c2"><label><input type="checkbox" class="checks" name="chk1" value="アクティビティ・体験・その他施設">アクティビティ・体験・その他施設</label></li>
+                </ul>
+                <button type="submit" class="btn btn-light">検索する</button>
+                <a href="./"  class="btn btn-light">クリア</a>
+                <input type="checkbox" name="post" value="1" class = "ml-2">カテゴリー</input>
+              </div>
+            </div>
+        </div>
+      </form>-->
+
+      {% include 'post/components/pagination.html' %}
+
+      <div class="container">
+        <div class="row row-cols-3">
+          <!--<div class="container">-->
+           {% for item in post_list %}
+
+           <div class="col">
+             <div class="card" style="width:400px;">
+               {% if item.thumbnail %}
+                <img src="{{ item.thumbnail.url }}" class="card-img-top" style="width:400px;height:280px">
+               {% endif %}
+               <div class="card-body">
+
+                 {% if item.number <= '20' or item.number == '3' or item.number == '4' or item.number == '5' or item.number == '6' or item.number == '7' or item.number == '8' or item.number == '9'%}
+                 <p class="card-text" style="text-align: right"><small class="text-body-secondary">人気No.{{ item.number }}</small></p>
+                 {% endif %}
+                 <a href="{% url 'detail-post' item.pk %}"><h5 class="card-title">{{ item.number }}.{{ item.name }}</h5></a>
+                 <ul>
+                   {% if '鎌倉' in item.address  %}
+                   <li><img src="../../media/pin.png" style="width:20px;height:25px"> 鎌倉</li>
+                   {% endif %}
+                   <span><li><img src="../../media/tag.png" style="width:20px;height:20px">
+                   {% for genre in item.category.all %}
+                   {{ genre.name }}
+                   {% endfor %}
+                   </li></span>
+                   <li><img src="../../media/review.png" style="width:20px;height:20px"> {{ item.review2_set.all.count }} 人</li>
+                 </ul>
+               </div>
+             </div>
+           </div>
+
+           {% endfor %}
+          <!--</div>-->
+        </div>
+      </div>
+
+      {% include 'post/components/pagination.html' %}
+{% endblock content %}

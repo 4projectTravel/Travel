@@ -90,7 +90,7 @@
         <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;">ほっと<span style="color: white;">リップ</span></a>
         <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
         <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
-        <a class="nav-link mx-3" href="{% url 'list-post' %}">札幌のスポット一覧</a>
+        <a class="nav-link mx-3" href="{% url 'list-post2' %}">札幌のスポット一覧</a>
         <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
       </div>
     </nav>
@@ -175,6 +175,7 @@
     </div>
 
     <div class="container3">
+      <a href="https://www.trip-kamakura.com/calendar/">鎌倉の最新イベント情報はこちら</a>
       <table id='data-table'>
         <tr id="midashi" style="background-color: #60a8f0;">
             <th></th>
@@ -184,6 +185,8 @@
          </tr>
       </table>
      </div>
+
+
 
 
     {% block extrajs %}
