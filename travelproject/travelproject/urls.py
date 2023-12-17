@@ -41,7 +41,7 @@ urlpatterns = [
     path('map/api/', include(router.urls)),
     path('map_all/api/', include(router.urls)),
     path('map_all/sapporo/api/', include(router.urls)),
-    path('map_all/kamkura/api/', include(router.urls)),
+    path('map_all/kamakura/api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #ここまで
 ]

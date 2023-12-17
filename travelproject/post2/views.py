@@ -15,6 +15,7 @@ from django.views.generic import (
     UpdateView,
 )
 from .models import Post2, Review2, PostLike2, Category
+from post.models import PostLike
 from .consts import ITEM_PER_PAGE
 
 
@@ -23,7 +24,6 @@ class ListPost2View(LoginRequiredMixin, ListView):
     template_name = 'post2/post_list.html'
     model = Post2
     paginate_by = ITEM_PER_PAGE
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,13 +39,14 @@ class ListPost2View(LoginRequiredMixin, ListView):
                 context['is_user_liked'] = False
         return context
 
+
     #いいね機能
 def postlike2(request):
     post_pk = request.POST.get('post2_pk')
     context = {
         'user_id': f'{ request.user }',
     }
-    post = get_object_or_404(Post2, pk=post2_pk)
+    post = get_object_or_404(Post2, pk=post_pk)
     like = PostLike2.objects.filter(target=post, user_id=request.user)
 
     if like.exists():

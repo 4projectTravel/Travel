@@ -32,11 +32,11 @@ class Post2(models.Model):
     def __str__(self):
         return str(self.name)
 #追加
-    def get_absolute_url(self):
-        return reverse('post2:list-post2', kwargs={'pk': self.pk})
+    #def get_absolute_url(self):
+        #return reverse('post2:list-post2', kwargs={'pk': self.pk})
 
-    class Meta:
-        ordering = ['-postlike2']
+    #class Meta:
+        #ordering = ['-postlike2']
 #追加
 class PostLike2(models.Model):
     user_id = models.ForeignKey('auth.User',on_delete=models.CASCADE)

@@ -569,10 +569,7 @@
                    var td6 = document.createElement('td');
                    var td7 = document.createElement('td');
 
-                   /*詳細ページに飛ぶリンク(1,6,13)*/
-
-                   /*ここまで*/
-                   var text1 = '<a href="{% url 'detail-post' 55 %}">'
+                   var text1 = '<a href="{% url 'detail-post2' 2 %}">'
                    var text2 = '</a>'
                    td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
                    td2.innerHTML = text1 + mapJson[i].name + text2;
@@ -652,9 +649,13 @@
                      var td7 = document.createElement('td');
 
                      /*詳細ページに飛ぶリンク(1,6,13)*/
-
+                     if(mapJson[i].name == "JRタワー"){
+                       var text1 = '<a href="{% url 'detail-post2' 9 %}">'
+                     }else{
+                       var text1 = '<a href="{% url 'detail-post2' 16 %}">'
+                     }
                      /*ここまで*/
-                     var text1 = '<a href="{% url 'detail-post' 55 %}">'
+
                      var text2 = '</a>'
                      td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
                      td2.innerHTML = text1 + mapJson[i].name + text2;
@@ -731,11 +732,13 @@
                  var td6 = document.createElement('td');
                  var td7 = document.createElement('td');
 
-                 /*詳細ページに飛ぶリンク(1,6,13)*/
-                var text1 = '<a href="{% url 'detail-post' 55 %}">'
-
+                 /*詳細ページに飛ぶリンク*/
+                 if(mapJson[i].name == "狸小路商店街"){
+                   var text1 = '<a href="{% url 'detail-post2' 11 %}">'
+                 }else{
+                   var text1 = '<a href="{% url 'detail-post2' 15 %}">'
+                 }
                  /*ここまで*/
-
                  var text2 = '</a>'
                  td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
                  td2.innerHTML = text1 + mapJson[i].name + text2;
@@ -811,10 +814,32 @@
                  var td6 = document.createElement('td');
                  var td7 = document.createElement('td');
 
-                 /*詳細ページに飛ぶリンク(1,6,13以外,20まで)*/
-
+                 /*詳細ページに飛ぶリンク(2,9,11,15,16以外,20まで)*/
+                 if(mapJson[i].number == 1){
+                     var text1 = '<a href="{% url 'detail-post2' 1 %}">'
+                   }else if (mapJson[i].number == 3){
+                     var text1 = '<a href="{% url 'detail-post2' 3 %}">'
+                   }else if (mapJson[i].number == 4){
+                     var text1 = '<a href="{% url 'detail-post2' 4 %}">'
+                   }else if (mapJson[i].number == 5){
+                     var text1 = '<a href="{% url 'detail-post2' 5 %}">'
+                   }else if (mapJson[i].number == 8){
+                     var text1 = '<a href="{% url 'detail-post2' 8 %}">'
+                   }else if (mapJson[i].number == 10){
+                     var text1 = '<a href="{% url 'detail-post2' 10 %}">'
+                   }else if (mapJson[i].number == 14){
+                     var text1 = '<a href="{% url 'detail-post2' 14 %}">'
+                   }else if (mapJson[i].number == 17){
+                     var text1 = '<a href="{% url 'detail-post2' 17 %}">'
+                   }else if (mapJson[i].number == 18){
+                     var text1 = '<a href="{% url 'detail-post2' 18 %}">'
+                   }else if (mapJson[i].number == 19){
+                     var text1 = '<a href="{% url 'detail-post2' 19 %}">'
+                   }else{
+                     var text1 = '<a href="{% url 'detail-post2' 20 %}">'
+                   }
                  /*ここまで*/
-                 var text1 = '<a href="{% url 'detail-post' 1 %}">'
+
                  var text2 = '</a>'
                  td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
                  td3.innerHTML = mapJson[i].genre;
@@ -927,129 +952,124 @@
                  var td5 = document.createElement('td');
                  var td6 = document.createElement('td');
 
-                 /*詳細ページに飛ぶリンク(1,6,13以外,20まで)*/
+                 /*詳細ページに飛ぶリンク*/
                  if(mapJson[i].number == 1){
-                     var text1 = '<a href="{% url 'detail-post' 1 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 1 %}">'
                    }else if (mapJson[i].number == 2){
-                     var text1 = '<a href="{% url 'detail-post' 2 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 2 %}">'
                    }else if (mapJson[i].number == 3){
-                     var text1 = '<a href="{% url 'detail-post' 3 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 3 %}">'
                    }else if (mapJson[i].number == 4){
-                     var text1 = '<a href="{% url 'detail-post' 4 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 4 %}">'
                    }else if (mapJson[i].number == 5){
-                     var text1 = '<a href="{% url 'detail-post' 5 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 5 %}">'
                    }else if (mapJson[i].number == 6){
-                     var text1 = '<a href="{% url 'detail-post' 6 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 6 %}">'
                    }else if (mapJson[i].number == 7){
-                     var text1 = '<a href="{% url 'detail-post' 7 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 7 %}">'
                    }else if (mapJson[i].number == 8){
-                     var text1 = '<a href="{% url 'detail-post' 8 %}">'
-                   }else if (mapJson[i].number == 9){
-                     var text1 = '<a href="{% url 'detail-post' 9 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 8 %}">'
+                   }else if (mapJson[i].number == 9){' 9 %}">'
                    }else if (mapJson[i].number == 10){
-                     var text1 = '<a href="{% url 'detail-post' 10 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 10 %}">'
                    }else if (mapJson[i].number == 11){
-                     var text1 = '<a href="{% url 'detail-post' 11 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 11 %}">'
                    }else if (mapJson[i].number == 12){
-                     var text1 = '<a href="{% url 'detail-post' 12 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 12 %}">'
                    }else if (mapJson[i].number == 13){
-                     var text1 = '<a href="{% url 'detail-post' 13 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 13 %}">'
                    }else if (mapJson[i].number == 14){
-                     var text1 = '<a href="{% url 'detail-post' 14 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 14 %}">'
                    }else if (mapJson[i].number == 15){
-                     var text1 = '<a href="{% url 'detail-post' 15 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 15 %}">'
                    }else if (mapJson[i].number == 16){
-                     var text1 = '<a href="{% url 'detail-post' 16 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 16 %}">'
                    }else if (mapJson[i].number == 17){
-                     var text1 = '<a href="{% url 'detail-post' 17 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 17 %}">'
                    }else if (mapJson[i].number == 18){
-                     var text1 = '<a href="{% url 'detail-post' 18 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 18 %}">'
                    }else if (mapJson[i].number == 19){
-                     var text1 = '<a href="{% url 'detail-post' 19 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 19 %}">'
                    }else if (mapJson[i].number == 20){
-                     var text1 = '<a href="{% url 'detail-post' 20 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 20 %}">'
                    }else if (mapJson[i].number == 21){
-                     var text1 = '<a href="{% url 'detail-post' 21 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 21 %}">'
                    }else if (mapJson[i].number == 22){
-                     var text1 = '<a href="{% url 'detail-post' 22 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 22 %}">'
                    }else if (mapJson[i].number == 23){
-                     var text1 = '<a href="{% url 'detail-post' 23 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 23 %}">'
                    }else if (mapJson[i].number == 24){
-                     var text1 = '<a href="{% url 'detail-post' 24 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 24 %}">'
                    }else if (mapJson[i].number == 25){
-                     var text1 = '<a href="{% url 'detail-post' 25 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 25 %}">'
                    }else if (mapJson[i].number == 26){
-                     var text1 = '<a href="{% url 'detail-post' 26 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 26 %}">'
                    }else if (mapJson[i].number == 27){
-                     var text1 = '<a href="{% url 'detail-post' 27 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 27 %}">'
                    }else if (mapJson[i].number == 28){
-                     var text1 = '<a href="{% url 'detail-post' 28 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 28 %}">'
                    }else if (mapJson[i].number == 29){
-                     var text1 = '<a href="{% url 'detail-post' 29 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 29 %}">'
                    }else if (mapJson[i].number == 30){
-                     var text1 = '<a href="{% url 'detail-post' 30 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 30 %}">'
                    }else if (mapJson[i].number == 31){
-                     var text1 = '<a href="{% url 'detail-post' 31 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 31 %}">'
                    }else if (mapJson[i].number == 32){
-                     var text1 = '<a href="{% url 'detail-post' 32 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 32 %}">'
                    }else if (mapJson[i].number == 33){
-                     var text1 = '<a href="{% url 'detail-post' 33 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 33 %}">'
                    }else if (mapJson[i].number == 34){
-                     var text1 = '<a href="{% url 'detail-post' 34 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 34 %}">'
                    }else if (mapJson[i].number == 35){
-                     var text1 = '<a href="{% url 'detail-post' 35 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 35 %}">'
                    }else if (mapJson[i].number == 36){
-                     var text1 = '<a href="{% url 'detail-post' 36 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 36 %}">'
                    }else if (mapJson[i].number == 37){
-                     var text1 = '<a href="{% url 'detail-post' 37 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 37 %}">'
                    }else if (mapJson[i].number == 38){
-                     var text1 = '<a href="{% url 'detail-post' 38 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 38 %}">'
                    }else if (mapJson[i].number == 39){
-                     var text1 = '<a href="{% url 'detail-post' 39 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 39 %}">'
                    }else if (mapJson[i].number == 40){
-                     var text1 = '<a href="{% url 'detail-post' 40 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 40 %}">'
                    }else if (mapJson[i].number == 41){
-                     var text1 = '<a href="{% url 'detail-post' 41 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 41 %}">'
                    }else if (mapJson[i].number == 42){
-                     var text1 = '<a href="{% url 'detail-post' 42 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 42 %}">'
                    }else if (mapJson[i].number == 43){
-                     var text1 = '<a href="{% url 'detail-post' 43 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 43 %}">'
                    }else if (mapJson[i].number == 44){
-                     var text1 = '<a href="{% url 'detail-post' 44 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 44 %}">'
                    }else if (mapJson[i].number == 45){
-                     var text1 = '<a href="{% url 'detail-post' 45 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 45 %}">'
                    }else if (mapJson[i].number == 46){
-                     var text1 = '<a href="{% url 'detail-post' 46 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 46 %}">'
                    }else if (mapJson[i].number == 47){
-                     var text1 = '<a href="{% url 'detail-post' 47 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 47 %}">'
                    }else if (mapJson[i].number == 48){
-                     var text1 = '<a href="{% url 'detail-post' 48 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 48 %}">'
                    }else if (mapJson[i].number == 49){
-                     var text1 = '<a href="{% url 'detail-post' 49 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 49 %}">'
                    }else if (mapJson[i].number == 50){
-                     var text1 = '<a href="{% url 'detail-post' 50 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 50 %}">'
                    }else if (mapJson[i].number == 51){
-                     var text1 = '<a href="{% url 'detail-post' 51 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 51 %}">'
                    }else if (mapJson[i].number == 52){
-                     var text1 = '<a href="{% url 'detail-post' 52 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 52 %}">'
                    }else if (mapJson[i].number == 53){
-                     var text1 = '<a href="{% url 'detail-post' 53 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 53 %}">'
                    }else if (mapJson[i].number == 54){
-                     var text1 = '<a href="{% url 'detail-post' 54 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 54 %}">'
                    }else if (mapJson[i].number == 55){
-                     var text1 = '<a href="{% url 'detail-post' 55 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 55 %}">'
                    }else if (mapJson[i].number == 56){
-                     var text1 = '<a href="{% url 'detail-post' 56 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 56 %}">'
                    }else if (mapJson[i].number == 57){
-                     var text1 = '<a href="{% url 'detail-post' 57 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 57 %}">'
                    }else if (mapJson[i].number == 58){
-                     var text1 = '<a href="{% url 'detail-post' 58 %}">'
-                   }else if (mapJson[i].number == 59){
-                     var text1 = '<a href="{% url 'detail-post' 59 %}">'
-                   }else if (mapJson[i].number == 60){
-                     var text1 = '<a href="{% url 'detail-post' 60 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 58 %}">'
                    }else{
-                     var text1 = '<a href="{% url 'detail-post' 61 %}">'
+                     var text1 = '<a href="{% url 'detail-post2' 59 %}">'
                    }
                  /*ここまで*/
 

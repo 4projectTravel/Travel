@@ -8,7 +8,7 @@ urlpatterns = [
 
     path('topA', views.topA, name='topA'),
     path('post2/', views.ListPost2View.as_view(), name='list-post2'),
-    path('post/likepost/', views.ListLikePostView.as_view(), name='list-likepost'),
+    path('post2/likepost/', views.ListLikePostView.as_view(), name='list-likepost'),
     path('post2/<int:pk>/detail/', views.DetailPost2View.as_view(),
 name='detail-post2'),
     path('post2/create/', views.CreatePost2View.as_view(), name='create-post2'),

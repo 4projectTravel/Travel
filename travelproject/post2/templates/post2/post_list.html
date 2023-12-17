@@ -1,8 +1,52 @@
 {% extends 'base.html' %}
 
-{% block title %}札幌のスポット一覧{% endblock %}
-{% block h1 %}札幌のスポット一覧{% endblock %}
+{% block title %}鎌倉のスポット一覧{% endblock %}
+{% block h1 %}鎌倉のスポット一覧{% endblock %}
 
+{% block extrajs %}
+
+
+<script type="text/javascript">
+  // いいねボタンが押された時
+  document.getElementById('ajax-like').addEventListener('click', e => {
+    e.preventDefault();
+    const url = '{% url "postlike2" %}';
+    fetch(url, {
+      method: 'POST',
+      body: `post2_pk={{ post2.pk }}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+    }).then(response => {
+      return response.json();
+    }).then(response => {
+      // いいね数を書き換える
+      const counter = document.getElementById('like-count')
+      counter.textContent = response.like_count
+      const icon = document.getElementById('like-icon')
+      // いいねした時はハートを塗る
+      if (response.method == 'create') {
+        icon.classList.remove('far')
+        icon.classList.add('fas')
+        icon.id = 'like-icon'
+      } else {
+        icon.classList.remove('fas')
+        icon.classList.add('far')
+        icon.id = 'like-icon'
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  });
+</script>
+
+<!--<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"
+async defer></script>-->
+<!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiugR_kRyfmu3OjnFbB1QL0qcdB-pfSb0&callback=initMap"></script>-->
+
+
+{% endblock %}
 
 {% block content %}
         <style>
@@ -49,12 +93,12 @@
         </div>
       </form>-->
 
-      {% include 'post/components/pagination.html' %}
+      {% include 'post2/components/pagination.html' %}
 
       <div class="container">
         <div class="row row-cols-3">
           <!--<div class="container">-->
-           {% for item in post_list %}
+           {% for item in post2_list %}
 
            <div class="col">
              <div class="card" style="width:400px;">
@@ -66,7 +110,7 @@
                  {% if item.number <= '20' or item.number == '3' or item.number == '4' or item.number == '5' or item.number == '6' or item.number == '7' or item.number == '8' or item.number == '9'%}
                  <p class="card-text" style="text-align: right"><small class="text-body-secondary">人気No.{{ item.number }}</small></p>
                  {% endif %}
-                 <a href="{% url 'detail-post' item.pk %}"><h5 class="card-title">{{ item.number }}.{{ item.name }}</h5></a>
+                 <a href="{% url 'detail-post2' item.pk %}"><h5 class="card-title">{{ item.number }}.{{ item.name }}</h5></a>
                  <ul>
                    {% if '鎌倉' in item.address  %}
                    <li><img src="../../media/pin.png" style="width:20px;height:25px"> 鎌倉</li>
@@ -87,5 +131,5 @@
         </div>
       </div>
 
-      {% include 'post/components/pagination.html' %}
+      {% include 'post2/components/pagination.html' %}
 {% endblock content %}

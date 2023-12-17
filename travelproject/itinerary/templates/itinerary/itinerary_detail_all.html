@@ -32,7 +32,7 @@
               {% if object.title == "鎌倉" %}
               <li>エリア：<a href="{% url 'list-post' %}"> {{ object.title }}</a></li>
               {% elif object.title == "札幌" %}
-              <li>エリア：<a href="{% url 'list-post' %}"> {{ object.title }}</a></li>
+              <li>エリア：<a href="{% url 'list-post2' %}"> {{ object.title }}</a></li>
               {% else %}
               <li>エリア：{{ object.title }}</li>
               {% endif %}

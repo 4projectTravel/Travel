@@ -33,7 +33,7 @@
     const url = '{% url "postlike2" %}';
     fetch(url, {
       method: 'POST',
-      body: `post_pk={{ post.pk }}`,
+      body: `post2_pk={{ post2.pk }}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
         'X-CSRFToken': '{{ csrf_token }}',
