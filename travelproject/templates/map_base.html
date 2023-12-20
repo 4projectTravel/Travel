@@ -10,10 +10,17 @@
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
+      /*
       #map {
         height: 50%;
         weight: 50%;
       }
+      */
+      #map {
+        height: 500px;
+        weight: 500px;
+      }
+
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
@@ -35,25 +42,33 @@
         margin-left: 30px;
       }
 
+
       .container {
         margin-top: 20px;
         display:flex;
-        gap : 600px;
+        gap: 40px;
+        /*gap : 600px;*/
       }
       .container2{
+        /*bottom: 600; /* 基準の位置を画面の一番右に指定する */
+        /*right: 0;
+        position: fixed;
+        background-color: gray;*/
         margin-top: 20px;
-        margin-right: 20px;
+        right: 0;
         border-style: solid;
-        padding: 10px;
-        width : 300px;
+        padding: 2px;
+        width: 300px;
+        height: 500px;
       }
       .container3{
         margin-top: 20px;
-        margin-left: 200px;
+        /*margin-left: 200px;*/
       }
 
       ul li{
         list-style:none;
+        font-size: calc(0.25vw + 0.65rem);
   　　}
      .c2 {
        padding-left: 2em;
@@ -85,6 +100,8 @@
     </style>
   </head>
   <body>
+
+
     <nav class="navbar navbar-light sticky-top" style="background-color:#60a8f0;">
       <div class="navbar-nav d-flex flex-row">
         <a class="navbar-brand" href="{% url 'topA' %}" style="color: #f0a860;">ほっと<span style="color: white;">リップ</span></a>
@@ -94,8 +111,8 @@
         <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
       </div>
     </nav>
-
     <div id="map"></div>
+
     <div class="container">
       <div class="BoxList">
         <form>
@@ -103,7 +120,7 @@
               <label><input type="radio" name="pattern" value="ranking"onclick="formSwitch()">ランキングを表示する</label>
           </div>
           <div class="form-check">
-              <label><input type="radio" name="pattern" value="category" onclick="formSwitch()">カテゴリーごとに表示する</label>
+              <label><input type="radio" name="pattern" value="category" onclick="formSwitch()">ジャンルごとに表示する</label>
           </div>
           <ul>
             <div id="rankingList">
@@ -147,45 +164,40 @@
         <font color="#f0a860"><a onclick="window.location.reload()"　href="#" id="reset">表示をリセットする</a></font>
         <!--<font color="#6495ed"><a href="./"  class="btn btn-light">クリア</a></font>-->
       </div>
-
-      <div class="container2">
-        <div>
-          <ul>
-            <li><スポットのカテゴリー></li>
-            <li><span style="color: #ffdc00; font-size: 18px;">●</span>：ごはん</li>
-            <li><span style="color: #ff0000; font-size: 18px;">●</span>：カフェ・パン・スイーツ・お菓子</li>
-            <li><span style="color: #ee7800; font-size: 18px;">●</span>：風景・景色</li>
-            <li><span style="color: #ffa0ed; font-size: 18px;">●</span>：アート・カルチャー</li>
-            <li><span style="color: #a260bf; font-size: 18px;">●</span>：お土産・お酒・雑貨</li>
-            <li><span style="color: #3333FF; font-size: 18px;">●</span>：名所・旧跡</li>
-            <li><span style="color: #008000; font-size: 18px;">●</span>：アクティビティ・体験・その他施設</li>
-          </ul>
-        </div>
-        <hr>
-        <div>
-          <ul>
-            <li><現在地からの距離></li>
-            <li><font color="#028760">緑</font>：徒歩<b>5</b>分圏内</li>
-            <li><font color="#ff0000">赤</font>：徒歩<b>15</b>分圏内</li>
-            <li><font color="#0095d9">青</font>：徒歩<b>30</b>分圏内</li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container3">
-      <a href="https://www.trip-kamakura.com/calendar/">鎌倉の最新イベント情報はこちら</a>
-      <table id='data-table'>
-        <tr id="midashi" style="background-color: #60a8f0;">
-            <th></th>
-            <th><font color="#ffffff">  　　　スポット名　　　  </font></th>
-            <th><font color="#ffffff">　　  　カテゴリー　　  　</font></th>
-            <th colspan="2"><font color="#ffffff">　  　　移動時間　　  　</font></th>
-         </tr>
-      </table>
-     </div>
-
+      <div class="container3">
+        <table id='data-table'>
+          <tr id="midashi" style="background-color: #60a8f0;">
+              <th></th>
+              <th><font color="#ffffff">  　スポット名　　　  </font></th>
+              <th><font color="#ffffff">　　 ジャンル　　  　</font></th>
+              <th colspan="2"><font color="#ffffff">　 移動時間　　  　</font></th>
+           </tr>
+        </table>
+       </div>
+       <div class="container2">
+         <div>
+           <ul>
+             <li><スポットのジャンル></li>
+             <li><span style="color: #ffdc00; font-size: 18px;">●</span>：ごはん</li>
+             <li><span style="color: #ff0000; font-size: 18px;">●</span>：カフェ・パン・スイーツ・お菓子</li>
+             <li><span style="color: #ee7800; font-size: 18px;">●</span>：風景・景色</li>
+             <li><span style="color: #ffa0ed; font-size: 18px;">●</span>：アート・カルチャー</li>
+             <li><span style="color: #a260bf; font-size: 18px;">●</span>：お土産・お酒・雑貨</li>
+             <li><span style="color: #3333FF; font-size: 18px;">●</span>：名所・旧跡</li>
+             <li><span style="color: #008000; font-size: 18px;">●</span>：アクティビティ・体験・その他施設</li>
+           </ul>
+         </div>
+         <hr>
+         <div>
+           <ul>
+             <li><現在地からの距離></li>
+             <li><font color="#028760">緑</font>：徒歩<b>5</b>分圏内</li>
+             <li><font color="#ff0000">赤</font>：徒歩<b>15</b>分圏内</li>
+             <li><font color="#0095d9">青</font>：徒歩<b>30</b>分圏内</li>
+           </ul>
+         </div>
+       </div>
+   </div>
 
 
 

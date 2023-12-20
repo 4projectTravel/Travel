@@ -117,7 +117,7 @@ async defer></script>-->
                    {% endif %}
                    <span><li><img src="../../media/tag.png" style="width:20px;height:20px">
                    {% for genre in item.category.all %}
-                   {{ genre.name }}
+                   {{ genre.name }}&nbsp;
                    {% endfor %}
                    </li></span>
                    <li><img src="../../media/review.png" style="width:20px;height:20px"> {{ item.review_set.all.count }} 人</li>
@@ -125,7 +125,7 @@ async defer></script>-->
                </div>
              </div>
            </div>
-      
+
            {% endfor %}
           <!--</div>-->
         </div>

@@ -126,13 +126,11 @@
           <li class="list-group-item">
             <br>
             <p class="card-text top">基本情報</p>
-            <ul>　　{% for genre in item.category.all %}
-            {{ genre.name }}
-            {% endfor %}
+            <ul>　　
               <li>住所：{{ object.address }}</li>
               <span><li>ジャンル：
               {% for item in object.category.all %}
-              {{ item.name }}
+              {{ item.name }}&nbsp;
               {% endfor %}
               </li></span>
               {% for review in item.review2_set.all %}
