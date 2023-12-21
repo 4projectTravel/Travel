@@ -35,13 +35,14 @@ urlpatterns = [
     path('', include('itinerary.urls')),
     path('', include('spot.urls')),
     path('map/', include('map.urls')),
+    path('', include('map_all.urls')),
     path('map_all/', include('map_all.urls')),
 
     #map追加ここから
     path('map/api/', include(router.urls)),
     path('map_all/api/', include(router.urls)),
-    path('map_all/sapporo/api/', include(router.urls)),
-    path('map_all/kamakura/api/', include(router.urls)),
+    path('sapporo/api/', include(router.urls)),
+    path('kamakura/api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #ここまで
 ]

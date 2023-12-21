@@ -70,7 +70,7 @@
         <div class="card">
           <img src="media/kamakura.jpg" class="card-img-top" style="width:450px;height:280px">
           <div class="card-body">
-            <a href="https://rana3.pythonanywhere.com/map_all/kamakura/"><h5 class="card-title">鎌倉</h5></a>
+            <a href="{% url 'map_all:kamakura' %}"><h5 class="card-title">鎌倉</h5></a>
          </div>
         </div>
     </div>
@@ -79,13 +79,12 @@
         <div class="card">
           <img src="media/sappro.jpg" class="card-img-top" style="width:450px;height:280px">
           <div class="card-body">
-            <a href="https://rana3.pythonanywhere.com/map_all/sapporo/"><h5 class="card-title">札幌</h5></a>
+            <a href="{% url 'map_all:sapporo' %}"><h5 class="card-title">札幌</h5></a>
          </div>
         </div>
     </div>
     </div>
     </div>
-
     <script>
     var map;
 
