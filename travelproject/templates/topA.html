@@ -57,6 +57,7 @@
         <a class="nav-link mx-3" href="{% url 'list-itinerary-all' %}"> ユーザーの旅行記録</a>
         <a class="nav-link mx-3" href="{% url 'list-post' %}">鎌倉のスポット一覧</a>
         <a class="nav-link mx-3" href="{% url 'list-post2' %}">札幌のスポット一覧</a>
+        <a class="nav-link mx-3" href="{% url 'list-post3' %}">沖縄のスポット一覧</a>
         <a class="nav-link mx-3" href="{% url 'mypage_top' %}"> マイページ</a>
       </div>
     </nav>
@@ -64,22 +65,31 @@
 
     <div id="map"></div>
 
-    <div class="row row-cols-2">
-    <div class="container">
-    <div class="col" style="width: 450px;">
+
+  <div class="container">
+    <div class="row row-cols-3">
+    <div class="col" style="width:350px">
         <div class="card">
-          <img src="media/kamakura.jpg" class="card-img-top" style="width:450px;height:280px">
+          <img src="media/kamakura.jpg" class="card-img-top" style="width:325px;height:200px">
           <div class="card-body">
             <a href="{% url 'map_all:kamakura' %}"><h5 class="card-title">鎌倉</h5></a>
          </div>
         </div>
     </div>
 
-    <div class="col" style="width: 450px;">
+    <div class="col" style="width:350px">
         <div class="card">
-          <img src="media/sappro.jpg" class="card-img-top" style="width:450px;height:280px">
+          <img src="media/sappro.jpg" class="card-img-top" style="width:325px;height:200px">
           <div class="card-body">
             <a href="{% url 'map_all:sapporo' %}"><h5 class="card-title">札幌</h5></a>
+         </div>
+        </div>
+    </div>
+    <div class="col" style="width:350px">
+        <div class="card">
+          <img src="media/okinawa.jpg" class="card-img-top" style="width:325px;height:200px">
+          <div class="card-body">
+            <a href="{% url 'map_all:okinawa' %}"><h5 class="card-title">沖縄</h5></a>
          </div>
         </div>
     </div>
@@ -95,6 +105,7 @@
       });
       var kamakura = {lat: 35.3188764, lng: 139.55197}
       var sapporo = {lat: 43.062087, lng: 141.35440}
+      var okinawa = {lat: 26.2123, lng: 127.6791}
       var marker_kamakura = new google.maps.Marker({
         position: kamakura,
         map: map,
@@ -102,6 +113,11 @@
       });
       var marker_sapporo = new google.maps.Marker({
         position: sapporo,
+        map: map,
+        icon: "https://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
+      });
+      var marker_okinawa = new google.maps.Marker({
+        position: okinawa,
         map: map,
         icon: "https://maps.google.com/mapfiles/ms/micons/yellow-dot.png"
       });

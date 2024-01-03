@@ -21,3 +21,9 @@ def sapporo(request):
     context = {}
     model = Map
     return HttpResponse(template.render(context, request))
+
+def okinawa(request):
+    template = loader.get_template('map_all/map_okinawa.html')
+    context = {}
+    model = Map
+    return HttpResponse(template.render(context, request))

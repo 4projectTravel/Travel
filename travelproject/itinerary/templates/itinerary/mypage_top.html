@@ -10,13 +10,14 @@
   $(function() {
     let checkbox1 = document.getElementById('check1');
     let checkbox2 = document.getElementById('check2');
+    let checkbox3 = document.getElementById('check3');
     let checkButton = document.getElementById('checkButton');
     checkButton.addEventListener('click', buttonClick);
 
     var API_KEY = 'adbc9bb9431b4c26099e46183b7041fd'
     var item_id = 'lat=35.333911&lon=139.540807'
     var url = 'https://api.openweathermap.org/data/2.5/forecast?' + item_id + '&lang=ja&units=metric&appid=' + API_KEY
-    console.log("鎌倉");
+
 
     function buttonClick(event){
       if(checkbox1.checked){
@@ -46,6 +47,28 @@
         var item_id = 'lat=35.333911&lon=139.540807'
         var url = 'https://api.openweathermap.org/data/2.5/forecast?' + item_id + '&lang=ja&units=metric&appid=' + API_KEY
         console.log("鎌倉");
+        $.ajax({
+          url: url,
+          dataType: "json",
+          type: 'GET',
+        })
+        .done(function(data) {
+          var insertHTML1 = "";
+          var cityName1 = '<h2>' + data.city.name + '</h2>';
+          $('#city-name').html(cityName1);
+          for (var i = 0; i <= 39; i = i + 8) {
+            insertHTML1 += buildHTML(data, i);
+          }
+          $('#weather1').html(insertHTML1);
+        })
+        .fail(function(data) {
+          console.log("失敗しました");
+        });
+      }
+      if(checkbox3.checked){
+        var item_id = 'lat=26.2123&lon=127.6791'
+        var url = 'https://api.openweathermap.org/data/2.5/forecast?' + item_id + '&lang=ja&units=metric&appid=' + API_KEY
+        console.log("那覇");
         $.ajax({
           url: url,
           dataType: "json",
@@ -177,6 +200,7 @@
 <p class="top">天気予報</p>
 <label><input type="radio" name="weather" id="check1">札幌市</label>
 <label><input type="radio" name="weather" id="check2">鎌倉市</label>
+<label><input type="radio" name="weather" id="check3">那覇市</label>
 <input type="button" value="表示する" id="checkButton" class="btn" style="background-color:#60a8f0" >
 <div class="content">
   <div id="weather1"></div>

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'post.apps.PostConfig',
     'post2.apps.Post2Config',
+    'post3.apps.Post3Config',
     'itinerary.apps.ItineraryConfig',
     'spot.apps.SpotConfig',
     'import_export',  #add_spot

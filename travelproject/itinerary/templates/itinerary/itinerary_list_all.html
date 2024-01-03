@@ -29,7 +29,6 @@
    </form>
 
     <div class="row row-cols-2">
-    <!--<div class="container">-->
     {% for item in object_list %}
     {% if item.category|stringformat:"s" == "記入済み" %}
     <div class="col">
@@ -44,7 +43,6 @@
             <a href="{% url 'detail-itinerary-all' item.pk %}"><h5 class="card-title">{{ review.title }}</h5></a>
           {% endfor %}
           <ul>
-            <!--<li>{{ item.category }}</li>-->
             <li><img src="../../media/pin.png" style="width:20px;height:25px"> {{ item.title }}</li>
             <li><img src="../../media/people.png" style="width:20px;height:25px"> {{ item.companion }}</li>
             {% if item.date_3 == null %}
@@ -60,7 +58,6 @@
     </div>
     {% endif %}
     {% endfor %}
-    <!--</div>-->
     </div>
     <!--<a href="{{request.META.HTTP_REFERER}}">前のページに戻る</a>-->
 {% endblock content %}

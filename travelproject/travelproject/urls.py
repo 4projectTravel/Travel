@@ -32,6 +32,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('', include('post.urls')),
     path('', include('post2.urls')),
+    path('', include('post3.urls')),
     path('', include('itinerary.urls')),
     path('', include('spot.urls')),
     path('map/', include('map.urls')),
@@ -43,6 +44,7 @@ urlpatterns = [
     path('map_all/api/', include(router.urls)),
     path('sapporo/api/', include(router.urls)),
     path('kamakura/api/', include(router.urls)),
+    path('okinawa/api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #ここまで
 ]

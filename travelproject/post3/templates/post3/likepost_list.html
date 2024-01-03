@@ -1,0 +1,72 @@
+{% extends 'mypage_top.html' %}
+
+{% block title %}保存済みスポット(@沖縄)一覧{% endblock %}
+{% block h1 %}保存済みスポット(@沖縄)一覧{% endblock %}
+
+{% block content %}
+<style>
+  .col {
+    margin-top: 20px;
+  }
+  .container {
+    display: flex;
+    margin-top: 20px;
+  }
+  /* 右寄せにするスタイル */
+  .border-style{
+    border: solid;
+    border-color: #60a8f0;
+    border-radius: 5px 5px 5px 5px;
+  }
+
+  .text{
+    color: #60a8f0;
+  }
+
+  a {
+    color:#f0a860;
+  }
+</style>
+
+<!--<p>あなたは現在{{ like_count }}箇所をお気に入り登録しています</p>-->
+
+
+
+<!--<div class="container text-center">-->
+  <div class="row row-cols-2">
+    <!--<div class="container">-->
+     {% for item in postlike3_list %}
+     {% if item.user_id == request.user %}
+     <div class="col">
+       <div class="card" style="width:400px;">
+         {% if item.target.thumbnail %}
+          <img src="{{ item.target.thumbnail.url }}" class="card-img-top" style="width:400px;height:280px">
+         {% endif %}
+         <div class="card-body">
+            {% if item.target.number <= '20' or item.target.number == '3' or item.target.number == '4' or item.target.number == '5' or item.target.number == '6' or item.target.number == '7' or item.target.number == '8' or item.target.number == '9'%}
+           <p class="card-text" style="text-align: right"><small class="text-body-secondary">人気No.{{ item.target.number }}</small></p>
+            {% endif %}
+           <a href="{% url 'detail-post3' item.target.pk %}"><h5 class="card-title">{{ item.target.number }}.{{ item.target.name }}</h5></a>
+           <ul>
+             {% if '鎌倉' in item.target.address  %}
+             <li><img src="../../media/pin.png" style="width:20px;height:25px"> 鎌倉</li>
+             {% elif '札幌' in item.target.address%}
+             <li><img src="../../media/pin.png" style="width:20px;height:25px"> 札幌</li>
+             {% endif %}
+             <span><li><img src="../../media/tag.png" style="width:20px;height:20px">
+             {% for genre in item.target.category.all %}
+             {{ genre.name }}
+             {% endfor %}
+             </li></span>
+             <li><img src="../../media/review.png" style="width:20px;height:20px"> {{ item.target.review3_set.all.count }} 人</li>
+           </ul>
+         </div>
+       </div>
+     </div>
+     {% endif %}
+     {% endfor %}
+    <!--</div>-->
+  </div>
+<!--</div>-->
+
+{% endblock content %}
