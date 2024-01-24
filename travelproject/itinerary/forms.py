@@ -14,7 +14,8 @@ class AddItineraryForm(forms.ModelForm):
     class Meta:
         model = Itinerary
         fields = ('title','date_1','date_2','date_3','time_1','time_2','time_3','time_4','time_5','time_6','time_7','time_8','time_9','time_10','time_11','time_12',
-    'schedule_1','schedule_2','schedule_3','schedule_4','schedule_5','schedule_6','schedule_7','schedule_8','schedule_9','schedule_10','schedule_11','schedule_12','category','contributer','companion')
+    'schedule_1','schedule_2','schedule_3','schedule_4','schedule_5','schedule_6','schedule_7','schedule_8','schedule_9','schedule_10','schedule_11','schedule_12',
+    'category','contributer','companion','age','gender')
         widgets = {
             'title':forms.Textarea(attrs={'cols': '50', 'rows': '1'}),
             'date_1':DateInput(),
@@ -54,4 +55,4 @@ class AddItineraryForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ('itinerary', 'title', 'text', 'rate_1', 'rate_2', 'record')
+        fields = ('itinerary', 'title', 'text', 'rate_1', 'rate_2', 'record','cost1','cost2','cost3','cost4')

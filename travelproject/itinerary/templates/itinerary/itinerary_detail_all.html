@@ -12,11 +12,11 @@
     border-color: #f0a860;
   }
 </style>
-<div class="border col" style="width:800px;">
+<div class="border col" style="width:700px; margin-left:200px;">
   <div class="card">
     {% for review in object.review_set.all %}
     {% if review.record %}
-    <img src="{{ review.record.url }}" class="card-img-top" style="width:800px;height:580px">
+    <img src="{{ review.record.url }}" class="card-img-top" style="width:700px;height:400px">
     {% endif %}
     {% endfor %}
     <div class="card-body">
@@ -33,15 +33,31 @@
               <li>エリア：<a href="{% url 'list-post' %}"> {{ object.title }}</a></li>
               {% elif object.title == "札幌" %}
               <li>エリア：<a href="{% url 'list-post2' %}"> {{ object.title }}</a></li>
+              {% elif object.title == "沖縄" %}
+              <li>エリア：<a href="{% url 'list-post3' %}"> {{ object.title }}</a></li>
               {% else %}
               <li>エリア：{{ object.title }}</li>
               {% endif %}
-              <li>同行者： {{ object.companion }}</li>
               {% if object.date_3 == null %}
               <li>滞在日程：{{ object.date_1|date:"Y-m-j" }} 〜 {{ object.date_2|date:"Y-m-j" }}</li>
               {% else %}
               <li>滞在日程：{{ object.date_1|date:"Y-m-j" }} 〜 {{ object.date_3|date:"Y-m-j" }}</li>
               {% endif %}
+              <br>
+              {% for review in object.review_set.all %}
+              <li>観光費：{{ review.cost1 }}</li>
+              <li>宿泊費：{{ review.cost2 }}</li>
+              <li>交通費：{{ review.cost3 }}</li>
+              <li>その他費用：{{ review.cost4 }}</li>
+              <!--<li>費用：観光費 {{ review.cost1 }}</li>宿泊費 {{ review.cost2 }}、交通費 {{ review.cost3 }}、その他費用 {{ review.cost4 }}</li>-->
+              {% endfor %}
+            </ul>
+          </li>
+          <li class="list-group-item">
+            <p class="card-text top">ユーザー情報</p>
+            <ul>
+              <li>同行者： {{ object.companion }}</li>
+              <li>年代・性別：{{ object.age }}・{{ object.gender }}</li>
             </ul>
           </li>
           <li class="list-group-item">

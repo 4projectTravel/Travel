@@ -97,10 +97,23 @@
   text-align: right;
 }
 
+li.picture {
+  list-style: none;
+}
+li.picture:nth-child(2) {
+    margin: 0 15px;
+  }
+
+ul.picture_all {
+  display: flex;
+  justify-content: center;
+}
+
 </style>
-<div class="border col" style="width:800px;">
+
+<div class="border col" style="width:700px; margin-left:200px;">
   <div class="card">
-    <img src="{{ object.thumbnail.url }}" class="card-img-top" style="width:800px;height:540px">
+    <img src="{{ object.thumbnail.url }}" class="card-img-top" style="width:700px;height:400px">
     <div class="card-body">
       {% if object.number <= '20' or object.number == '3' or object.number == '4' or object.number == '5' or object.number == '6' or object.number == '7' or object.number == '8' or object.number == '9' %}
       <p class="card-text" style="text-align: right"><small class="text-body-secondary">鎌倉人気スポットランキング第{{ object.number }}位</small></p>
@@ -130,13 +143,24 @@
               <li>住所：{{ object.address }}</li>
               <span><li>ジャンル：
               {% for item in object.category.all %}
+              {% if item.name == 'ごはん' %}
+              {{ item.name }} ( {{ object.food_category }} )&nbsp
+              {% else %}
               {{ item.name }}&nbsp;
+              {% endif %}
               {% endfor %}
               </li></span>
               {% for review in item.review_set.all %}
               <li>口コミ数： {{ review.review_set.all.count }}人</li>
 　　　　　　　　{% endfor %}
               <li>お気に入り登録数： <span id="like-count">{{ like_count }}</span></li>
+              <br>
+              <li>公式サイト： <a href="{{ object.website }}">{{ object.website }}</a></li>
+              <li>営業時間： {{ object.hours }}</li>
+              <li>定休日： {{ object.holiday }}</li>
+              <br>
+              <li>利用シーン： {{ object.scene }}</li>
+              <li>費用： {{ object.cost }}</li>
             </ul>
           </li>
           <li class="list-group-item">
@@ -146,6 +170,19 @@
               <img src="{{ object.wordcloud.url }}" style="width:400px;height:225px">
             </div>
             {% endif %}
+          </li>
+          <li class="list-group-item">
+            <p class="card-text top">写真</p>
+
+            <ul class="picture_all">
+              {% if object.picture1 %}
+              <li class="picture"><img src="{{ object.picture1.url }}" style="width:300px;height:230px"></li>
+              {% endif %}
+              {% if object.picture1 %}
+              <li class="picture"><img src="{{ object.picture2.url }}" style="width:300px;height:230px"></li>
+              {% endif %}
+            </ul>
+
           </li>
           <li class="list-group-item">
             <p class="card-text top">口コミ</p>
@@ -167,6 +204,7 @@
    </div>
   </div>
 </div>
+
 <br>
 <ul align="right">
   <li><a href="{% url 'list-post' %}">鎌倉のスポット一覧へ</a></li>

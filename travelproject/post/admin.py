@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post , Review , Category
+from .models import Post , Review , Category, FoodCategory
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -21,3 +21,4 @@ class ReviewAdmin(ImportExportModelAdmin):
 admin.site.register(Post, PostAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(Category)
+admin.site.register(FoodCategory)

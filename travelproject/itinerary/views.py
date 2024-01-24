@@ -13,6 +13,7 @@ from .forms import AddItineraryForm, ReviewForm
 from django.contrib.admin.widgets import AdminDateWidget
 from django.http import JsonResponse # 追加
 from django.views import View
+from django.db.models import Q
 
 
 
@@ -22,13 +23,15 @@ class ListItineraryView(ListView):
 
     # 検索フォーム
     def get_queryset(self): # 検索機能のために追加
-        query = self.request.GET.get('query')
+       query = self.request.GET.get('w1')
 
-        if query:
-            object_list = Itinerary.objects.filter(title__icontains=query)
-        else:
-            object_list = Itinerary.objects.all()
-        return object_list
+       if query:
+           object_list = Itinerary.objects.filter(contributer__icontains=query)
+       else:
+           object_list = Itinerary.objects.all()
+       return object_list
+
+
 
     # 投稿ユーザーとログインユーザーが一致した時のみ表示する。
     """
@@ -70,21 +73,26 @@ class ListItineraryRecordView(ListView):
 class ListItineraryAllView(ListView):
      template_name = 'itinerary/itinerary_list_all.html'
      model = Itinerary
+     """
+      # 投稿ユーザーとログインユーザーが一致した時のみ表示する。
+      def mypagefunc(request):
+          object_list = Itinerary.objects.all()
+          return render(request, 'itinerary_list_all.html', {'object_list': object_list})
+"""
 
      # 検索フォーム
      def get_queryset(self): # 検索機能のために追加
-         query = self.request.GET.get('query')
+        query = self.request.GET.get('query')
 
-         if query:
-             itinerary_list = Itinerary.objects.filter(title__icontains=query)
-         else:
-             itinerary_list = Itinerary.objects.all()
-         return itinerary_list
+        if query:
+            object_list = Itinerary.objects.filter(companion__icontains=query)
+            #object_list = Itinerary.objects.filter(title__icontains=query)
+        else:
+            object_list = Itinerary.objects.all()
+        return object_list
 
-         # 投稿ユーザーとログインユーザーが一致した時のみ表示する。
-         def mypagefunc(request):
-             object_list = Itinerary.objects.all()
-             return render(request, 'itinerary_list_all.html', {'object_list': object_list})
+
+
 
 class ListKamakuraItineraryAllView(ListView):
     template_name = 'itinerary/itinerary_kamakura_list_all.html'

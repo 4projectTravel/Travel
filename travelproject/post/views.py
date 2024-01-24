@@ -14,7 +14,7 @@ from django.views.generic import (
     DeleteView,
     UpdateView,
 )
-from .models import Post, Review, PostLike, Category
+from .models import Post, Review, PostLike, Category, FoodCategory
 from map.models import Map
 from .consts import ITEM_PER_PAGE
 """
@@ -64,25 +64,25 @@ class ListPostView(LoginRequiredMixin, ListView):
         return context
 
 
-"""
+
     # 検索フォーム
     def get_queryset(self):
-        query = self.request.GET.get('query')
-        if query:
-            post_list = Post.objects.filter(name__icontains=query)
-        else:
-            post_list = Post.objects.all()
-        return post_list
-"""
-"""
         chk1 = self.request.GET.get('chk1')
         if chk1:
             post_list = Post.objects.filter(name__icontains=chk1)
         else:
             post_list = Post.objects.all()
         return post_list
-"""
 
+        """
+        query = self.request.GET.get('query')
+        if query:
+            post_list = Post.objects.filter(name__icontains=query)
+        else:
+            post_list = Post.objects.all()
+        return post_list
+
+        """
 
 
 

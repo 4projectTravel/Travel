@@ -9,10 +9,24 @@ RATE_CHOICES = [(x, str(x)) for x in range(0, MAX_RATE + 1)]
 CATEGORY = (('ごはん', 'ごはん'),('カフェ・パン・スイーツ・お菓子','カフェ・パン・スイーツ・お菓子'),('イベント','イベント'),('風景・景色','風景・景色'),('アート・カルチャー','アート・カルチャー'),
 ('お土産・お酒・雑貨','お土産・お酒・雑貨'),('神社・寺院','神社・寺院'),('アクティビティ・体験・その他施設','アクティビティ・体験・その他施設'))
 
+FOOD = (('和食', '和食'),('洋食','洋食'),('中華料理','中華料理'),('イタリアン','イタリアン'),('フレンチ','フレンチ'),
+('韓国料理','韓国料理'),('その他', 'その他'))
+
 class Category(models.Model):
     name = models.CharField(
           max_length = 100,
           choices = CATEGORY,
+          blank = True,
+          null=True
+         )
+
+    def __str__(self):
+        return self.name
+
+class FoodCategory(models.Model):
+    name = models.CharField(
+          max_length = 100,
+          choices = FOOD,
           blank = True,
           null=True
          )
@@ -28,7 +42,15 @@ class Post(models.Model):
     thumbnail = models.ImageField(null=True)
     #category = models.ForeignKey(Category,on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category, related_name='categories')
+    food_category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, null=True)
+    website = models.CharField(max_length=50, null=True)
+    hours =  models.CharField(max_length=50, null=True)
+    holiday = models.CharField(max_length=50, null=True)
+    scene = models.CharField(max_length=50, null=True)
+    cost =  models.CharField(max_length=50, null=True)
     wordcloud = models.ImageField(null=True)
+    picture1 = models.ImageField(null=True)
+    picture2 = models.ImageField(null=True)
 
 
 

@@ -22,11 +22,27 @@
 
      }
    </style>
-   <form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
-     <input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" エリア名を入力 "/>
+   <!--<form action="" method="get"><!-- getメソッドでインデックス関数を呼び出す -->
+     <!--<input name="query" value="{{ request.GET.query }}"　type="text" placeholder=" エリア名を入力 "/>
      <button type="submit">検索</button>
      <a href="./">クリア</a>
-   </form>
+   </form>-->
+   <form action="" method="get" class="mb-5" enctype="multipart/form-data"><!--{% csrf_token %}-->
+   <div class = "form-row">
+       <div class = "col-5">
+         <div class="BoxList">
+           <ul>
+             <li class="c2"><label><input type="checkbox" class="checks" name="query" value="家族">家族</label></li>
+             <li class="c2"><label><input type="checkbox" class="checks" name="query" value="友人・知人">友人・知人</label></li>
+             <li class="c2"><label><input type="checkbox" class="checks" name="query" value="ひとり旅">ひとり旅</label></li>
+             <li class="c2"><label><input type="checkbox" class="checks" name="query" value="カップル・夫婦">カップル・夫婦</label></li>
+           </ul>
+           <button type="submit" class="btn btn-light" style="background-color:#60a8f0">検索する</button>
+           <a href="./"  class="btn btn-light" style="background-color:#60a8f0">クリア</a>
+         </div>
+       </div>
+   </div>
+ </form>
 
     <div class="row row-cols-2">
     {% for item in object_list %}
