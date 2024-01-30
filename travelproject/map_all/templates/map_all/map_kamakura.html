@@ -572,6 +572,12 @@
                      travelMode: google.maps.TravelMode.WALKING
                    };
 
+                   var requestbicycling = {
+                     origin: origin,
+                     destination: destination,
+                     travelMode: google.maps.TravelMode.BICYCLING
+                   };
+
                    var requestdriving = {
                      origin: origin,
                      destination: destination,
@@ -585,10 +591,13 @@
                    var td5 = document.createElement('td');
                    var td6 = document.createElement('td');
                    var td7 = document.createElement('td');
+                   var td8 = document.createElement('td');
 
                    /*詳細ページに飛ぶリンク(1,6,13)*/
                    if(mapJson[i].number == 1){
                      var text1 = '<a href="{% url 'detail-post' 1 %}">'
+                   }else if (mapJson[i].number == 2){
+                     var text1 = '<a href="{% url 'detail-post' 2 %}">'
                    }else if (mapJson[i].number == 6){
                      var text1 = '<a href="{% url 'detail-post' 6 %}">'
                    }else if (mapJson[i].number == 7){
@@ -629,25 +638,36 @@
                      }
                    });
 
+                   directionsService.route(requestbicycling, function (response, status){
+                     if(status == 'OK'){
+                       var route = response.routes[0];
+                       var routeLeg = route.legs[0];
+                       var durationText = routeLeg.duration.text;
+
+                       td6.innerHTML = '🚲' + durationText;
+                     }
+                   });
+
                    directionsService.route(requestdriving, function (response, status){
                      if(status == 'OK'){
                        var route = response.routes[0];
                        var routeLeg = route.legs[0];
                        var durationText = routeLeg.duration.text;
 
-                       td6.innerHTML = '🚘' + durationText;
+                       td7.innerHTML = '🚘' + durationText;
                      }
                    });
                    if(mapJson[i].number == 1){
-                     td7.innerHTML = '<img src="/media/NO.1.png" style="width:30px;height:30px">';
+                     td8.innerHTML = '<img src="/media/NO.1.png" style="width:30px;height:30px">';
                    }else{
-                     td7.innerHTML = '<font size="1">'+'No.'+ mapJson[i].number + '</font>';
+                     td8.innerHTML = '<font size="1">'+'No.'+ mapJson[i].number + '</font>';
                    }
-                   tr.appendChild(td7);
+                   tr.appendChild(td8);
                    tr.appendChild(td1);
                    tr.appendChild(td3);
                    tr.appendChild(td5);
                    tr.appendChild(td6);
+                   tr.appendChild(td7);
                    tableEle.appendChild(tr);
                  })(i);
                  i++;
@@ -667,6 +687,12 @@
                    travelMode: google.maps.TravelMode.WALKING
                  };
 
+                 var requestbicycling = {
+                   origin: origin,
+                   destination: destination,
+                   travelMode: google.maps.TravelMode.BICYCLING
+                 };
+
                  var requestdriving = {
                    origin: origin,
                    destination: destination,
@@ -679,10 +705,13 @@
                  var td5 = document.createElement('td');
                  var td6 = document.createElement('td');
                  var td7 = document.createElement('td');
+                 var td8 = document.createElement('td');
 
                  /*詳細ページに飛ぶリンク(1,6,7,12,13以外,20まで)*/
                  if(mapJson[i].number == 1){
                      var text1 = '<a href="{% url 'detail-post' 1 %}">'
+                   }else if (mapJson[i].number == 2){
+                     var text1 = '<a href="{% url 'detail-post' 2 %}">'
                    }else if (mapJson[i].number == 3){
                      var text1 = '<a href="{% url 'detail-post' 3 %}">'
                    }else if (mapJson[i].number == 4){
@@ -718,11 +747,11 @@
                  td1.innerHTML = mapJson[i].number+'. '+text1 + mapJson[i].name + text2;
                  td3.innerHTML = mapJson[i].genre;
                  if(mapJson[i].number == 2){
-                   td7.innerHTML = '<img src="/media/NO.2.png" style="width:30px;height:30px">';
+                   td8.innerHTML = '<img src="/media/NO.2.png" style="width:30px;height:30px">';
                  }else if(mapJson[i].number == 3){
-                   td7.innerHTML = '<img src="/media/NO.3.png" style="width:30px;height:30px">';
+                   td8.innerHTML = '<img src="/media/NO.3.png" style="width:30px;height:30px">';
                  }else{
-                   td7.innerHTML = '<font size="1">'+'No.'+　mapJson[i].number + '</font>';
+                   td8.innerHTML = '<font size="1">'+'No.'+　mapJson[i].number + '</font>';
                  }
 
                  directionsService.route(requestwalking, function (response, status){
@@ -749,21 +778,32 @@
                    }
                  });
 
+                 directionsService.route(requestbicycling, function (response, status){
+                   if(status == 'OK'){
+                     var route = response.routes[0];
+                     var routeLeg = route.legs[0];
+                     var durationText = routeLeg.duration.text;
+
+                     td6.innerHTML = '🚲' + durationText;
+                   }
+                 });
+
                  directionsService.route(requestdriving, function (response, status){
                    if(status == 'OK'){
                      var route = response.routes[0];
                      var routeLeg = route.legs[0];
                      var durationText = routeLeg.duration.text;
 
-                     td6.innerHTML = '🚘' + durationText;
+                     td7.innerHTML = '🚘' + durationText;
                    }
                  });
 
-                 tr.appendChild(td7);
+                 tr.appendChild(td8);
                  tr.appendChild(td1);
                  tr.appendChild(td3);
                  tr.appendChild(td5);
                  tr.appendChild(td6);
+                 tr.appendChild(td7);
                  tableEle.appendChild(tr);
                })(i);
 
@@ -792,6 +832,7 @@
 
          for(var j = 0; j < chk1.length; j++){
            for (var i = 0; i< mapJson.length; i++){
+            if(mapJson[i].area_number=="1"){
 
              if(count2 == eachnumber){
                count2 = 0;
@@ -812,6 +853,12 @@
                    travelMode: google.maps.TravelMode.WALKING
                  };
 
+                 var requestbicycling = {
+                   origin: origin,
+                   destination: destination,
+                   travelMode: google.maps.TravelMode.BICYCLING
+                 };
+
                  var requestdriving = {
                    origin: origin,
                    destination: destination,
@@ -824,6 +871,7 @@
                  var td3 = document.createElement('td');
                  var td5 = document.createElement('td');
                  var td6 = document.createElement('td');
+                 var td7 = document.createElement('td');
 
                  /*詳細ページに飛ぶリンク*/
                  if(mapJson[i].number == 1){
@@ -978,13 +1026,23 @@
                    }
                  });
 
+                 directionsService.route(requestbicycling, function (response, status){
+                   if(status == 'OK'){
+                     var route = response.routes[0];
+                     var routeLeg = route.legs[0];
+                     var durationText = routeLeg.duration.text;
+
+                     td6.innerHTML = '🚲' + durationText;
+                   }
+                 });
+
                  directionsService.route(requestdriving, function (response, status){
                    if(status == 'OK'){
                      var route = response.routes[0];
                      var routeLeg = route.legs[0];
                      var durationText = routeLeg.duration.text;
 
-                     td6.innerHTML = '🚘' + durationText;
+                     td7.innerHTML = '🚘' + durationText;
                    }
                  });
 
@@ -993,11 +1051,13 @@
                  tr.appendChild(td3);
                  tr.appendChild(td5);
                  tr.appendChild(td6);
+                 tr.appendChild(td7);
                  tableEle.appendChild(tr);
                })(i);
                count2++;
            }
          }
+       }
        }
       }
 
